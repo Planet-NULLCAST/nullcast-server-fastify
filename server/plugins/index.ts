@@ -1,15 +1,11 @@
-import { FastifyInstance } from "fastify";
-import { fastifyPostgres } from "fastify-postgres";
-
-function postgresPlugin(server: FastifyInstance) {
-    server.register(fastifyPostgres,{
-        connectionString: process.env.CONNECTIONSTRING 
-    });
-}
+import { FastifyInstance } from 'fastify';
+import { fastifyAuthPlugin } from './auth.plugin';
+import fastifySwaggerPlugin from './fastify-swagger.plugin';
 
 async function initPlugins(server: FastifyInstance) {
 
-    postgresPlugin(server);
+    fastifyAuthPlugin(server);
+    fastifySwaggerPlugin(server);
 }
 
 export default initPlugins;

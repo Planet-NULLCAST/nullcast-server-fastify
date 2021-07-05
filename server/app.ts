@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import initServices from './initialize-services';
 import initPlugins from './plugins';
 import initRoutes from './routes';
 
@@ -8,6 +9,10 @@ async function start() {
 
         //init plugins
         initPlugins(server);
+
+        // services are decoupled from server. Hence their instances are stored in globalThis
+        await initServices();
+
         //init the routes
         initRoutes(server);
 
