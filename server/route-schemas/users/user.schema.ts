@@ -1,9 +1,8 @@
 import { Static, Type } from '@sinclair/typebox';
 
-
 //-- Schema Body --//
 
-const User = Type.Omit(
+export const User = Type.Omit(
     Type.Object({
         username: Type.String(),
         fullName: Type.String(),
@@ -14,12 +13,12 @@ const User = Type.Omit(
     }), ['coverImage', 'bio']
 );
 
-//-- Success Body --//
+//-- Success Body(common)--// 
 const SuccessBody = Type.Object({
     message: Type.String()       // response objects(data) can be modified by ajv to set default values
 });
 
-//-- Error Body --//
+//-- Error Body(common) --//
 
 const ErrorBody = Type.Object({
     message: Type.String()
