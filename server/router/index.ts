@@ -1,0 +1,1 @@
+import { FastifyInstance } from "fastify";

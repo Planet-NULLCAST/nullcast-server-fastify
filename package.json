@@ -14,6 +14,9 @@
   "author": "Nullcast",
   "license": "ISC",
   "dependencies": {
+    "@sinclair/typebox": "^0.17.8",
+    "ajv": "^8.6.1",
+    "ajv-formats": "^2.1.0",
     "fastify": "^3.18.0",
     "fastify-auth": "^1.1.0",
     "fastify-postgres": "^3.5.0",
