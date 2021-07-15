@@ -1,7 +1,7 @@
 import addFormats from 'ajv-formats'
 import Ajv from 'ajv'
 
-export const ajv = addFormats(new Ajv(), [
+const ajv = addFormats(new Ajv(), [
     'date-time', 
     'time', 
     'date', 
@@ -19,3 +19,5 @@ export const ajv = addFormats(new Ajv(), [
     'password'
 ]).addKeyword('kind')
   .addKeyword('modifier');
+
+  export default ajv;
