@@ -2,16 +2,24 @@ import { Static, Type } from '@sinclair/typebox';
 
 //-- Schema Body --//
 
-export const User = Type.Omit(
-    Type.Object({
+export const User = Type.Object({
+        id: Type.Optional(
+            Type.Number({ format: 'uuid' })
+        ),
         username: Type.String(),
         fullName: Type.String(),
         email: Type.String({ format: 'email' }),
         password: Type.String({ format: 'password' }),
-        coverImage: Type.String({ format: 'uri' }),
-        bio: Type.String({ maxLength: 200 }),
-    }), ['coverImage', 'bio']
-);
+        coverImage: Type.Optional(
+            Type.String({ format: 'uri' })
+        ),
+        bio: Type.Optional(
+            Type.String({ maxLength: 200 })
+        ),
+        createdAt: Type.String({ format: 'date-time' }),
+        updatedAt: Type.String({ format: 'date-time' }),
+        // status ?
+    });
 
 //-- Success Body(common)--// 
 const SuccessBody = Type.Object({
@@ -25,8 +33,7 @@ const ErrorBody = Type.Object({
 });
 
 //-- Types --//
-
-export type UserType = Static<typeof User>
+export type UserType = Static<typeof User>  
 
 //-- Schemas --//
 
