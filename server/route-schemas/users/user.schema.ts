@@ -4,7 +4,7 @@ import { Static, Type } from '@sinclair/typebox';
 
 export const User = Type.Object({
         id: Type.Optional(
-            Type.Number({ format: 'uuid' })
+            Type.Number({ format: 'uuid' })    
         ),
         username: Type.String(),
         fullName: Type.String(),
@@ -33,7 +33,10 @@ const ErrorBody = Type.Object({
 });
 
 //-- Types --//
+
 export type UserType = Static<typeof User>  
+export type SuccessResponse = Static<typeof SuccessBody>  
+export type ErrorResponse = Static<typeof ErrorBody>  
 
 //-- Schemas --//
 
@@ -52,33 +55,3 @@ export const createUserSchema = {
         },
     }
 }
-
-// // Using JSON schema
-
-// server.post<{ Body: UserType; Response: UserType }>(
-//     "/items",
-//     {
-//         schema: {
-//             body: User,
-//             response: {
-//                 200: User,
-//             },
-//         },
-//     },
-//     (req, rep) => {
-//         const { body: user } = req;
-//         console.log(user);
-        
-//         // const { name, mail } = user;
-//         // let items: UserType[] = [];
-//         // const item = {
-//         //     name,
-//         //     mail
-//         // }
-//         // items = [...items, item];
-//         // const isValid = ajv.validate(User, user);
-//         // console.log(isValid);
-        
-//         rep.status(200).send(user);
-//     }
-// );
