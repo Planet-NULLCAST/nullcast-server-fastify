@@ -1,7 +1,8 @@
 import fastify from 'fastify';
 import initServices from './initialize-services';
 import initPlugins from './plugins';
-import initRoutes from './routes';
+// import initRoutes from './routes';
+import initRoutes from './router';
 
 async function start() {
     try {
@@ -15,6 +16,7 @@ async function start() {
 
         //init the routes
         initRoutes(server);
+
 
         return server;
 

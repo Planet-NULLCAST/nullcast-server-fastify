@@ -6,7 +6,7 @@ export const User = Type.Object({
         id: Type.Optional(
             Type.Number({ format: 'uuid' })    
         ),
-        username: Type.String(),
+        userName: Type.String(),
         fullName: Type.String(),
         email: Type.String({ format: 'email' }),
         password: Type.String({ format: 'password' }),
