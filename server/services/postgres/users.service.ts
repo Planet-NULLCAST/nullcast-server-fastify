@@ -1,13 +1,18 @@
-import { Client } from "pg";
-import { CreateUserQuery, ValidateUser, getUserQuery, User, UserStatus } from "typings/user.type";
+import { Client, QueryConfig } from "pg";
+import { CreateUserQuery, ValidateUser, getUserQuery, User, UserStatus } from "interfaces/user.type";
 
 export async function getUser(payload:{userName: string}):Promise<User> {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
-    const data = await postgresClient.query<getUserQuery>(`
-    SELECT user_name, full_name, email, created_at, updated_at,cover_image, bio, status 
-    FROM users
-    WHERE user_name = '${payload.userName}';`
-    );
+
+    const getUserQuery:QueryConfig = {
+        name: 'get-user',
+        text: `SELECT user_name, full_name, email, created_at, updated_at,cover_image, bio, status
+        FROM users
+        WHERE user_name = $1;`,
+        values: [payload.userName]
+    }
+    
+    const data = await postgresClient.query<getUserQuery>(getUserQuery);
 
     if (data.rows && data.rows.length) {
         return {
