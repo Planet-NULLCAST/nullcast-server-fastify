@@ -32,12 +32,29 @@ This readme will help to setup the server and the environment.
                 sudo -u postgres createuser --superuser <username>
                 sudo -u postgres createdb <username>
 
-    Now change the CONNECTIONSTRING value in `.env` to connect to your database
-
 ## Let's start the server
 
-Clone the repo `https://github.com/Planet-NULLCAST/nullcast-server-fastify.git`
+1. Clone the repo `https://github.com/Planet-NULLCAST/nullcast-server-fastify.git`
 
             npm install
-            npm run build
-            npm start
+
+2. Create a .env file with these [configuration](#Env)
+
+3. Run the following script to create tables in you postgres DB
+
+            npm run init-tables
+
+4. Start the server.
+
+            npm run dev
+
+## Env
+
+         ENV
+         PORT
+         HOST
+         PG_USER
+         PG_PASSWORD
+         PG_HOST
+         PG_DATABASE
+         PG_PORT

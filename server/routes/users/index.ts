@@ -1,9 +1,9 @@
 import { FastifyInstance } from "fastify/types/instance";
-import users from "./users";
+import user from "./users.route";
 
 
 function initUsersRoutes(server:FastifyInstance) {
-    users(server)
+    user(server)
 }
 
 export default initUsersRoutes;
