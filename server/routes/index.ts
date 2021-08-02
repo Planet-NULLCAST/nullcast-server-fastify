@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import homePath from "./home";
+import homePath from "./home.route";
 import initUsersRoutes from "./users";
 
 function initRoutes(server:FastifyInstance) {

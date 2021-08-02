@@ -5,8 +5,9 @@
   "main": "dist/server/server.js",
   "scripts": {
     "start": ". ./load-env.sh && node ./dist/server/server.js",
-    "build": "node_modules/typescript/bin/tsc -p ./tsconfig.json",
-    "dev": "node_modules/nodemon/bin/nodemon.js",
+    "build": "tsc -p ./tsconfig.json",
+    "dev": "nodemon",
+    "init-tables": "node ./initialize-tables.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,12 +15,15 @@
   "license": "ISC",
   "dependencies": {
     "fastify": "^3.18.0",
+    "fastify-auth": "^1.1.0",
     "fastify-postgres": "^3.5.0",
+    "fastify-swagger": "^4.8.2",
     "pg": "^8.6.0"
   },
   "devDependencies": {
     "@types/node": "^15.12.5",
     "@types/pg": "^8.6.0",
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.7",
     "typescript": "^4.3.4"
   },
@@ -34,7 +38,7 @@
     "watch": [
       "server"
     ],
-    "exec": "node_modules/typescript/bin/tsc -p ./tsconfig.json &&  npm start",
+    "exec": "tsc -p ./tsconfig.json &&  npm start",
     "ext": "ts"
   }
 }
