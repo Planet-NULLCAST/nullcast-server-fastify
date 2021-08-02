@@ -1,5 +1,5 @@
 import postgresHandler from '../../services/postgres/postgres.handler';
-import { ValidateUser, User } from "typings/user.type";
+import { ValidateUser, User } from "interfaces/user.type";
 
 export async function createUserController(userData:User): Promise<boolean> {
     try {
