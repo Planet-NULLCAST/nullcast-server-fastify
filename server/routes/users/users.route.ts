@@ -1,7 +1,7 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
-import { ValidateUser, User } from "typings/user.type";
+import { ValidateUser, User } from "interfaces/user.type";
 
 
 
