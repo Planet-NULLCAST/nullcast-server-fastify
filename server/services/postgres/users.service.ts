@@ -73,8 +73,8 @@ export async function createUser(payload: User): Promise<boolean> {
     try {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
     await postgresClient.query<CreateUserQuery>(`
-     INSERT INTO users (user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) VALUES (
-        '${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}'
+     INSERT INTO users (entity_id, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status, slug) VALUES (
+        '${payload.entityId}','${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}', '${payload.slug}'
      );`
      );
 

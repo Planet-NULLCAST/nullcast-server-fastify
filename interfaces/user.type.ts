@@ -4,7 +4,8 @@ export type UserStatus =
 'Inactive'
 
 export interface User {
-    id?: number;
+    id?: string;
+    entityId?: string;
     userName: string;
     fullName: string;
     email: string;
@@ -13,7 +14,8 @@ export interface User {
     updatedAt: string;
     coverImage?: string;
     bio?: string;
-    status?: UserStatus
+    status?: UserStatus,
+    slug?: string;
 }
 
 export interface getUserQuery {
