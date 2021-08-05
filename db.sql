@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS users (
     visibilty varchar(10) NOT NULL DEFAULT 'public',
     last_active TIMESTAMP WITH TIME ZONE,
     dob TIMESTAMP WITH TIME ZONE,
-    primary_badge UUID NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    primary_badge UUID  REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
     meta_title varchar(255),
     meta_description TEXT,
     twitter varchar(255),

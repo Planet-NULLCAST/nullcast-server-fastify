@@ -28,10 +28,11 @@ const createUser: RouteOptions = {
     url: '/user',    
     handler: async (request, reply ) => {
         try {
-            const userStatus = await controller.createUserController(request.body as User );
+            const userToken = await controller.createUserController(request.body as User );
 
-            if(userStatus) {
-                reply.code(201).send({message: 'User created'});
+            if(userToken) {
+                reply.setCookie('token', userToken, {signed: false});
+                reply.code(200).send({message: 'User created'});
             } else {
                 reply.code(500).send({message:'Something Error happend'});
             }

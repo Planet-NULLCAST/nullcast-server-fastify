@@ -1,10 +1,15 @@
 import postgresHandler from '../../services/postgres/postgres.handler';
 import { ValidateUser, User } from "interfaces/user.type";
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
-export async function createUserController(userData:User): Promise<boolean> {
+export async function createUserController(userData:User): Promise<string> {
     try {
+        const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
+        
         const payload: User = {
             ...userData,
+            password,
             userName: userData.userName.toLowerCase(),
             fullName: userData.fullName.toLowerCase(),
             email: userData.email.toLowerCase(),
@@ -12,7 +17,14 @@ export async function createUserController(userData:User): Promise<boolean> {
             updatedAt: new Date().toISOString()
         };
 
-        return  await postgresHandler<User,boolean>('CREATE_USER', payload);
+          await postgresHandler<User,boolean>('CREATE_USER', payload);
+          // if create success.
+          const token = jwt.sign({userName:payload.userName, password:password}, process.env.JWT_KEY as string, {
+            algorithm: 'HS256',
+            expiresIn: parseInt(process.env.JWT_EXPIRY as string)
+          } );
+          return token;
+
     } catch(error) {
         throw error;
     }
