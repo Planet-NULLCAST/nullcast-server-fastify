@@ -1,61 +1,61 @@
 CREATE TABLE IF NOT EXISTS badges (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    name varchar(64) NOT NULL UNIQUE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(64) NOT NULL UNIQUE,
     description TEXT NOT NULL,
-    avatar varchar(512),
+    avatar VARCHAR(512),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_by UUID,
-    created_by UUID
+    updated_by INTEGER,
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS entity (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    name varchar(64) NOT NULL UNIQUE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(64) NOT NULL UNIQUE,
     description TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    updated_by UUID,
-    created_by UUID
+    updated_by INTEGER,
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS tags (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    name varchar(64) NOT NULL UNIQUE,
-    description TEXT NOT NULL,
-    meta_title varchar(255),
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(64) NOT NULL UNIQUE,
+    description TEXT,
+    meta_title VARCHAR(255),
     meta_description TEXT,
-    feature_image varchar(512),
-    slug varchar(255),
-    visibilty varchar(10) NOT NULL DEFAULT 'public',
-    status varchar(10) NOT NULL DEFAULT 'active',
+    feature_image VARCHAR(512),
+    slug VARCHAR(255) NOT NULL,
+    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
+    status VARCHAR(10) NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_by UUID ,
-    created_by UUID NOT NULL
+    updated_by INTEGER ,
+    created_by INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS users (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    entity_id UUID NOT NULL REFERENCES entity (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    user_name varchar(64) NOT NULL UNIQUE,
-    full_name varchar(64) NOT NULL,
-    email varchar(64) NOT NULL UNIQUE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    entity_id INTEGER NOT NULL REFERENCES entity (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_name VARCHAR(64) NOT NULL UNIQUE,
+    full_name VARCHAR(64) NOT NULL,
+    email VARCHAR(64) NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    cover_image varchar(512),
-    avatar varchar(512),
+    cover_image VARCHAR(512),
+    avatar VARCHAR(512),
     bio TEXT,
-    status varchar(10) NOT NULL DEFAULT 'active',
-    visibilty varchar(10) NOT NULL DEFAULT 'public',
+    status VARCHAR(10) NOT NULL DEFAULT 'active',
+    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
     last_active TIMESTAMP WITH TIME ZONE,
-    dob TIMESTAMP WITH TIME ZONE,
-    primary_badge UUID NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    meta_title varchar(255),
+    dob DATE,
+    primary_badge INTEGER NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    meta_title VARCHAR(255),
     meta_description TEXT,
-    twitter varchar(255),
-    facebook varchar(255),
-    discord varchar(255),
+    twitter VARCHAR(255),
+    facebook VARCHAR(255),
+    discord VARCHAR(255),
     location TEXT,
-    slug varchar(255) NOT NULL,
-    locale varchar(10),
-    website varchar(255),
+    slug VARCHAR(255) NOT NULL,
+    locale VARCHAR(10),
+    website VARCHAR(255),
     followers_count integer NOT NULL DEFAULT 0,
     following_count integer NOT NULL DEFAULT 0,
     blog_count integer NOT NULL DEFAULT 0,
@@ -63,79 +63,138 @@ CREATE TABLE IF NOT EXISTS users (
     styled_classes jsonb,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_by UUID,
-    created_by UUID
+    updated_by INTEGER,
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS roles (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    name varchar(64) NOT NULL UNIQUE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(64) NOT NULL UNIQUE,
     description TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_by UUID,
-    created_by UUID
+    updated_by INTEGER,
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS user_roles (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    role_id UUID NOT NULL REFERENCES roles (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    role_id INTEGER NOT NULL REFERENCES roles (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    created_by UUID
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS user_badges (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    badge_id UUID NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    badge_id INTEGER NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    created_by UUID
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS posts (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     mobiledoc jsonb,
-    status varchar(10) NOT NULL DEFAULT 'drafted',
-    visibilty varchar(10) NOT NULL DEFAULT 'public',
+    status VARCHAR(10) NOT NULL DEFAULT 'drafted',
+    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
     featured boolean NOT NULL DEFAULT FALSE,
-    locale varchar(10),
-    canonical_url varchar(255),
-    preview_url varchar(255),
-    banner_image varchar(255),
-    primary_tag UUID NOT NULL REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    meta_title varchar(255),
+    locale VARCHAR(10),
+    canonical_url VARCHAR(255),
+    preview_url VARCHAR(255),
+    banner_image VARCHAR(255),
+    primary_tag INTEGER NOT NULL REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    meta_title VARCHAR(255),
     meta_description TEXT,
-    og_image varchar(255),
-    og_title varchar(255),
+    og_image VARCHAR(255),
+    og_title VARCHAR(255),
     og_description TEXT,
     html TEXT,
-    type varchar(255) NOT NULL DEFAULT 'blog',
-    slug varchar(255) NOT NULL,
-    custom_excerpt varchar(255),
+    type VARCHAR(255) NOT NULL DEFAULT 'blog',
+    slug VARCHAR(255) NOT NULL,
+    custom_excerpt VARCHAR(255),
     viewers jsonb,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     published_at TIMESTAMP WITH TIME ZONE,
-    updated_by UUID REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    created_by UUID REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    published_by UUID REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+    updated_by INTEGER,
+    created_by INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    published_by INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE TABLE IF NOT EXISTS post_votes (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    post_id UUID NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    user_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    post_id INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     value smallint, 
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 CREATE TABLE IF NOT EXISTS post_tags (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    post_id UUID NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    tag_id UUID NOT NULL REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    post_id INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    tag_id INTEGER NOT NULL REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    created_by UUID
+    created_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS post_authors (
-    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-    post_id UUID NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    author_id UUID NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    post_id INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    author_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS certificates (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT NOT NULL,
+    certificate_content TEXT NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS courses (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    certificate_id INTEGER REFERENCES certificates (id) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS course_chapters (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    course_id INTEGER REFERENCES courses (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    chapter_name VARCHAR(255),
+    slug VARCHAR(255),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS user_chapters(
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    chapter_id INTEGER NOT NULL REFERENCES course_chapters (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS user_courses(
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    course_id INTEGER NOT NULL REFERENCES courses (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    status VARCHAR(255) DEFAULT 'in_progress',
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS followers(
+    follower_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    following_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER,
+    PRIMARY KEY(follower_id, following_id)
 );
