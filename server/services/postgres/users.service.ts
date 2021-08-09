@@ -6,7 +6,7 @@ export async function getUser(payload:{userName: string}):Promise<User> {
 
     const getUserQuery:QueryConfig = {
         name: 'get-user',
-        text: `SELECT user_name, full_name, email, created_at, updated_at,cover_image, bio, status
+        text: `SELECT entity_id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status
         FROM users
         WHERE user_name = $1;`,
         values: [payload.userName]
@@ -16,6 +16,8 @@ export async function getUser(payload:{userName: string}):Promise<User> {
 
     if (data.rows && data.rows.length) {
         return {
+            entity_id: data.rows[0]?.entity_id as string,
+            primary_badge: data.rows[0]?.primary_badge as string,
             userName: data.rows[0]?.user_name as string,
             fullName: data.rows[0]?.full_name as string,
             email: data.rows[0]?.email as string,
@@ -23,6 +25,7 @@ export async function getUser(payload:{userName: string}):Promise<User> {
             updatedAt: data.rows[0]?.updated_at  as string,
             bio: data.rows[0]?.bio  as string,
             status: data.rows[0]?.status  as UserStatus,
+            slug: data.rows[0]?.slug  as string,
         }
     } else {
         throw new Error("User not found");
@@ -73,8 +76,8 @@ export async function createUser(payload: User): Promise<boolean> {
     try {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
     await postgresClient.query<CreateUserQuery>(`
-     INSERT INTO users (user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) VALUES (
-        '${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}'
+     INSERT INTO users (entity_id, primary_badge, slug, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) VALUES (
+        '${payload.entity_id}', '${payload.primary_badge}', '${payload.slug}', '${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}'
      );`
      );
 
@@ -88,7 +91,7 @@ export async function updateUser(payload: User): Promise<boolean> {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
     await postgresClient.query<getUserQuery>(`
         UPDATE users SET 
-        full_name = '${payload.fullName}', email = '${payload.email}', updated_at = '${payload.updatedAt}', cover_image = '${payload.coverImage || ''}', bio = '${payload.bio || ''}', status = '${payload.status || ''}'
+        entity_id = '${payload.entity_id}', primary_badge = '${payload.primary_badge}', slug = '${payload.slug}', full_name = '${payload.fullName}', email = '${payload.email}', updated_at = '${payload.updatedAt}', cover_image = '${payload.coverImage || ''}', bio = '${payload.bio || ''}', status = '${payload.status || ''}'
         WHERE user_name = '${payload.userName}'
     ;`)
 
