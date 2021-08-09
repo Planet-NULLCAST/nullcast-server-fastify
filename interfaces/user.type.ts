@@ -5,6 +5,9 @@ export type UserStatus =
 
 export interface User {
     id?: number;
+    entity_id: string;
+    primary_badge: string;
+    slug: string,
     userName: string;
     fullName: string;
     email: string;
@@ -17,6 +20,9 @@ export interface User {
 }
 
 export interface getUserQuery {
+    entity_id: string;
+    primary_badge: string;
+    slug: string,
     user_name: string;
     full_name: string;
     email: string;

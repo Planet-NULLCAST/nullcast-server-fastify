@@ -5,6 +5,8 @@ export async function createUserController(userData:User): Promise<boolean> {
     try {
         const payload: User = {
             ...userData,
+            primary_badge: userData.primary_badge,
+            entity_id: userData.entity_id,
             userName: userData.userName.toLowerCase(),
             fullName: userData.fullName.toLowerCase(),
             email: userData.email.toLowerCase(),
@@ -38,9 +40,16 @@ export async function updateUserController(userData: User): Promise<boolean> {
     try {
         const payload: User = {
             ...userData,
+            primary_badge: userData.primary_badge,
+            entity_id: userData.entity_id,
+            userName: userData.userName.toLowerCase(),
+            fullName: userData.fullName.toLowerCase(),
+            email: userData.email.toLowerCase(),
+            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
-        return await postgresHandler<User,boolean>('UPDATE_USER', payload);
+
+        return  await postgresHandler<User,boolean>('UPDATE_USER', payload);
     } catch(error) {
         throw error;
     }
