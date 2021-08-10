@@ -27,10 +27,16 @@ This readme will help to setup the server and the environment.
 
     On the bottom of the file, below `# "local" is for Unix domain socket connections only`. Change value `peer` to `password` or `trust`(no password required for `trust`). Yes, you can change the `postgres` user privilage, but we probably be using a new user.
 
+    PLEASE NOTE: If you choose `password` make sure to provide a password to the user you have created.
+
     Now create a user and database with the same name by
 
                 sudo -u postgres createuser --superuser <username>
                 sudo -u postgres createdb <username>
+
+3. Restart the postgres service to update the config changes
+
+               sudo service postgresql restart
 
 ## Let's start the server
 
@@ -50,11 +56,13 @@ This readme will help to setup the server and the environment.
 
 ## Env
 
-         ENV
-         PORT
-         HOST
-         PG_USER
+         ENV (dev or prod)
+         PORT (number)
+         HOST (default:localhost)
+         PG_USER 
          PG_PASSWORD
-         PG_HOST
+         PG_HOST (default:localhost)
          PG_DATABASE
-         PG_PORT
+         PG_PORT (default:5432)
+         JWT_KEY (string)
+         JWT_EXPIRY (number)

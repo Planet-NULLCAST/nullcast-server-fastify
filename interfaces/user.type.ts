@@ -9,13 +9,15 @@ export interface User {
     userName: string;
     fullName: string;
     email: string;
-    password?: string;
+    password: string;
+    salt: string;
     createdAt: string;
     updatedAt: string;
     coverImage?: string;
     bio?: string;
     status?: UserStatus,
     slug?: string;
+    primaryBadge?: number;
 }
 
 export interface getUserQuery {
