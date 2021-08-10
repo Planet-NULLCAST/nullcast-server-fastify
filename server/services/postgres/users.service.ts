@@ -98,11 +98,15 @@ export async function createUser(payload: User): Promise<boolean> {
 
 export async function updateUser(payload: User): Promise<boolean> {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
-    await postgresClient.query<getUserQuery>(`
-        UPDATE users SET 
-        entity_id = '${payload.entity_id}', primary_badge = '${payload.primary_badge}', slug = '${payload.slug}', full_name = '${payload.fullName}', email = '${payload.email}', updated_at = '${payload.updatedAt}', cover_image = '${payload.coverImage || ''}', bio = '${payload.bio || ''}', status = '${payload.status || ''}'
-        WHERE user_name = '${payload.userName}'
-    ;`)
+
+    const CreateUserQuery:QueryConfig = {
+        name: 'update-user',
+        text: `UPDATE users SET entity_id = $1, primary_badge = $2, slug = $3, full_name = $4, email = $5, created_at = $6, updated_at = $7, cover_image = $8, bio = $9, status = $10
+        WHERE user_name = $11`,
+        values: [payload.entity_id, payload.primary_badge, payload.slug, payload.fullName, payload.email, payload.createdAt, payload.updatedAt, payload.coverImage || '', payload.bio || '', payload.status || '', payload.userName]
+    }
+
+    await postgresClient.query<getUserQuery>(CreateUserQuery)
 
     return true;
 }
