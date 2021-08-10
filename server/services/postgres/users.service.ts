@@ -37,10 +37,13 @@ export async function deleteUser(payload: ValidateUser): Promise<boolean> {
     try {
         const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-        await postgresClient.query(`
-            DELETE FROM users
-            WHERE user_name = '${payload.userName}' AND password = '${payload.password}'
-        ;`)
+        const DeleteUserQuery:QueryConfig = {
+            name: 'delete-user',
+            text: `DELETE FROM users WHERE user_name = $1 AND password = $2;`,
+            values: [payload.userName, payload.password]
+        }
+
+        await postgresClient.query<User>(DeleteUserQuery)
     
         return true;
     } catch(error) {
@@ -53,11 +56,13 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
     try {
         const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-        const queryData = await postgresClient.query(`
-            SELECT user_name, password
-            FROM users
-            WHERE user_name = '${payload.userName}' AND password = '${payload.password}'
-        ;`)
+        const ValidateUserQuery:QueryConfig = {
+            name: 'validate-user',
+            text: `SELECT user_name, password FROM users WHERE user_name = $1 AND password = $2;`,
+            values: [payload.userName, payload.password]
+        }
+
+        const queryData = await postgresClient.query<ValidateUser>(ValidateUserQuery)
     
         if(queryData.rows.length) {
             return true
@@ -70,16 +75,20 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
         console.error(error);
         return false;
     }
-} 
+}
 
 export async function createUser(payload: User): Promise<boolean> {
     try {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
-    await postgresClient.query<CreateUserQuery>(`
-     INSERT INTO users (entity_id, primary_badge, slug, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) VALUES (
-        '${payload.entity_id}', '${payload.primary_badge}', '${payload.slug}', '${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}'
-     );`
-     );
+
+    const CreateUserQuery:QueryConfig = {
+        name: 'create-user',
+        text: `INSERT INTO users (entity_id, primary_badge, slug, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+        values: [payload.entity_id, payload.primary_badge, payload.slug, payload.userName,payload.fullName, payload.email, payload.password, payload.createdAt, payload.updatedAt, payload.coverImage || '', payload.bio || '', payload.status || '']
+    }
+
+    await postgresClient.query<CreateUserQuery>(CreateUserQuery);
 
      return true;
     } catch(error) {
