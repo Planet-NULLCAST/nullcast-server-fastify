@@ -1,6 +1,7 @@
 import { FastifySchema, RequestBodyDefault } from "fastify";
 
 const userRequestBody:RequestBodyDefault = {
+    $id: 'https://example.com/schemas/user',
     type: 'object',
     required: ['userName', 'fullName', 'email','password'],
     properties: {
@@ -37,6 +38,28 @@ export const createUserSchema: FastifySchema = {
         201: {
             description: 'User created success.',
 
+        },
+        400: {
+            description: 'Bad request',
+            type: 'object',
+            properties: {
+                message: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+}
+
+export const getUserSchema: FastifySchema = {
+    description: 'Get a user',
+    tags: ['user','get'],
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                item: { $ref: 'http://example.com/schemas/user#/properties'}
+            }
         },
         400: {
             description: 'Bad request',
