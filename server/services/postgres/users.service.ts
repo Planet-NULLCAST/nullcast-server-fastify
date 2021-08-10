@@ -17,6 +17,8 @@ export async function getUser(payload:{userName: string}):Promise<User> {
     if (data.rows && data.rows.length) {
         return {
             userName: data.rows[0]?.user_name as string,
+            password: '',
+            salt: '',
             fullName: data.rows[0]?.full_name as string,
             email: data.rows[0]?.email as string,
             createdAt: data.rows[0]?.created_at as string,
@@ -73,8 +75,8 @@ export async function createUser(payload: User): Promise<boolean> {
     try {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
     await postgresClient.query<CreateUserQuery>(`
-     INSERT INTO users (user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) VALUES (
-        '${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}'
+     INSERT INTO users (entity_id, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status, slug, primary_badge) VALUES (
+        '${payload.entityId}','${payload.userName}','${payload.fullName}', '${payload.email}', '${payload.password}', '${payload.createdAt}', '${payload.updatedAt}', '${payload.coverImage || ''}', '${payload.bio || ''}', '${payload.status || ''}', '${payload.slug}', ${payload.primaryBadge}
      );`
      );
 
