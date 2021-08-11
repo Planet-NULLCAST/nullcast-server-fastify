@@ -1,7 +1,7 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
-import { ValidateUser, User, getUserQuery } from "interfaces/user.type";
+import { ValidateUser, User } from "interfaces/user.type";
 
 
 
@@ -28,7 +28,7 @@ const createUser: RouteOptions = {
     url: '/user',    
     handler: async (request, reply ) => {
         try {
-            const userToken = await controller.createUserController(request.body as getUserQuery );
+            const userToken = await controller.createUserController(request.body as User );
 
             if(userToken) {
                 reply.setCookie('token', userToken, {signed: false});
