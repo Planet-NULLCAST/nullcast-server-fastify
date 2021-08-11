@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 
 import dbHandler, { DatabaseHandler } from 'services/postgres/postgres.handler';
-import { ValidateUser, User, getUserQuery} from "interfaces/user.type";
+import { ValidateUser, User} from "interfaces/user.type";
 import { createHash } from '../../utils/hash-utils';
 
 import { USER_TABLE } from '../../constants/tables'
 
 const handler = new DatabaseHandler(USER_TABLE)
 
-export async function createUserController(userData:getUserQuery): Promise<string> {
+export async function createUserController(userData:User): Promise<string> {
     try {
         // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
         const hashData = createHash(userData.password as string)
@@ -16,7 +16,7 @@ export async function createUserController(userData:getUserQuery): Promise<strin
 
         // Get entity_idsadas
 
-        const payload: getUserQuery = {
+        const payload: User = {
             ...userData,
             entity_id: 10000000,
             password: hashData.password,
@@ -58,7 +58,7 @@ export async function updateUserController(userData: User): Promise<boolean> {
     try {
         const payload: User = {
             ...userData,
-            updatedAt: new Date().toISOString()
+            updated_at: new Date().toISOString()
         };
         return await dbHandler.dbHandler<User,boolean>('UPDATE_USER', payload);
     } catch(error) {
