@@ -1,6 +1,6 @@
 import { Actions, CommonActions } from 'interfaces/service-actions.type';
 import {createUser, deleteUser, getUser, updateUser, ValidateUser} from './users.service';
-import { insertOne } from './common.service'
+import { insertOne, insertMany , findOneById } from './query-builder.service'
 
 export const serviceActions: {[x in Actions]:any} = {
     'CREATE_USER': createUser,
@@ -11,5 +11,7 @@ export const serviceActions: {[x in Actions]:any} = {
 };
 
 export const commonActions: {[x in CommonActions]: any} = {
-    'INSERT_ONE': insertOne
+    'INSERT_ONE': insertOne,
+    'FIND_BY_ID': findOneById,
+    'INSERT_MANY': insertMany
 }
