@@ -1,27 +1,33 @@
-import dbHandler from '../../services/postgres/postgres.handler';
-import { ValidateUser, User } from "interfaces/user.type";
 import jwt from 'jsonwebtoken';
-import { createHash } from '../../utils/hash-utils'
 
-export async function createUserController(userData:User): Promise<string> {
+import dbHandler, { DatabaseHandler } from 'services/postgres/postgres.handler';
+import { ValidateUser, User, getUserQuery} from "interfaces/user.type";
+import { createHash } from '../../utils/hash-utils';
+
+import { USER_TABLE } from '../../constants/tables'
+
+const handler = new DatabaseHandler(USER_TABLE)
+
+export async function createUserController(userData:getUserQuery): Promise<string> {
     try {
         // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
-        const hashData = createHash(userData.password)
+        const hashData = createHash(userData.password as string)
         console.log(hashData);
 
-        const payload: User = {
+        // Get entity_idsadas
+
+        const payload: getUserQuery = {
             ...userData,
+            entity_id: 10000000,
             password: hashData.password,
-            userName: userData.userName.toLowerCase(),
-            fullName: userData.fullName.toLowerCase(),
+            user_name: userData.user_name.toLowerCase(),
+            full_name: userData.full_name.toLowerCase(),
             email: userData.email.toLowerCase(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
         };
 
-          await dbHandler.dbHandler<User,boolean>('CREATE_USER', payload);
+            await handler.insertOne(payload);
           // if create success.
-          const token = jwt.sign({userName:payload.userName, password:hashData.password}, process.env.JWT_KEY as string, {
+          const token = jwt.sign({userName:payload.user_name, password:hashData.password}, process.env.JWT_KEY as string, {
             algorithm: 'HS256',
             expiresIn: parseInt(process.env.JWT_EXPIRY as string, 10)
           } );

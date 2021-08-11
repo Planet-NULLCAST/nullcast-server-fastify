@@ -4,3 +4,4 @@ test-result.log
 .nyc_output
 coverage
 .env
+**/*.js
