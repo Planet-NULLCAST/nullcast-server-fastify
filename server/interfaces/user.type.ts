@@ -4,8 +4,8 @@ export type UserStatus =
 'Inactive'
 
 export interface User {
-    id?: string;
-    entityId?: string;
+    id?: number;
+    entityId?: number;
     userName: string;
     fullName: string;
     email: string;
@@ -21,17 +21,19 @@ export interface User {
 }
 
 export interface getUserQuery {
+    entity_id?: number;
+    password?: string;
     user_name: string;
     full_name: string;
     email: string;
-    created_at: string;
-    updated_at: string;
-    bio: string;
-    status: UserStatus;
+    created_at?: string;
+    updated_at?: string;
+    bio?: string;
+    status?: UserStatus;
 }
 
 export interface CreateUserQuery extends getUserQuery {
-    password: String;
+    // password: String;
 }
 
 export interface ValidateUser  {
