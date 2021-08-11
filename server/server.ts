@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import start from './app';
+
+dotenv.config()
 
 async function initServer() {
     try {

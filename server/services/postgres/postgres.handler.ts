@@ -1,25 +1,14 @@
 import { Actions } from "interfaces/service-actions.type";
-import { Client } from "pg";
-import { serviceActions } from './action-list';
+import { commonActions, serviceActions } from './action-list';
 
-
-// async function postgresHandler<payLoadType, ResponseType>(action: Actions, payload: payLoadType): Promise<ResponseType> {
-//   try {
-
-//     return await serviceActions[action](payload) as ResponseType
-
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 
 export class DatabaseHandler {
 
   // Uncomment the below code to use pgClient
-  // private pgClient: Client
-  constructor(_pgClient: Client) {
-    // this.pgClient = pgClient
+  private tableName: string;
+  constructor(_tableName: string) {
+    this.tableName = _tableName;
     
   }
 
@@ -33,7 +22,21 @@ export class DatabaseHandler {
       throw error;
     }
   }
+
+  /**
+   * A shared function to insert one record into database
+   * 
+   * @param payload {payLoadType}
+   * @returns {Promise}
+   */
+  public async insertOne<payLoadType, ResponseType>(payload: payLoadType): Promise<ResponseType> {
+    try {
+      return await commonActions.INSERT_ONE(this.tableName, payload) as ResponseType
+
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
-
-export default  new DatabaseHandler((globalThis as any).postgresClient as Client);
+export default new DatabaseHandler('' as string);
