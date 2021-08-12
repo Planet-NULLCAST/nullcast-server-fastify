@@ -1,9 +1,9 @@
-import { Client, QueryConfig } from "pg";
+import { Client, QueryConfig, QueryResult } from "pg";
 
 export async function insertOne(
   tableName: string,
   payload: { [x: string]: any }
-): Promise<boolean> {
+): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -24,9 +24,8 @@ export async function insertOne(
       values: values,
     };
 
-    await postgresClient.query(insertOneQuery);
+    return await postgresClient.query(insertOneQuery);
 
-    return true;
   } catch (error) {
     throw error;
   }
@@ -35,7 +34,7 @@ export async function insertOne(
 export async function insertMany(
   tableName: string,
   payload: [{ [x: string]: any }]
-): Promise<boolean> {
+): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -93,9 +92,8 @@ export async function insertMany(
       values: values,
     };
 
-    await postgresClient.query(query);
+    return await postgresClient.query(query);
 
-    return true;
   } catch (error) {
     throw error;
   }
@@ -104,8 +102,8 @@ export async function insertMany(
 export async function findOneById(
   tableName: string,
   id: number,
-  attributes?: []
-): Promise<boolean> {
+  attributes?: string[]
+): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -128,9 +126,67 @@ export async function findOneById(
       values: [id],
     };
 
-    await postgresClient.query(query);
+    return await postgresClient.query(query);
 
-    return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteOneById(
+  tableName: string,
+  id: number,
+): Promise<QueryResult> {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+
+    // Build the query text for prepared statement
+    const text = `DELETE
+                  FROM ${tableName}
+                  WHERE id = $1`;
+
+    const query: QueryConfig = {
+      name: "delete-one-by-id",
+      text,
+      values: [id],
+    };
+
+    return await postgresClient.query(query);
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+export async function updateOneById(
+  tableName: string,
+  id: number,
+  payload: { [x: string]: any }
+): Promise<QueryResult> {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    let updateStatement = 'Set';
+    Object.entries(payload).forEach(([key, value]) => {
+      updateStatement = updateStatement + ` ${key} = ${value}`
+    })
+
+
+    // Build the query text for prepared statement
+    const text = `UPDATE ${tableName}
+                  ${updateStatement}
+                  WHERE id = $1`;
+
+    const query: QueryConfig = {
+      name: "update-one-by-id",
+      text,
+      values: [id],
+    };
+    
+    return await postgresClient.query(query);
   } catch (error) {
     throw error;
   }
