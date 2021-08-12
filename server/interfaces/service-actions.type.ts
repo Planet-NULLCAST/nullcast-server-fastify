@@ -5,4 +5,9 @@ export type Actions =
   | "UPDATE_USER"
   | "VALIDATE_USER";
 
-export type CommonActions = "INSERT_ONE" | "INSERT_MANY" | "FIND_BY_ID";
+export type CommonActions =
+  | "INSERT_ONE"
+  | "INSERT_MANY"
+  | "FIND_BY_ID"
+  | "DELETE_BY_ID"
+  | "UPDATE_BY_ID";
