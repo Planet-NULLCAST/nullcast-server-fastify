@@ -1,5 +1,5 @@
 import { Client, QueryConfig } from "pg";
-import { CreateUserQuery, ValidateUser, getUserQuery, User, UserStatus } from "interfaces/user.type";
+import { CreateUserQuery, ValidateUser, User, UserStatus } from "interfaces/user.type";
 
 export async function getUser(payload:{userName: string}):Promise<User> {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
@@ -12,12 +12,10 @@ export async function getUser(payload:{userName: string}):Promise<User> {
         values: [payload.userName]
     }
     
-    const data = await postgresClient.query<getUserQuery>(getUserQuery);
+    const data = await postgresClient.query<User>(getUserQuery);
 
     if (data.rows && data.rows.length) {
         return {
-            entity_id: data.rows[0]?.entity_id as string,
-            // primary_badge: data.rows[0]?.primary_badge as string,
             user_name: data.rows[0]?.user_name as string,
             password: '',
             salt: '',
@@ -27,7 +25,8 @@ export async function getUser(payload:{userName: string}):Promise<User> {
             updated_at: data.rows[0]?.updated_at  as string,
             bio: data.rows[0]?.bio  as string,
             status: data.rows[0]?.status  as UserStatus,
-            slug: data.rows[0]?.slug  as string,
+            slug: data.rows[0]?.slug as string,
+            primary_badge:data.rows[0]?.primary_badge as string
         }
     } else {
         throw new Error("User not found");
@@ -109,7 +108,7 @@ export async function updateUser(payload: User): Promise<boolean> {
             values: [payload.entity_id, payload.primary_badge, payload.slug, payload.full_name, payload.email, payload.created_at, payload.updated_at, payload.cover_image || '', payload.bio || '', payload.status || '', payload.user_name]
         }
         
-        await postgresClient.query<getUserQuery>(UpdateUserQuery);
+        await postgresClient.query<User>(UpdateUserQuery);
         
         return true;
     } catch(error) {
