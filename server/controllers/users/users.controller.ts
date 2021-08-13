@@ -8,15 +8,16 @@ export async function createUserController(userData:User): Promise<string> {
         // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
         const hashData = createHash(userData.password)
         console.log(hashData);
-
+        console.log(typeof (userData as any).user_name);
+        
         const payload: User = {
             ...userData,
-            password: hashData.password,
-            userName: userData.userName.toLowerCase(),
-            fullName: userData.fullName.toLowerCase(),
-            email: userData.email.toLowerCase(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            // password: hashData.password,
+            // userName: userData.userName.toLowerCase(),
+            // fullName: userData.fullName.toLowerCase(),
+            // email: userData.email.toLowerCase(),
+            // createdAt: new Date().toISOString(),
+            // updatedAt: new Date().toISOString()
         };
 
           await dbHandler.dbHandler<User,boolean>('CREATE_USER', payload);

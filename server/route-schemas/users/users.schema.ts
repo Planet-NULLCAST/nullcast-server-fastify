@@ -1,15 +1,47 @@
-import { FastifySchema, RequestBodyDefault } from "fastify";
+import { FastifySchema } from "fastify";
 
-const userRequestBody:RequestBodyDefault = {
-    $id: 'https://example.com/schemas/user',
-    type: 'object',
-    required: ['userName', 'fullName', 'email','password'],
+// const userRequestBody:RequestBodyDefault = {
+//     // $id: 'https://example.com/schemas/user',
+//     type: 'object',
+//     required: ['user_name', 'full_name', 'email','password'],
+//     properties: {
+//       user_name: {
+//           type: 'boolean',
+//           description: 'user provided username'
+//       },
+//       full_name: {
+//           type: 'string',
+//           description: 'user provided full name'
+//       },
+//       email: {
+//           type: 'string',
+//           description: 'user email',
+//       },
+//       password: {
+//           type: 'string',
+//           description: 'user password'
+//       },
+//       coverImage: {
+//           type: 'string',
+//       },
+//       bio: {
+//           type: 'string'
+//       }
+//     }
+// }
+
+export const createUserSchema: FastifySchema = {
+    description: 'Create a user',
+    tags: ['user','create'],
+    body:  {
+        type: 'object',
+    required: ['user_name', 'full_name', 'email','password'],
     properties: {
-      userName: {
+      user_name: {
           type: 'string',
           description: 'user provided username'
       },
-      fullName: {
+      full_name: {
           type: 'string',
           description: 'user provided full name'
       },
@@ -28,16 +60,16 @@ const userRequestBody:RequestBodyDefault = {
           type: 'string'
       }
     }
-}
-
-export const createUserSchema: FastifySchema = {
-    description: 'Create a user',
-    tags: ['user','create'],
-    body:  userRequestBody,
+    },
     response: {
         201: {
             description: 'User created success.',
-
+            type: 'object',
+            properties: {
+                message: {
+                    type: 'string'
+                }
+            }
         },
         400: {
             description: 'Bad request',
@@ -58,7 +90,9 @@ export const getUserSchema: FastifySchema = {
         200: {
             type: 'object',
             properties: {
-                item: { $ref: 'http://example.com/schemas/user#/properties'}
+                message: {
+                    type: 'string'
+                }
             }
         },
         400: {
