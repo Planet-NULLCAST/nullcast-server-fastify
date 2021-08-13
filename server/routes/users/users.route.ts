@@ -1,7 +1,7 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
-import  { createUserSchema, getUserSchema }  from "../../route-schemas/users/users.schema";
+import  { createUserSchema }  from "../../route-schemas/users/users.schema";
 import { ValidateUser, User } from "interfaces/user.type";
 
 
@@ -14,16 +14,16 @@ import { ValidateUser, User } from "interfaces/user.type";
 //     }
 // }
 
-const getUser: RouteOptions = {
-    method: 'GET',
-    url: '/user/:userName',
-    schema: getUserSchema,
-    handler: async (request, reply) => {
-        const params = request.params as {userName: string};
-        const userData =  await controller.getUserController(params.userName);
-        reply.code(200).send({data: userData});
-    }
-}
+// const getUser: RouteOptions = {
+//     method: 'GET',
+//     url: '/user/:userName',
+//     schema: getUserSchema,
+//     handler: async (request, reply) => {
+//         const params = request.params as {userName: string};
+//         const userData =  await controller.getUserController(params.userName);
+//         reply.code(200).send({data: userData});
+//     }
+// }
 
 const createUser: RouteOptions = {
     method: 'POST',
@@ -79,7 +79,7 @@ const deleteUser: RouteOptions = {
 
 function initUsers(server:FastifyInstance) {
     // server.route(getUsers);
-    server.route(getUser);
+    // server.route(getUser);
     server.route(createUser);
     server.route(deleteUser);
     server.route(updateUser);

@@ -83,26 +83,26 @@ export const createUserSchema: FastifySchema = {
     }
 }
 
-export const getUserSchema: FastifySchema = {
-    description: 'Get a user',
-    tags: ['user','get'],
-    response: {
-        200: {
-            type: 'object',
-            properties: {
-                message: {
-                    type: 'string'
-                }
-            }
-        },
-        400: {
-            description: 'Bad request',
-            type: 'object',
-            properties: {
-                message: {
-                    type: 'string'
-                }
-            }
-        }
-    }
-}
+// export const getUserSchema: FastifySchema = {
+//     description: 'Get a user',
+//     tags: ['user','get'],
+//     response: {
+//         200: {
+//             type: 'object',
+//             properties: {
+//                 message: {
+//                     type: 'string'
+//                 }
+//             }
+//         },
+//         400: {
+//             description: 'Bad request',
+//             type: 'object',
+//             properties: {
+//                 message: {
+//                     type: 'string'
+//                 }
+//             }
+//         }
+//     }
+// }
