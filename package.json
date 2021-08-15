@@ -4,7 +4,7 @@
   "description": "Nullcact v2 fastify server",
   "main": "dist/server/server.js",
   "scripts": {
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server/server.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "tsc -p ./tsconfig.json",
     "dev": "nodemon",
     "init-tables": "node ./initialize-tables.js",

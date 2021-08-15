@@ -1,5 +1,8 @@
 import {RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
+
+import { docSchema } from "route-schemas/home/home.schema";
+
 import * as fs from 'fs';
 import * as path from 'path';
 const stream = fs.createReadStream(path.resolve('./redoc.html'));
@@ -7,6 +10,7 @@ const stream = fs.createReadStream(path.resolve('./redoc.html'));
 const documentation: RouteOptions = {
     method: 'GET',
     url: '/api/doc',
+    schema: docSchema,
     handler: (_, rep) => {
         rep.type('text/html').send(stream);
     }
