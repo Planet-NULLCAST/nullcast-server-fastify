@@ -1,59 +1,54 @@
 import { FastifyInstance } from "fastify";
 
 export function fastifySwaggerPlugin(server: FastifyInstance) {
-    server.register(require('fastify-swagger'), {
-        routePrefix: '/documentation',
-        swagger: {
-          info: {
-            title: 'Nullcast V2 Api documentation',
-            description: 'Testing the Fastify swagger API',
-            version: '0.1.0',
-            "x-logo" : {
-              "url": "https://v2.nullcast.io/images/nullcast.svg",
-              "backgroundColor": "#FFFFFF",
-              "altText": "NullCast logo"
-            }
-          },
-          externalDocs: {
-            url: 'https://swagger.io',
-            description: 'Find more info here'
-          },
-          host: 'localhost',
-          schemes: ['http'],
-          consumes: ['application/json'],
-          produces: ['application/json'],
-          tags: [
-            { name: 'user', description: 'NullCast user end-points' },
-            { name: 'code', description: 'Code related end-points' }
-          ],
-          definitions: {
-            User: {
-              type: 'object',
-              required: ['id', 'email'],
-              properties: {
-                id: { type: 'string', format: 'uuid' },
-                firstName: { type: 'string' },
-                lastName: { type: 'string' },
-                email: {type: 'string', format: 'email' }
-              }
-            }
-          },
-          securityDefinitions: {
-            apiKey: {
-              type: 'apiKey',
-              name: 'apiKey',
-              in: 'header'
-            }
-          }
+  server.register(require('fastify-swagger'), {
+    routePrefix: '/documentation',
+    swagger: {
+      info: {
+        title: 'Nullcast Server Api',
+        description: 'New Fastify Server for Nullcast Version 2 with Postgres as Database.',
+        version: '0.1.0',
+        termsOfService:'http://swagger.io/terms/',
+        "x-logo": {
+          "url": "https://v2.nullcast.io/images/nullcast.svg",
+          "backgroundColor": "#FFFFFF",
+          "altText": "Nullcast logo"
         },
-        uiConfig: {
-          docExpansion: 'full',
-          deepLinking: false
+        contact:{
+          email:'apiteam@swagger.io'
         },
-        staticCSP: true,
-        transformStaticCSP: (header: any) => header,
-        exposeRoute: true
-      });
+        license:{
+          name:'Apache 2.0',
+          url:'http://www.apache.org/licenses/LICENSE-2.0.html'
+       }
+      },
+      'tags': [
+        {
+          'name': 'Introduction',
+          'description': 'fastify server Api consisting of create, get, update and delete requests.'
+        },
+        {
+          'name': 'Authentication',
+          'description': 'Preliminary backend authentication apis'
+        }
+      ],
+      externalDocs: {
+        url: 'https://github.com/Planet-NULLCAST/nullcast-server-fastify/tree/feature/adding-routes-types#readme',
+        description: 'Find more on Planet-Nullcast repo here'
+      },
+      host: 'localhost:8080',
+      schemes: ['http'],
+      consumes: ['application/json'],
+      produces: ['application/json'],
+    },
+    uiConfig: {
+      docExpansion: 'full',
+      deepLinking: false
+    },
+    staticCSP: true,
+    transformStaticCSP: (header:any) => header,
+    exposeRoute: true
+  })
 }
 
 export default fastifySwaggerPlugin;

@@ -1,7 +1,7 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
-import  { createUserSchema }  from "../../route-schemas/users/users.schema";
+import  { createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema }  from "../../route-schemas/users/users.schema";
 import { ValidateUser, User } from "interfaces/user.type";
 
 
@@ -14,16 +14,16 @@ import { ValidateUser, User } from "interfaces/user.type";
 //     }
 // }
 
-// const getUser: RouteOptions = {
-//     method: 'GET',
-//     url: '/user/:userName',
-//     schema: getUserSchema,
-//     handler: async (request, reply) => {
-//         const params = request.params as {userName: string};
-//         const userData =  await controller.getUserController(params.userName);
-//         reply.code(200).send({data: userData});
-//     }
-// }
+const getUser: RouteOptions = {
+    method: 'GET',
+    url: '/user/:user_name',
+    schema: getUserSchema,
+    handler: async (request, reply) => {
+        const params = request.params as {user_name: string};
+        const userData =  await controller.getUserController(params.user_name);
+        reply.code(200).send({data: userData});
+    }
+}
 
 const createUser: RouteOptions = {
     method: 'POST',
@@ -50,6 +50,7 @@ const createUser: RouteOptions = {
 const updateUser: RouteOptions = {
     method: 'PUT',
     url: '/user',
+    schema: updateUserSchema,
     handler: async (request, reply ) => {
         try {
             if (await controller.updateUserController(request.body as User)) {
@@ -66,6 +67,7 @@ const updateUser: RouteOptions = {
 const deleteUser: RouteOptions = {
     method: 'DELETE',
     url: '/user',
+    schema: deleteUserSchema,
     handler: async (request, reply) => {
         const requesyBody = request.body as ValidateUser;
 
@@ -79,7 +81,7 @@ const deleteUser: RouteOptions = {
 
 function initUsers(server:FastifyInstance) {
     // server.route(getUsers);
-    // server.route(getUser);
+    server.route(getUser);
     server.route(createUser);
     server.route(deleteUser);
     server.route(updateUser);
