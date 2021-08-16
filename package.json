@@ -1,15 +1,23 @@
 {
   "name": "fastify-server",
   "version": "1.0.0",
+  "private":"true",
   "description": "Nullcact v2 fastify server",
   "main": "dist/server.js",
   "scripts": {
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "tsc -p ./tsconfig.json",
+    "postinstall": "husky install",
     "dev": "nodemon",
     "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix",
     "init-tables": "node ./initialize-tables.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "lint-staged": {
+    "./**/*.{js,ts,json,md}": [
+      "eslint --fix"
+    ]
   },
   "keywords": [],
   "author": "Nullcast",
@@ -31,6 +39,8 @@
     "@typescript-eslint/parser": "^4.29.1",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.2",
     "nodemon": "^2.0.7",
     "ts-node": "^10.2.0",
     "tsconfig-paths": "^3.10.1",
