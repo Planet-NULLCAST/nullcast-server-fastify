@@ -6,43 +6,6 @@ import {
   UserStatus
 } from 'interfaces/user.type';
 
-export async function getEntityId(payload: {
-  EntityName: string;
-}): Promise<number> {
-  try {
-    const postgresClient: Client = (globalThis as any).postgresClient as Client;
-
-    const getEntityIdQuery: QueryConfig = {
-      name: 'get-entity-id',
-      text: `SELECT id FROM entity WHERE name = $1;`,
-      values: [payload.EntityName]
-    };
-
-    const data = await postgresClient.query<any>(getEntityIdQuery);
-    return data.rows[0].id as number;
-  } catch (err) {
-    throw err;
-  }
-}
-
-export async function getBadgeId(payload: {
-  BadgeName: string;
-}): Promise<number> {
-  try {
-    const postgresClient: Client = (globalThis as any).postgresClient as Client;
-
-    const getBadgeIdQuery: QueryConfig = {
-      name: 'get-badge-id',
-      text: `SELECT id FROM badges WHERE name = $1;`,
-      values: [payload.BadgeName]
-    };
-
-    const data = await postgresClient.query<any>(getBadgeIdQuery);
-    return data.rows[0].id as number;
-  } catch (err) {
-    throw err;
-  }
-}
 
 export async function getUser(payload: { userName: string }): Promise<User> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
