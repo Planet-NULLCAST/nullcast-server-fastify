@@ -1,13 +1,12 @@
 import { FastifyInstance } from "fastify";
-import homePath from "./home.route";
-import initUsersRoutes from "./users";
-import initPostsRoutes from "./posts"
+import oembedRoutes from "./embed.route";
+import initUsersRoutes from "./users/users.route";
 
-function initRoutes(server:FastifyInstance) {
+function initRoutes(server: FastifyInstance, _: any, done: () => void) {
+  server.register(oembedRoutes);
+  server.register(initUsersRoutes);
 
-    homePath(server); //homeRoutes didn't seem to be a nice name :)
-    initUsersRoutes(server);
-    initPostsRoutes(server);
+  done();
 }
 
 export default initRoutes;
