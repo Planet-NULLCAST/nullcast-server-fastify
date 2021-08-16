@@ -3,7 +3,7 @@ import {
   CreateUserQuery,
   ValidateUser,
   User,
-  UserStatus,
+  UserStatus
 } from 'interfaces/user.type';
 
 export async function getEntityId(payload: {
@@ -15,7 +15,7 @@ export async function getEntityId(payload: {
     const getEntityIdQuery: QueryConfig = {
       name: 'get-entity-id',
       text: `SELECT id FROM entity WHERE name = $1;`,
-      values: [payload.EntityName],
+      values: [payload.EntityName]
     };
 
     const data = await postgresClient.query<any>(getEntityIdQuery);
@@ -34,7 +34,7 @@ export async function getBadgeId(payload: {
     const getBadgeIdQuery: QueryConfig = {
       name: 'get-badge-id',
       text: `SELECT id FROM badges WHERE name = $1;`,
-      values: [payload.BadgeName],
+      values: [payload.BadgeName]
     };
 
     const data = await postgresClient.query<any>(getBadgeIdQuery);
@@ -52,7 +52,7 @@ export async function getUser(payload: { userName: string }): Promise<User> {
     text: `SELECT entity_id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status
         FROM users
         WHERE user_name = $1;`,
-    values: [payload.userName],
+    values: [payload.userName]
   };
 
   const data = await postgresClient.query<User>(getUserQuery);
@@ -69,7 +69,7 @@ export async function getUser(payload: { userName: string }): Promise<User> {
       bio: data.rows[0]?.bio as string,
       status: data.rows[0]?.status as UserStatus,
       slug: data.rows[0]?.slug as string,
-      primary_badge: data.rows[0]?.primary_badge as number,
+      primary_badge: data.rows[0]?.primary_badge as number
     };
   }
   throw new Error('User not found');
@@ -82,7 +82,7 @@ export async function deleteUser(payload: ValidateUser): Promise<boolean> {
     const DeleteUserQuery: QueryConfig = {
       name: 'delete-user',
       text: `DELETE FROM users WHERE user_name = $1 AND password = $2;`,
-      values: [payload.user_name, payload.password],
+      values: [payload.user_name, payload.password]
     };
 
     await postgresClient.query<User>(DeleteUserQuery);
@@ -101,7 +101,7 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
       text: `SELECT user_name, password FROM users WHERE user_name = $1 AND password = $2;`,
-      values: [payload.user_name, payload.password],
+      values: [payload.user_name, payload.password]
     };
 
     const queryData = await postgresClient.query<ValidateUser>(
@@ -140,8 +140,8 @@ export async function createUser(payload: User): Promise<boolean> {
         payload.updated_at,
         payload.cover_image || '',
         payload.bio || '',
-        payload.status || '',
-      ],
+        payload.status || ''
+      ]
     };
 
     await postgresClient.query<CreateUserQuery>(CreateUserQuery);
@@ -173,8 +173,8 @@ export async function updateUser(payload: User): Promise<boolean> {
         payload.cover_image || '',
         payload.bio || '',
         payload.status || '',
-        payload.user_name,
-      ],
+        payload.user_name
+      ]
     };
 
     await postgresClient.query<User>(UpdateUserQuery);
