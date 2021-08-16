@@ -33,7 +33,7 @@ export interface User {
     bio?: string;
     status?: UserStatus;
     slug: string;
-    primary_badge: string;
+    primary_badge: number;
     cover_image?: string
 }
 
@@ -44,4 +44,19 @@ export interface CreateUserQuery extends User {
 export interface ValidateUser  {
     user_name: string;
     password: string;
+}
+
+export interface UpdateUser {
+    user_name: string;
+    full_name: string;
+    email: string;
+    updated_at?: string;
+    bio?: string;
+    status?: UserStatus;
+    slug: string;
+    cover_image?: string
+}
+
+export interface DeleteUser {
+    id: number;
 }

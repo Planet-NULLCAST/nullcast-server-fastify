@@ -15,8 +15,7 @@ export async function insertOne(
       .join(", ");
 
     // Build the query text for prepared statement
-    const text = `INSERT INTO ${tableName} (${columns}) 
-                    VALUES (${valueRefs});`;
+    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs});`;
 
     const insertOneQuery: QueryConfig = {
       name: "insert-one",
@@ -142,9 +141,7 @@ export async function deleteOneById(
 
 
     // Build the query text for prepared statement
-    const text = `DELETE
-                  FROM ${tableName}
-                  WHERE id = $1`;
+    const text = `DELETE FROM ${tableName} WHERE id = $1`;
 
     const query: QueryConfig = {
       name: "delete-one-by-id",
@@ -169,24 +166,65 @@ export async function updateOneById(
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-    let updateStatement = 'Set';
-    Object.entries(payload).forEach(([key, value]) => {
-      updateStatement = updateStatement + ` ${key} = ${value}`
+    let updateStatement = 'SET';
+    const payloadArray = Object.entries(payload);
+    
+    payloadArray.forEach(([key, value], index) => {
+      if (index !== payloadArray.length - 1) {
+        updateStatement = updateStatement + ` ${key} = '${value}',`
+
+      } else {
+        updateStatement = updateStatement + ` ${key} = '${value}'`
+
+      }
     })
 
 
     // Build the query text for prepared statement
-    const text = `UPDATE ${tableName}
-                  ${updateStatement}
-                  WHERE id = $1`;
+    const text = `UPDATE ${tableName} ${updateStatement} WHERE id = $1`;
 
     const query: QueryConfig = {
       name: "update-one-by-id",
       text,
       values: [id],
     };
+
     
     return await postgresClient.query(query);
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export async function findOneByField(
+  tableName: string,
+  payload: { [x: string]: any },
+  attributes?: any[]
+): Promise<QueryResult> {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    // If no attributes are passed set the columns to *
+    let columns: string = "*";
+
+    // Construct columns for the prepared statement from the payload
+    if (attributes && attributes.length) {
+      columns = attributes.join(", ");
+    }
+    const [fieldName, fieldValue] = Object.entries(payload)[0] as string[];
+
+    // Build the query text for prepared statement
+    const text = `SELECT ${columns} FROM ${tableName} WHERE ${fieldName} = $1`;
+
+    const query: QueryConfig = {
+      name: "find-one-by-field",
+      text,
+      values: [fieldValue],
+    };
+
+    return await postgresClient.query(query);
+
   } catch (error) {
     throw error;
   }
