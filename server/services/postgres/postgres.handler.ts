@@ -96,6 +96,24 @@ export class DatabaseHandler {
       throw error
     }
   }
+
+
+  /**
+   * A function to find one record by id
+   * 
+   * @param id {Number}
+   * @param attributes {Array}
+   * @returns {Promise}
+   */
+   public async findOneByField<payLoadType>(payload: payLoadType, attributes: any []): Promise<QueryResult> {
+    try {
+      return await commonActions.FIND_ONE_BY_FIELD(this.tableName, payload, attributes) as QueryResult;
+
+    } catch (error) {
+      throw error
+    }
+  }
 }
+
 
 export default new DatabaseHandler('' as string);

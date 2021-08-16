@@ -1,7 +1,7 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
-import { ValidateUser, User } from "interfaces/user.type";
+import { User, DeleteUser } from "interfaces/user.type";
 
 
 
@@ -64,7 +64,7 @@ const deleteUser: RouteOptions = {
     method: 'DELETE',
     url: '/user',
     handler: async (request, reply) => {
-        const requesyBody = request.body as ValidateUser;
+        const requesyBody = request.body as DeleteUser;
 
         if(await controller.deleteUserController(requesyBody)) {
             reply.code(201).send({message: 'User deleted'});

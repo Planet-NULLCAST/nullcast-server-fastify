@@ -2,9 +2,9 @@
   "name": "fastify-server",
   "version": "1.0.0",
   "description": "Nullcact v2 fastify server",
-  "main": "dist/server/server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server/server.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "tsc -p ./tsconfig.json",
     "dev": "nodemon",
     "init-tables": "node ./initialize-tables.js",
@@ -19,6 +19,7 @@
     "fastify-cookie": "^5.3.1",
     "fastify-postgres": "^3.5.0",
     "fastify-swagger": "^4.8.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1"
   },
   "devDependencies": {
