@@ -1,4 +1,6 @@
-import { Client, QueryConfig, QueryResult } from "pg";
+import {
+  Client, QueryConfig, QueryResult
+} from 'pg';
 
 export async function insertOne(
   tableName: string,
@@ -8,19 +10,19 @@ export async function insertOne(
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     // Construct columns , values and valueRefs for the prepared statement from the payload
-    const columns: string = Object.keys(payload).join(", ");
+    const columns: string = Object.keys(payload).join(', ');
     const values: string[] = Object.values(payload);
     const valueRefs: string = values
       .map((_, index) => `$${index + 1}`)
-      .join(", ");
+      .join(', ');
 
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs});`;
 
     const insertOneQuery: QueryConfig = {
-      name: "insert-one",
+      name: 'insert-one',
       text,
-      values: values,
+      values
     };
 
     return await postgresClient.query(insertOneQuery);
@@ -45,12 +47,12 @@ export async function insertMany(
       result[key] = null;
       return result;
     }, {});
-    
+
     // store null as value to keys in object if there is inconsistency
-    const data: any [] = payload.map(item => ({...dummyValue, ...item}))
+    const data: any [] = payload.map((item) => ({...dummyValue, ...item}));
 
     // Construct columns for the prepared statement from the payload
-    const columns: string = uniqueKeys.join(", ");
+    const columns: string = uniqueKeys.join(', ');
     const valueRefArray: string[] = [];
     const values: any[] = [];
 
@@ -59,36 +61,36 @@ export async function insertMany(
     // Construct both the values array and the valueref array
     data.forEach((record: { [x: string]: any }) => {
       const records: [] = Object.values(record) as [];
-      let str = "(";
+      let str = '(';
 
       records.forEach((value: any, index: number) => {
         // The string needed for the value ref array
         // All of the items in the string has to be distinct
         if (index !== records.length - 1) {
-          str = str + `$${index + 1 + count}, `;
+          str = `${str}$${index + 1 + count}, `;
         } else {
-          str = str + `$${index + 1 + count}`;
+          str = `${str}$${index + 1 + count}`;
         }
 
         values.push(value);
       });
 
-      str = str + ")";
+      str = `${str})`;
       count = count + records.length;
 
       valueRefArray.push(str);
     });
 
-    const valueRefs: string = valueRefArray.join(", ");
+    const valueRefs: string = valueRefArray.join(', ');
 
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) 
                     VALUES (${valueRefs});`;
 
     const query: QueryConfig = {
-      name: "insert-many",
+      name: 'insert-many',
       text,
-      values: values,
+      values
     };
 
     return await postgresClient.query(query);
@@ -107,11 +109,11 @@ export async function findOneById(
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     // If no attributes are passed set the columns to *
-    let columns: string = "*";
+    let columns = '*';
 
     // Construct columns for the prepared statement from the payload
     if (attributes && attributes.length) {
-      columns = attributes.join(", ");
+      columns = attributes.join(', ');
     }
 
     // Build the query text for prepared statement
@@ -120,9 +122,9 @@ export async function findOneById(
                     WHERE id = $1`;
 
     const query: QueryConfig = {
-      name: "find-one-by-id",
+      name: 'find-one-by-id',
       text,
-      values: [id],
+      values: [id]
     };
 
     return await postgresClient.query(query);
@@ -144,9 +146,9 @@ export async function deleteOneById(
     const text = `DELETE FROM ${tableName} WHERE id = $1`;
 
     const query: QueryConfig = {
-      name: "delete-one-by-id",
+      name: 'delete-one-by-id',
       text,
-      values: [id],
+      values: [id]
     };
 
     return await postgresClient.query(query);
@@ -155,7 +157,6 @@ export async function deleteOneById(
     throw error;
   }
 }
-
 
 
 export async function updateOneById(
@@ -168,28 +169,28 @@ export async function updateOneById(
 
     let updateStatement = 'SET';
     const payloadArray = Object.entries(payload);
-    
+
     payloadArray.forEach(([key, value], index) => {
       if (index !== payloadArray.length - 1) {
-        updateStatement = updateStatement + ` ${key} = '${value}',`
+        updateStatement = `${updateStatement} ${key} = '${value}',`;
 
       } else {
-        updateStatement = updateStatement + ` ${key} = '${value}'`
+        updateStatement = `${updateStatement} ${key} = '${value}'`;
 
       }
-    })
+    });
 
 
     // Build the query text for prepared statement
     const text = `UPDATE ${tableName} ${updateStatement} WHERE id = $1`;
 
     const query: QueryConfig = {
-      name: "update-one-by-id",
+      name: 'update-one-by-id',
       text,
-      values: [id],
+      values: [id]
     };
 
-    
+
     return await postgresClient.query(query);
 
   } catch (error) {
@@ -207,11 +208,11 @@ export async function findOneByField(
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     // If no attributes are passed set the columns to *
-    let columns: string = "*";
+    let columns = '*';
 
     // Construct columns for the prepared statement from the payload
     if (attributes && attributes.length) {
-      columns = attributes.join(", ");
+      columns = attributes.join(', ');
     }
     const [fieldName, fieldValue] = Object.entries(payload)[0] as string[];
 
@@ -219,9 +220,9 @@ export async function findOneByField(
     const text = `SELECT ${columns} FROM ${tableName} WHERE ${fieldName} = $1`;
 
     const query: QueryConfig = {
-      name: "find-one-by-field",
+      name: 'find-one-by-field',
       text,
-      values: [fieldValue],
+      values: [fieldValue]
     };
 
     return await postgresClient.query(query);
