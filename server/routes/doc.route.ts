@@ -9,15 +9,17 @@ const stream = fs.createReadStream(path.resolve('./redoc.html'));
 
 const documentation: RouteOptions = {
     method: 'GET',
-    url: '/api/doc',
+    url: '/doc',
     schema: docSchema,
     handler: (_, rep) => {
         rep.type('text/html').send(stream);
     }
 }
 
-function docPath(server: FastifyInstance) {
+function docPath (server: FastifyInstance, _: any, done: () => void) {
     server.route(documentation);
-}
+    
+    done()
+};
 
 export default docPath;

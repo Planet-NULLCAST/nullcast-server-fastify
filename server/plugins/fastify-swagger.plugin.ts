@@ -36,7 +36,7 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
         url: 'https://github.com/Planet-NULLCAST/nullcast-server-fastify/tree/feature/adding-routes-types#readme',
         description: 'Find more on Planet-Nullcast repo here'
       },
-      host: 'localhost:8080',
+      host: 'localhost:8080/api/v1',
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json'],

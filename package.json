@@ -2,11 +2,12 @@
   "name": "fastify-server",
   "version": "1.0.0",
   "description": "Nullcact v2 fastify server",
-  "main": "dist/server/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "tsc -p ./tsconfig.json",
     "dev": "nodemon",
+    "lint": "eslint . --ext .ts",
     "init-tables": "node ./initialize-tables.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,16 +21,20 @@
     "fastify-postgres": "^3.5.0",
     "fastify-swagger": "^4.8.2",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.6.0"
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.4",
     "@types/node": "^15.12.5",
     "@types/pg": "^8.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
     "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
     "nodemon": "^2.0.7",
     "ts-node": "^10.2.0",
     "tsconfig-paths": "^3.10.1",
+    "tslint": "^6.1.3",
     "typescript": "^4.3.4"
   },
   "nodemonConfig": {
