@@ -1,7 +1,7 @@
 import {RouteOptions } from "fastify";
-import { FastifyInstance } from "fastify/types/instance";
+// import { FastifyInstance } from "fastify/types/instance";
 
-const getHome: RouteOptions = {
+export const getHome: RouteOptions = {
     method: 'GET',
     url: '/',
     handler:  (_, response) => {
@@ -9,7 +9,7 @@ const getHome: RouteOptions = {
     }
 }
 
-const getHealthCheck: RouteOptions = {
+export const getHealthCheck: RouteOptions = {
     method: 'GET',
     url: '/health-check',
     handler:  (_, response) => {
@@ -19,11 +19,11 @@ const getHealthCheck: RouteOptions = {
 
 
 
-function homePath(server: FastifyInstance) {
+// function homePath(server: FastifyInstance) {
 
-    server.route(getHome);
-    server.route(getHealthCheck);
+//     server.route(getHome);
+//     server.route(getHealthCheck);
 
-}
+// }
 
-export default homePath;
+// export default homePath;
