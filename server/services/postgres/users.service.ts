@@ -1,12 +1,47 @@
 import { Client, QueryConfig } from "pg";
 import { CreateUserQuery, ValidateUser, User, UserStatus } from "interfaces/user.type";
 
+
+export async function getEntityId(payload:{EntityName:string}):Promise<Number> {
+    try {
+        const postgresClient:Client = (globalThis as any).postgresClient as Client;
+
+        const getEntityIdQuery:QueryConfig = {
+            name: 'get-entity-id',
+            text: `SELECT id FROM entity WHERE name = $1;`,
+            values: [payload.EntityName]
+        }
+    
+        const data = await postgresClient.query<any>(getEntityIdQuery);
+        return data.rows[0].id as Number;
+    } catch(err) {
+        throw err;
+    }
+}
+
+export async function getBadgeId(payload:{BadgeName:string}):Promise<Number> {
+    try {
+        const postgresClient:Client = (globalThis as any).postgresClient as Client;
+
+        const getBadgeIdQuery:QueryConfig = {
+            name: 'get-badge-id',
+            text: `SELECT id FROM badges WHERE name = $1;`,
+            values: [payload.BadgeName]
+        }
+    
+        const data = await postgresClient.query<any>(getBadgeIdQuery);
+        return data.rows[0].id as Number;
+    } catch(err) {
+        throw err;
+    }
+}
+
 export async function getUser(payload:{userName: string}):Promise<User> {
     const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
     const getUserQuery:QueryConfig = {
         name: 'get-user',
-        text: `SELECT user_name, full_name, email, created_at, updated_at,cover_image, bio, status
+        text: `SELECT entity_id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status
         FROM users
         WHERE user_name = $1;`,
         values: [payload.userName]
@@ -26,7 +61,7 @@ export async function getUser(payload:{userName: string}):Promise<User> {
             bio: data.rows[0]?.bio  as string,
             status: data.rows[0]?.status  as UserStatus,
             slug: data.rows[0]?.slug as string,
-            primary_badge:data.rows[0]?.primary_badge as string
+            primary_badge:data.rows[0]?.primary_badge as number
         }
     } else {
         throw new Error("User not found");
@@ -38,10 +73,13 @@ export async function deleteUser(payload: ValidateUser): Promise<boolean> {
     try {
         const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-        await postgresClient.query(`
-            DELETE FROM users
-            WHERE user_name = '${payload.user_name}' AND password = '${payload.password}'
-        ;`)
+        const DeleteUserQuery:QueryConfig = {
+            name: 'delete-user',
+            text: `DELETE FROM users WHERE user_name = $1 AND password = $2;`,
+            values: [payload.user_name, payload.password]
+        }
+
+        await postgresClient.query<User>(DeleteUserQuery)
     
         return true;
     } catch(error) {
@@ -54,11 +92,13 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
     try {
         const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-        const queryData = await postgresClient.query(`
-            SELECT user_name, password
-            FROM users
-            WHERE user_name = '${payload.user_name}' AND password = '${payload.password}'
-        ;`)
+        const ValidateUserQuery:QueryConfig = {
+            name: 'validate-user',
+            text: `SELECT user_name, password FROM users WHERE user_name = $1 AND password = $2;`,
+            values: [payload.user_name, payload.password]
+        }
+
+        const queryData = await postgresClient.query<ValidateUser>(ValidateUserQuery)
     
         if(queryData.rows.length) {
             return true
@@ -71,34 +111,43 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
         console.error(error);
         return false;
     }
-} 
+}
 
 export async function createUser(payload: User): Promise<boolean> {
     try {
-    const postgresClient:Client = (globalThis as any).postgresClient as Client;
+        const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-    const createUser:QueryConfig = {
-        name: 'create-user',
-        text: `INSERT INTO users (entity_id, user_name, full_name, email,password, slug, primary_badge) VALUES (
-            $1, $2, $3, $4, $5, $6, $7
-        );`,
-        values: [payload.entity_id, payload.user_name, payload.full_name, payload.email, payload.password, payload.slug, payload.primary_badge]
-    }
-    await postgresClient.query<CreateUserQuery>(createUser)
+        const CreateUserQuery:QueryConfig = {
+            name: 'create-user',
+            text: `INSERT INTO users (entity_id, primary_badge, slug, user_name, full_name, email,password, created_at, updated_at, cover_image, bio, status) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+            values: [payload.entity_id, payload.primary_badge, payload.slug, payload.user_name,payload.full_name, payload.email, payload.password, payload.created_at, payload.updated_at, payload.cover_image || '', payload.bio || '', payload.status || '']
+        }
 
-     return true;
+        await postgresClient.query<CreateUserQuery>(CreateUserQuery);
+
+        return true;
     } catch(error) {
         throw error;
     }
 }
 
 export async function updateUser(payload: User): Promise<boolean> {
-    const postgresClient:Client = (globalThis as any).postgresClient as Client;
-    await postgresClient.query<User>(`
-        UPDATE users SET 
-        full_name = '${payload.full_name}', email = '${payload.email}', updated_at = '${payload.updated_at}', cover_image = '${payload.cover_image || ''}', bio = '${payload.bio || ''}', status = '${payload.status || ''}'
-        WHERE user_name = '${payload.user_name}'
-    ;`)
+    try {
+        const postgresClient:Client = (globalThis as any).postgresClient as Client;
 
-    return true;
+        const UpdateUserQuery:QueryConfig = {
+            name: 'update-user',
+            text: `UPDATE users SET entity_id = $1, primary_badge = $2, slug = $3, full_name = $4, email = $5, created_at = $6, updated_at = $7, cover_image = $8, bio = $9, status = $10
+            WHERE user_name = $11`,
+            values: [payload.entity_id, payload.primary_badge, payload.slug, payload.full_name, payload.email, payload.created_at, payload.updated_at, payload.cover_image || '', payload.bio || '', payload.status || '', payload.user_name]
+        }
+        
+        await postgresClient.query<User>(UpdateUserQuery);
+        
+        return true;
+    } catch(error) {
+        throw error;
+    }
+    
 }
