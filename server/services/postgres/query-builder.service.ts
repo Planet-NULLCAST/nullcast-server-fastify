@@ -191,6 +191,7 @@ export async function updateOneById(
 
     
     return await postgresClient.query(query);
+
   } catch (error) {
     throw error;
   }

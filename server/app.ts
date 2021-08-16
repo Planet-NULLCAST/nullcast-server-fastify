@@ -10,11 +10,12 @@ async function start() {
         //init plugins
         initPlugins(server);
 
+        const PREFIX = '/api/v1';
+
+        server.register(initRoutes, {prefix: PREFIX});
+
         // services are decoupled from server. Hence their instances are stored in globalThis
         await initServices();
-
-        //init the routes
-        initRoutes(server);
 
         return server;
 
