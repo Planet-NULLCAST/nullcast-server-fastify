@@ -12,7 +12,7 @@ const getHome: RouteOptions = {
     }
 }
 
-const getHealthCheck: RouteOptions = {
+export const getHealthCheck: RouteOptions = {
     method: 'GET',
     url: '/health-check',
     schema: healthSchema,
@@ -21,11 +21,11 @@ const getHealthCheck: RouteOptions = {
     }
 }
 
-function homePath(server: FastifyInstance) {
-
+function homePath (server: FastifyInstance, _: any, done: () => void) {
     server.route(getHome);
     server.route(getHealthCheck);
-
-}
+    
+    done()
+};
 
 export default homePath;

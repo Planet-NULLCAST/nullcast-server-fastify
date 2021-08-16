@@ -1,13 +1,14 @@
 import { FastifyInstance } from "fastify";
+import oembedRoutes from "./embed.route";
+import initUsersRoutes from "./users/users.route";
 import docPath from "./doc.route";
-import homePath from "./home.route";
-import initUsersRoutes from "./users";
-// import initSkillRoutes from "./skills";
 
-function initRoutes(server:FastifyInstance) {
-    docPath(server); // documentation path
-    homePath(server); //homeRoutes didn't seem to be a nice name :)
-    initUsersRoutes(server);
+function initRoutes(server: FastifyInstance, _: any, done: () => void) {
+  server.register(oembedRoutes);
+  server.register(initUsersRoutes);
+  server.register(docPath);
+
+  done();
 }
 
 export default initRoutes;

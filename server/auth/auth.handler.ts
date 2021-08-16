@@ -49,7 +49,7 @@ async function jwtAuth(request: FastifyRequest, _: FastifyReply) {
         const verificationStatus = jwt.verify(token, process.env.JWT_KEY as string, { algorithms: ['HS256'] });
 
         if (verificationStatus && typeof verificationStatus === 'object' && (Math.floor(Date.now() / 1000) < (verificationStatus as any).exp  )) {
-            const validated = await controller.validateUserController({ user_name: verificationStatus.userName as string, password: verificationStatus.password as string });
+            const validated = await controller.validateUserController({ user_name: verificationStatus.user_name as string, password: verificationStatus.password as string });
             
             if (validated) {
                 console.log('Auth success');

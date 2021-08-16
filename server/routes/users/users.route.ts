@@ -1,18 +1,20 @@
 import { RouteOptions } from "fastify";
 import { FastifyInstance } from "fastify/types/instance";
 import  controller  from "../../controllers/index";
+
 import  { createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema }  from "../../route-schemas/users/users.schema";
-import { ValidateUser, User } from "interfaces/user.type";
+
+import { User, DeleteUser } from "interfaces/user.type";
 
 
 
-// const getUsers: RouteOptions = {
-//     method: 'GET',
-//     url: '/users',
-//     handler: async (_, reply) => {
-//         reply.code(200).send({data:'Some data'});
-//     }
-// }
+const getUsers: RouteOptions = {
+    method: 'GET',
+    url: '/users',
+    handler: async (_, reply) => {
+        reply.code(200).send({data:'Some data'});
+    }
+}
 
 const getUser: RouteOptions = {
     method: 'GET',
@@ -22,6 +24,15 @@ const getUser: RouteOptions = {
         const params = request.params as {user_name: string};
         const userData =  await controller.getUserController(params.user_name);
         reply.code(200).send({data: userData});
+    }
+}
+
+const documentation: RouteOptions = {
+    method: 'GET',
+    url: '/test',
+    handler: (_, rep) => {
+        rep.send({message: 'hi'})
+        // rep.type('text/html').send(stream);
     }
 }
 
@@ -69,7 +80,7 @@ const deleteUser: RouteOptions = {
     url: '/user',
     schema: deleteUserSchema,
     handler: async (request, reply) => {
-        const requesyBody = request.body as ValidateUser;
+        const requesyBody = request.body as DeleteUser;
 
         if(await controller.deleteUserController(requesyBody)) {
             reply.code(201).send({message: 'User deleted'});
@@ -79,13 +90,14 @@ const deleteUser: RouteOptions = {
     }
 }
 
-function initUsers(server:FastifyInstance) {
-    // server.route(getUsers);
+function initUsers(server:FastifyInstance, _:any, done: () => void) {
+    server.route(getUsers);
     server.route(getUser);
     server.route(createUser);
     server.route(deleteUser);
     server.route(updateUser);
-
+    server.route(documentation)
+    done()
 }
 
 export default initUsers;
