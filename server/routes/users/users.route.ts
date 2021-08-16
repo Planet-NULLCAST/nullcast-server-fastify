@@ -5,13 +5,13 @@ import { User, DeleteUser } from "interfaces/user.type";
 
 
 
-// const getUsers: RouteOptions = {
-//     method: 'GET',
-//     url: '/users',
-//     handler: async (_, reply) => {
-//         reply.code(200).send({data:'Some data'});
-//     }
-// }
+const getUsers: RouteOptions = {
+    method: 'GET',
+    url: '/users',
+    handler: async (_, reply) => {
+        reply.code(200).send({data:'Some data'});
+    }
+}
 
 const getUser: RouteOptions = {
     method: 'GET',
@@ -20,6 +20,15 @@ const getUser: RouteOptions = {
         const params = request.params as {userName: string};
         const userData =  await controller.getUserController(params.userName);
         reply.code(200).send({data: userData});
+    }
+}
+
+const documentation: RouteOptions = {
+    method: 'GET',
+    url: '/test',
+    handler: (_, rep) => {
+        rep.send({message: 'hi'})
+        // rep.type('text/html').send(stream);
     }
 }
 
@@ -74,13 +83,14 @@ const deleteUser: RouteOptions = {
     }
 }
 
-function initUsers(server:FastifyInstance) {
-    // server.route(getUsers);
+function initUsers(server:FastifyInstance, _:any, done: () => void) {
+    server.route(getUsers);
     server.route(getUser);
     server.route(createUser);
     server.route(deleteUser);
     server.route(updateUser);
-
+    server.route(documentation)
+    done()
 }
 
 export default initUsers;
