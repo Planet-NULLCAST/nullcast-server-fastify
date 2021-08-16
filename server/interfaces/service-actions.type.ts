@@ -1,4 +1,6 @@
 export type Actions =
+  | "GET_ENTITY_ID"
+  | "GET_BADGE_ID"
   | "CREATE_USER"
   | "GET_USER"
   | "DELETE_USER"
