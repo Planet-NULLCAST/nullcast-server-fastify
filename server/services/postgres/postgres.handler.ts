@@ -1,5 +1,5 @@
 import {Actions} from 'interfaces/service-actions.type';
-import {QueryResult} from 'pg';
+import {QueryResult, QueryResultRow} from 'pg';
 import {commonActions, serviceActions} from './action-list';
 
 
@@ -58,9 +58,9 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-  public async findOneById(id: number, attributes: string []): Promise<QueryResult> {
+  public async findOneById(id: number, attributes: string []): Promise<QueryResultRow> {
     try {
-      return await commonActions.FIND_BY_ID(this.tableName, id, attributes) as QueryResult;
+      return await commonActions.FIND_BY_ID(this.tableName, id, attributes);
 
     } catch (error) {
       throw error;
@@ -105,9 +105,9 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-  public async findOneByField<payLoadType>(payload: payLoadType, attributes: any []): Promise<QueryResult> {
+  public async findOneByField<payLoadType>(payload: payLoadType, attributes: any []): Promise<QueryResultRow> {
     try {
-      return await commonActions.FIND_ONE_BY_FIELD(this.tableName, payload, attributes) as QueryResult;
+      return await commonActions.FIND_ONE_BY_FIELD(this.tableName, payload, attributes);
 
     } catch (error) {
       throw error;
