@@ -1,29 +1,31 @@
-import {RouteOptions } from "fastify";
-// import { FastifyInstance } from "fastify/types/instance";
+import {RouteOptions} from 'fastify';
+import {FastifyInstance} from 'fastify/types/instance';
 
-export const getHome: RouteOptions = {
-    method: 'GET',
-    url: '/',
-    handler:  (_, response) => {
-        response.send({message: 'All Okay yay!!!'}).code(200);
-    }
-}
+import {homeSchema, healthSchema} from '../route-schemas/home/home.schema';
+
+const getHome: RouteOptions = {
+  method: 'GET',
+  url: '/',
+  schema: homeSchema,
+  handler:  (_, response) => {
+    response.send({message: 'All Okay yay!!!'}).code(200);
+  }
+};
 
 export const getHealthCheck: RouteOptions = {
-    method: 'GET',
-    url: '/health-check',
-    handler:  (_, response) => {
-        response.send({message: 'Check your server and DB status on this endpoint'}).code(200);
-    }
+  method: 'GET',
+  url: '/health-check',
+  schema: healthSchema,
+  handler:  (_, response) => {
+    response.send({message: 'Check your server and DB status on this endpoint'}).code(200);
+  }
+};
+
+function homePath(server: FastifyInstance, _: any, done: () => void) {
+  server.route(getHome);
+  server.route(getHealthCheck);
+
+  done();
 }
 
-
-
-// function homePath(server: FastifyInstance) {
-
-//     server.route(getHome);
-//     server.route(getHealthCheck);
-
-// }
-
-// export default homePath;
+export default homePath;
