@@ -1,6 +1,6 @@
 
-export type UserStatus = 
-'Active' | 
+export type UserStatus =
+'Active' |
 'Inactive'
 
 // export interface User {
@@ -37,9 +37,7 @@ export interface User {
     cover_image?: string
 }
 
-export interface CreateUserQuery extends User {
-    // password: String;
-}
+export type CreateUserQuery = User
 
 export interface ValidateUser  {
     user_name: string;

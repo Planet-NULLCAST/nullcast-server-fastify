@@ -1,6 +1,7 @@
-import { FastifyInstance } from "fastify";
+import {FastifyInstance} from 'fastify';
 
 export function fastifySwaggerPlugin(server: FastifyInstance) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   server.register(require('fastify-swagger'), {
     routePrefix: '/documentation',
     swagger: {
@@ -9,10 +10,10 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
         description: 'New Fastify Server for Nullcast Version 2 with Postgres as Database.',
         version: '0.1.0',
         termsOfService:'http://swagger.io/terms/',
-        "x-logo": {
-          "url": "https://v2.nullcast.io/images/nullcast.svg",
-          "backgroundColor": "#FFFFFF",
-          "altText": "Nullcast logo"
+        'x-logo': {
+          'url': 'https://v2.nullcast.io/images/nullcast.svg',
+          'backgroundColor': '#FFFFFF',
+          'altText': 'Nullcast logo'
         },
         contact:{
           email:'apiteam@swagger.io'
@@ -20,7 +21,7 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
         license:{
           name:'Apache 2.0',
           url:'http://www.apache.org/licenses/LICENSE-2.0.html'
-       }
+        }
       },
       'tags': [
         {
@@ -39,7 +40,7 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
       host: 'localhost:8080/api/v1',
       schemes: ['http'],
       consumes: ['application/json'],
-      produces: ['application/json'],
+      produces: ['application/json']
     },
     uiConfig: {
       docExpansion: 'full',
@@ -48,7 +49,7 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
     staticCSP: true,
     transformStaticCSP: (header:any) => header,
     exposeRoute: true
-  })
+  });
 }
 
 export default fastifySwaggerPlugin;
