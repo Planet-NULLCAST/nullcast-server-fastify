@@ -27,15 +27,6 @@ const getUser: RouteOptions = {
     }
 }
 
-const documentation: RouteOptions = {
-    method: 'GET',
-    url: '/test',
-    handler: (_, rep) => {
-        rep.send({message: 'hi'})
-        // rep.type('text/html').send(stream);
-    }
-}
-
 const createUser: RouteOptions = {
     method: 'POST',
     url: '/user',
@@ -96,7 +87,6 @@ function initUsers(server:FastifyInstance, _:any, done: () => void) {
     server.route(createUser);
     server.route(deleteUser);
     server.route(updateUser);
-    server.route(documentation)
     done()
 }
 
