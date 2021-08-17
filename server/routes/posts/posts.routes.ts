@@ -6,7 +6,7 @@ import {Post, DeletePost} from 'interfaces/post.type';
 
 const createPost: RouteOptions = {
   method: 'POST',
-  url: '/api/post',
+  url: '/post',
   handler: async(request, reply) => {
     try {
       const post = await controller.createPostController(request.body as Post);
@@ -26,7 +26,7 @@ const createPost: RouteOptions = {
 
 // const getPost: RouteOptions = {
 //     method: 'GET',
-//     url: '/api/post/:postName',
+//     url: '/post/:postName',
 //     handler: async (request, reply) => {
 //         const params = request.params as {postName: string};
 //         const postData =  await controller.getPostController(params.postName);
@@ -36,7 +36,7 @@ const createPost: RouteOptions = {
 
 const updatePost: RouteOptions = {
   method: 'PUT',
-  url: '/api/post',
+  url: '/post',
   handler: async(request, reply) => {
     try {
       if (await controller.updatePostController(request.body as Post)) {
@@ -52,7 +52,7 @@ const updatePost: RouteOptions = {
 
 const deletePost: RouteOptions = {
   method: 'DELETE',
-  url: '/api/post',
+  url: '/post',
   handler: async(request, reply) => {
     const requestBody = request.body as DeletePost;
 
@@ -65,12 +65,13 @@ const deletePost: RouteOptions = {
 };
 
 
-function initPosts(server:FastifyInstance) {
+function initPosts(server:FastifyInstance, _:any, done: () => void) {
   server.route(createPost);
   // server.route(getPost);
   server.route(updatePost);
   server.route(deletePost);
 
+  done();
 }
 
 export default initPosts;
