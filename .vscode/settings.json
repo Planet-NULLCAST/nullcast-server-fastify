@@ -1,0 +1,8 @@
+{
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "none",
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": true,
+}

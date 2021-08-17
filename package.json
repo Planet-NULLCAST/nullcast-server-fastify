@@ -1,36 +1,54 @@
 {
   "name": "fastify-server",
   "version": "1.0.0",
+  "private": "true",
   "description": "Nullcact v2 fastify server",
   "main": "dist/server.js",
   "scripts": {
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/server.js",
     "build": "tsc -p ./tsconfig.json",
+    "postinstall": "husky install",
     "dev": "nodemon",
     "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix",
     "init-tables": "node ./initialize-tables.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "lint-staged": {
+    "./**/*.{js,ts,json,md}": [
+      "eslint"
+    ]
   },
   "keywords": [],
   "author": "Nullcast",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^8.6.2",
+    "cheerio": "^1.0.0-rc.10",
     "fastify": "^3.18.0",
     "fastify-auth": "^1.1.0",
     "fastify-cookie": "^5.3.1",
     "fastify-postgres": "^3.5.0",
     "fastify-swagger": "^4.8.2",
+    "got": "^11.8.2",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.7.1"
+    "lodash": "^4.17.21",
+    "oembed-parser": "^1.4.7",
+    "pg": "^8.7.1",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.4",
+    "@types/lodash": "^4.14.172",
     "@types/node": "^15.12.5",
     "@types/pg": "^8.6.0",
+    "@types/validator": "^13.6.3",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.2",
     "nodemon": "^2.0.7",
     "ts-node": "^10.2.0",
     "tsconfig-paths": "^3.10.1",

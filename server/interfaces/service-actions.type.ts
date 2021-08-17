@@ -1,15 +1,13 @@
 export type Actions =
-  | "GET_ENTITY_ID"
-  | "GET_BADGE_ID"
-  | "CREATE_USER"
-  | "GET_USER"
-  | "DELETE_USER"
-  | "UPDATE_USER"
-  | "VALIDATE_USER";
+  | 'CREATE_USER'
+  | 'GET_USER'
+  | 'DELETE_USER'
+  | 'UPDATE_USER'
+  | 'VALIDATE_USER';
 
 export type CommonActions =
-  | "INSERT_ONE"
-  | "INSERT_MANY"
-  | "FIND_BY_ID"
-  | "DELETE_BY_ID"
-  | "UPDATE_BY_ID";
+  | 'INSERT_ONE'
+  | 'INSERT_MANY'
+  | 'FIND_BY_ID'
+  | 'DELETE_BY_ID'
+  | 'UPDATE_BY_ID';

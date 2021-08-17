@@ -7,9 +7,9 @@
 //     url: '/user',
 //     handler: async (request, reply) => {
 //         try {
-//             const 
+//             const
 //         } catch () {
-            
+
 //         }
 //     }
 // }
