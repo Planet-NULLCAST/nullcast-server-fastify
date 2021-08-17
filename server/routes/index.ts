@@ -1,5 +1,6 @@
 import {FastifyInstance} from 'fastify';
-import oembedRoutes from './embed.route';
+
+import oembedRoutes from './embed/embed.route';
 import initUsersRoutes from './users/users.route';
 import docPath from './doc.route';
 
