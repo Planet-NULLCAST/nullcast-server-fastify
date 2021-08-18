@@ -13,6 +13,11 @@ async function start() {
       }
     });
 
+    // setting a request decorator to store toekn decoded data. It is efficient to decalre a decorator first.
+    // refer: https://www.fastify.io/docs/master/Decorators/
+    server.decorateRequest('authData', null);
+
+
     //init plugins
     initPlugins(server);
 
