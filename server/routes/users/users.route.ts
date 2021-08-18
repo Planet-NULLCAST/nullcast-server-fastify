@@ -1,6 +1,6 @@
 import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
-import  controller  from '../../controllers/index';
+import * as controller from '../../controllers/index';
 
 import  {
   createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema
@@ -8,6 +8,14 @@ import  {
 
 import {User, DeleteUser} from 'interfaces/user.type';
 
+
+// const getUsers: RouteOptions = {
+//   method: 'GET',
+//   url: '/users',
+//   handler: async(_, reply) => {
+//     reply.code(200).send({data:'Some data'});
+//   }
+// };
 
 const getUser: RouteOptions = {
   method: 'GET',

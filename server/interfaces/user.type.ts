@@ -1,7 +1,7 @@
 
 export type UserStatus =
-'Active' |
-'Inactive'
+'active' |
+'inactive'
 
 // export interface User {
 //     id?: number;
@@ -41,7 +41,7 @@ export type CreateUserQuery = User
 
 export interface ValidateUser  {
     user_name: string;
-    password: string;
+    password?: string
 }
 
 export interface UpdateUser {

@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import {
   ValidateUser,
@@ -7,11 +5,12 @@ import {
   UpdateUser,
   DeleteUser
 } from 'interfaces/user.type';
-import { createHash } from '../../utils/hash-utils';
+import { createHash, createRandomBytes } from '../../utils/hash-utils';
 
 import {
   USER_TABLE, ENTITY_TABLE, BADGE_TABLE
 } from '../../constants/tables';
+import { issueToken } from 'utils/jwt.utils';
 
 const userHandler = new DatabaseHandler(USER_TABLE);
 const entityHandler = new DatabaseHandler(ENTITY_TABLE);
@@ -20,8 +19,8 @@ const badgeHandler = new DatabaseHandler(BADGE_TABLE);
 export async function createUserController(userData: User): Promise<string> {
   try {
     // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
-    const hashData = createHash(userData.password as string);
-    console.log(hashData);
+    const salt = createRandomBytes();
+    const hashData = createHash(userData.password as string, salt);
 
     // Get entity_id and badge_id
     const ENTITY_NAME = 'nullcast';
@@ -51,14 +50,7 @@ export async function createUserController(userData: User): Promise<string> {
 
     await userHandler.insertOne(payload);
     // if create success.
-    const token = jwt.sign(
-      { userName: payload.user_name, password: hashData.password },
-      process.env.JWT_KEY as string,
-      {
-        algorithm: 'HS256',
-        expiresIn: parseInt(process.env.JWT_EXPIRY as string, 10)
-      }
-    );
+    const token = issueToken({user_name: payload.user_name});
     return token;
   } catch (error) {
     throw error;
