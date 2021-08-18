@@ -44,8 +44,8 @@ export async function deleteUser(payload: ValidateUser): Promise<boolean> {
 
     const DeleteUserQuery: QueryConfig = {
       name: 'delete-user',
-      text: `DELETE FROM users WHERE user_name = $1 AND password = $2;`,
-      values: [payload.user_name, payload.password]
+      text: `DELETE FROM users WHERE user_name = $1;`,
+      values: [payload.user_name]
     };
 
     await postgresClient.query<User>(DeleteUserQuery);
@@ -63,7 +63,7 @@ export async function ValidateUser(payload: ValidateUser): Promise<boolean> {
 
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
-      text: `SELECT user_name, password FROM users WHERE user_name = $1 AND password = $2;`,
+      text: `SELECT user_name, password FROM users WHERE user_name = $1 and password = $2;`,
       values: [payload.user_name, payload.password]
     };
 

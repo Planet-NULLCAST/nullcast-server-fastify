@@ -11,6 +11,7 @@ export class DatabaseHandler {
   }
 
 
+  // Todo: rename function name to query
   public async dbHandler<payLoadType, ResponseType>(action: Actions, payload: payLoadType): Promise<ResponseType> {
     try {
 
@@ -27,9 +28,9 @@ export class DatabaseHandler {
    * @param payload {payLoadType}
    * @returns {Promise}
    */
-  public async insertOne<payLoadType>(payload: payLoadType): Promise<QueryResult> {
+  public async insertOne<payLoadType, ResponseType>(payload: payLoadType): Promise<QueryResult<ResponseType>> {
     try {
-      return await commonActions.INSERT_ONE(this.tableName, payload) as QueryResult;
+      return await commonActions.INSERT_ONE(this.tableName, payload);
 
     } catch (error) {
       throw error;
