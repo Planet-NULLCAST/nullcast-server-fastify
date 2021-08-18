@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS tags (
     meta_description TEXT,
     feature_image VARCHAR(512),
     slug VARCHAR(255) NOT NULL,
-    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
+    visibility VARCHAR(10) NOT NULL DEFAULT 'public',
     status VARCHAR(10) NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),

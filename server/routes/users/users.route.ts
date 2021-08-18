@@ -9,13 +9,13 @@ import  {
 import {User, DeleteUser} from 'interfaces/user.type';
 
 
-const getUsers: RouteOptions = {
-  method: 'GET',
-  url: '/users',
-  handler: async(_, reply) => {
-    reply.code(200).send({data:'Some data'});
-  }
-};
+// const getUsers: RouteOptions = {
+//   method: 'GET',
+//   url: '/users',
+//   handler: async(_, reply) => {
+//     reply.code(200).send({data:'Some data'});
+//   }
+// };
 
 const getUser: RouteOptions = {
   method: 'GET',
@@ -93,7 +93,6 @@ const deleteUser: RouteOptions = {
 
 
 function initUsers(server:FastifyInstance, _:any, done: () => void) {
-  server.route(getUsers);
   server.route(getUser);
   server.route(createUser);
   server.route(deleteUser);
