@@ -1,20 +1,27 @@
 import {
-  Post, UpdatePost, DeletePost
+  Post, UpdatePost, DeletePost, mobiledoc
 } from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
+import { default as mobiledocLib} from '../../lib/mobiledoc';
+
+const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
 
 const postHandler = new DatabaseHandler(POST_TABLE);
 
 
 export async function createPostController(postData:Post): Promise<boolean> {
   try {
+
+    const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
-      primary_tag: postData.primary_tag,
-      slug: postData.slug,
-      created_by: postData.created_by,
-      published_by: postData.published_by
+      primary_tag: postData.primary_tag as number,
+      html,
+      mobiledoc: postData.mobiledoc as mobiledoc,
+      slug: postData.slug
     };
+
+
     await postHandler.insertOne(payload);
     return true;
 

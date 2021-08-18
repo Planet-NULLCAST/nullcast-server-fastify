@@ -28,15 +28,6 @@ const getUser: RouteOptions = {
   }
 };
 
-const documentation: RouteOptions = {
-  method: 'GET',
-  url: '/test',
-  handler: (_, rep) => {
-    rep.send({message: 'hi'});
-    // rep.type('text/html').send(stream);
-  }
-};
-
 const createUser: RouteOptions = {
   method: 'POST',
   url: '/user',
@@ -91,14 +82,11 @@ const deleteUser: RouteOptions = {
   }
 };
 
-
 function initUsers(server:FastifyInstance, _:any, done: () => void) {
   server.route(getUser);
   server.route(createUser);
   server.route(deleteUser);
   server.route(updateUser);
-  server.route(documentation);
-
   done();
 }
 

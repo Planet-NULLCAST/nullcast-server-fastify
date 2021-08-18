@@ -1,5 +1,6 @@
 
 export const createUserSchema = {
+  $comment: 'coerce',
   summary: 'Create User',
   description: 'A POST route to create register user information',
   tags: ['User'],

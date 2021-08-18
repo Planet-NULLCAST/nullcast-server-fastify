@@ -53,7 +53,7 @@ const updateTag: RouteOptions = {
   }
 };
 
-function initTags(server: FastifyInstance, _: any, done: () => void) {
+function initTagsRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.route(createTag);
   server.route(getTag);
   server.route(updateTag);
@@ -61,4 +61,4 @@ function initTags(server: FastifyInstance, _: any, done: () => void) {
   done();
 }
 
-export default initTags;
+export default initTagsRoutes;
