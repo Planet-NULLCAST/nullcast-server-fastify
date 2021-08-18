@@ -65,7 +65,6 @@ async function jwtAuth(request: FastifyRequest) {
     const token = request.cookies.token as string;
     const verificationStatus = verifyToken(token);
     if (verificationStatus) {
-      console.log(verificationStatus);
       return;
     }
   }
