@@ -1,6 +1,6 @@
 import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
-import  controller  from '../../controllers/index';
+import * as controller from '../../controllers/index';
 
 import  {
   createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema
