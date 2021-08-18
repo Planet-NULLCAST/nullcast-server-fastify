@@ -21,7 +21,6 @@ export async function createUserController(userData: User): Promise<string> {
     // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
     const salt = createRandomBytes();
     const hashData = createHash(userData.password as string, salt);
-    console.log(hashData);
 
     // Get entity_id and badge_id
     const ENTITY_NAME = 'nullcast';
