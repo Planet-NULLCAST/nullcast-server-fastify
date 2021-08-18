@@ -1,5 +1,5 @@
 import {FastifyInstance, FastifyRequest} from 'fastify';
-import controller from '../controllers/index';
+import * as controller from '../controllers';
 import { NON_AUTH_ROUTES } from 'constants/non-auth-routes';
 import { verifyToken } from 'utils/jwt.utils';
 

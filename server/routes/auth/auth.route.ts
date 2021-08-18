@@ -1,4 +1,5 @@
-import controller from '../../controllers/index';import { RouteOptions } from 'fastify';
+import * as controller from '../../controllers/index';
+import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 
 const getNewToken: RouteOptions = {

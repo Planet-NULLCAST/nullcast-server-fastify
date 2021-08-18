@@ -1,7 +1,7 @@
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 import { Tag } from 'interfaces/tags.type';
-import controller from '../../controllers/index';
+import * as controller from '../../controllers';
 
 const createTag: RouteOptions = {
   method: 'POST',
