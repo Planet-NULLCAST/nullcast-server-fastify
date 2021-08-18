@@ -5,7 +5,13 @@ import initRoutes from './routes';
 
 async function start() {
   try {
-    const server = fastify();
+    const server = fastify({
+      ajv: {
+        customOptions: {
+          coerceTypes: false
+        }
+      }
+    });
 
     // setting a request decorator to store toekn decoded data. It is efficient to decalre a decorator first.
     // refer: https://www.fastify.io/docs/master/Decorators/

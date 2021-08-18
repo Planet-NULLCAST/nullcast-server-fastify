@@ -17,10 +17,10 @@ const getNewToken: RouteOptions = {
   }
 };
 
-function initTokens(server:FastifyInstance, _:any, done: () => void) {
+function initTokensRoutes(server:FastifyInstance, _:any, done: () => void) {
   server.route(getNewToken);
 
   done();
 }
 
-export default initTokens;
+export default initTokensRoutes;
