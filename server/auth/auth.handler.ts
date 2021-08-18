@@ -43,7 +43,8 @@ async function basicAuth(request: FastifyRequest) {
 
     if (username && password) {
       const validated = await controller.validateUserController({
-        user_name: username as string
+        user_name: username as string,
+        password: password as string
       });
 
       if (validated) {

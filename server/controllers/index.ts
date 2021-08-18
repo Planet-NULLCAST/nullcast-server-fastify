@@ -8,7 +8,7 @@ import {
   createTagController, getTagController, updateTagController
 } from './tags/tags.controller';
 
-import { generateNewTokenController} from './tokens/tokens.controller';
+import { generateNewTokenController } from './tokens/tokens.controller';
 
 export default {
   // users

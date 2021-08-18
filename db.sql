@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS tags (
     status VARCHAR(10) NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_by INTEGER ,
+    updated_by INTEGER,
     created_by INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS users (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS users (
     avatar VARCHAR(512),
     bio TEXT,
     status VARCHAR(10) NOT NULL DEFAULT 'active',
-    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
+    visibility VARCHAR(10) NOT NULL DEFAULT 'public',
     last_active TIMESTAMP WITH TIME ZONE,
     dob DATE,
     primary_badge INTEGER NOT NULL REFERENCES badges (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS posts (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     mobiledoc jsonb,
     status VARCHAR(10) NOT NULL DEFAULT 'drafted',
-    visibilty VARCHAR(10) NOT NULL DEFAULT 'public',
+    visibility VARCHAR(10) NOT NULL DEFAULT 'public',
     featured boolean NOT NULL DEFAULT FALSE,
     locale VARCHAR(10),
     canonical_url VARCHAR(255),
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS post_votes (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     post_id INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    value smallint, 
+    value SMALLINT,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
@@ -199,3 +199,9 @@ CREATE TABLE IF NOT EXISTS followers(
     updated_by INTEGER,
     PRIMARY KEY(follower_id, following_id)
 );
+INSERT INTO entity (name, description)
+VALUES ('nullcast', 'Nullcast is an open-source tech community');
+INSERT INTO tags (name, description, meta_title, created_by)
+VALUES ('primary', 'some description', 'primary', 12343);
+INSERT INTO badges (name, description)
+VALUES ('noob', 'Just getting started!');
