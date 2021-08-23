@@ -1,6 +1,7 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import {
   ValidateUser,
+  ValidateResponse,
   User,
   UpdateUser,
   DeleteUser
@@ -107,13 +108,25 @@ export async function updateUserController(userData: User): Promise<boolean> {
 
 export async function validateUserController(
   userData: ValidateUser
-): Promise<boolean> {
+) {
   try {
-    return await userHandler.dbHandler<ValidateUser, boolean>(
+    const dbData =  await userHandler.dbHandler<ValidateUser, ValidateResponse>(
       'VALIDATE_USER',
       userData
     );
+
+    if (!dbData) {
+      return 'Invalid Username or Password';
+    }
+
+    const hashData = createHash(userData.password, dbData.salt);
+
+    if (dbData.password === hashData.password) {
+      const token = issueToken({dbData});
+      return { 'token': token };
+    }
+    return 'Invalid Username or Password';
   } catch (error) {
-    return false;
+    throw error;
   }
 }
