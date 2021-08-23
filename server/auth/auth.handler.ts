@@ -16,6 +16,14 @@ function authHandler(server: FastifyInstance) {
 
 async function verifyRoute(request: FastifyRequest) {
 
+  // removing the user data if someone sends it along with a request
+  if (request.user) {
+    request.user = null;
+  }
+
+  if (request.cookies && request.cookies.token) {
+    throw new Error('Token exists, validating the token');
+  }
   if (request.method === 'GET') {
     // console.log('Auth skipped for GET request');
     return;
@@ -49,6 +57,9 @@ async function basicAuth(request: FastifyRequest) {
 
       if (validated) {
         console.log('user exist in DB');
+        request.user = {
+          user_name: username
+        };
         return;
       }
       throw new Error('Auth failed');
@@ -64,8 +75,12 @@ async function basicAuth(request: FastifyRequest) {
 async function jwtAuth(request: FastifyRequest) {
   if (request.cookies && request.cookies.token) {
     const token = request.cookies.token as string;
+
     const verificationStatus = verifyToken(token);
     if (verificationStatus) {
+      request.user = {
+        user_name: verificationStatus.user_name as string
+      };
       return;
     }
   }
