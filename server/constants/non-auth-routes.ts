@@ -1,3 +1,4 @@
 export const NON_AUTH_ROUTES: {[x: string]: string} = {
-  'user': 'POST'
+  'user': 'POST',
+  'signin': 'POST'
 };

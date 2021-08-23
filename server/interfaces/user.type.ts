@@ -41,7 +41,14 @@ export type CreateUserQuery = User
 
 export interface ValidateUser  {
     user_name: string;
-    password?: string
+    password: string
+}
+
+export interface ValidateResponse {
+    user_name: string,
+    password: string,
+    salt: string,
+    email: string,
 }
 
 export interface UpdateUser {
@@ -57,4 +64,9 @@ export interface UpdateUser {
 
 export interface DeleteUser {
     id: number;
+}
+
+export interface SignIn {
+    email: string,
+    password: string
 }

@@ -38,7 +38,7 @@ const createUser: RouteOptions = {
 
       if (userToken) {
         reply.setCookie('token', userToken, {signed: false});
-        reply.code(200).send({message: 'User created'});
+        reply.code(201).send({message: 'User created'});
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }
