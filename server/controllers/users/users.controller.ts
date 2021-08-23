@@ -50,18 +50,19 @@ export async function createUserController(userData: User): Promise<string> {
     };
 
     await userHandler.insertOne(payload);
+    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name']);
     // if create success.
-    const token = issueToken({user_name: payload.user_name});
+    const token = issueToken({user_name: user.user_name, id: user.id});
     return token;
   } catch (error) {
     throw error;
   }
 }
 
-export async function getUserController(userName: string): Promise<User> {
+export async function getUserController(user_name: string): Promise<User> {
   try {
-    return await userHandler.dbHandler<{ userName: string }, User>('GET_USER', {
-      userName
+    return await userHandler.dbHandler<{ user_name: string }, User>('GET_USER', {
+      user_name
     });
   } catch (error) {
     throw error;
@@ -116,16 +117,16 @@ export async function validateUserController(
     );
 
     if (!dbData) {
-      return 'Invalid Username or Password';
+      return;
     }
 
     const hashData = createHash(userData.password, dbData.salt);
 
     if (dbData.password === hashData.password) {
-      const token = issueToken({dbData});
-      return { 'token': token };
+      const token = issueToken({user_name: dbData.user_name, id: dbData.id});
+      return token;
     }
-    return 'Invalid Username or Password';
+    return;
   } catch (error) {
     throw error;
   }

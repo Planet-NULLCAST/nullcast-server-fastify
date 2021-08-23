@@ -12,11 +12,11 @@ const getNewToken: RouteOptions = {
       const token = request.cookies.token as string;
       const userToken = controller.generateNewTokenController(token);
       if (userToken) {
-        reply.setCookie('token', userToken, {signed: false});
+        reply.setCookie('token', userToken, { signed: false });
         reply.code(200).send();
       }
     }
-    reply.code(401).send({message: 'Cannot issue new token. Token provided is not valid'});
+    reply.code(401).send({ message: 'Cannot issue new token. Token provided is not valid' });
   }
 };
 
@@ -25,16 +25,16 @@ const signIn: RouteOptions = {
   url: '/signin',
   schema: signInSchema,
   handler: async(request, reply) => {
-    const res = await controller.validateUserController(request.body as ValidateUser);
-    if (res) {
-      reply.code(200).send(res);
-    } else {
-      reply.code(500);
+    const userToken = await controller.validateUserController(request.body as ValidateUser);
+    if (userToken) {
+      reply.setCookie('token', userToken, { signed: false });
+      reply.code(200).send();
     }
+    reply.code(401).send({ message: 'Invalid username or password' });
   }
 };
 
-function initTokensRoutes(server:FastifyInstance, _:any, done: () => void) {
+function initTokensRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.route(getNewToken);
   server.route(signIn);
 
