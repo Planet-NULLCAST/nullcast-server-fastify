@@ -49,6 +49,7 @@ export interface ValidateResponse {
     password: string,
     salt: string,
     email: string,
+    id: string,
 }
 
 export interface UpdateUser {

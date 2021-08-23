@@ -1,6 +1,6 @@
 import {Actions} from 'interfaces/service-actions.type';
 import {
-  createUser, deleteUser, getUser, updateUser, ValidateUser
+  createUser, deleteUser, getUser, updateUser, validateUser
 } from './users.service';
 import * as commonService from './query-builder.service';
 
@@ -9,7 +9,7 @@ export const serviceActions: {[x in Actions]:any} = {
   'GET_USER': getUser,
   'DELETE_USER': deleteUser,
   'UPDATE_USER': updateUser,
-  'VALIDATE_USER': ValidateUser
+  'VALIDATE_USER': validateUser
 };
 
 export const commonActions = {
