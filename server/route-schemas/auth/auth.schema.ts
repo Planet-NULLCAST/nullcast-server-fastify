@@ -4,9 +4,9 @@ export const signInSchema = {
   tags: ['User'],
   body: {
     type: 'object',
-    required: ['email', 'password'],
+    required: ['user_name', 'password'],
     properties: {
-      email: {
+      user_name: {
         type: 'string',
         description: 'Email Id of the user'
       },
@@ -17,24 +17,18 @@ export const signInSchema = {
     }
   },
   response: {
-    201: {
-      description: 'User created success.',
+    200: {
+      description: 'Token issued ',
       type: 'object',
       properties: {
-        message: {
-          default: 'Response Message',
+        token: {
           type: 'string'
         }
       }
     },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
+    401: {
+      description: 'Unauthorized request',
+      type: 'string'
     }
   }
 };
