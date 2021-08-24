@@ -1,7 +1,9 @@
 import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers';
-import {Post, DeletePost, SearchQuery} from 'interfaces/post.type';
+import {
+  Post, DeletePost, SearchQuery
+} from 'interfaces/post.type';
 
 
 const createPost: RouteOptions = {
