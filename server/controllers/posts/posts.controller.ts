@@ -63,7 +63,7 @@ export async function deletePostController(postData:DeletePost) : Promise<boolea
   }
 }
 
-export async function getPostController(getData:SearchQuery): Promise<Post> {
+export async function getPostsController(getData:SearchQuery): Promise<Post> {
   try {
     return await postHandler.dbHandler<{ getData: SearchQuery }, Post>('GET_POSTS', {
       getData

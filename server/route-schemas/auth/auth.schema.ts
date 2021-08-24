@@ -28,7 +28,12 @@ export const signInSchema = {
     },
     401: {
       description: 'Unauthorized request',
-      type: 'string'
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
     }
   }
 };

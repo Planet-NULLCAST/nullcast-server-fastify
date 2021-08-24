@@ -7,7 +7,7 @@ import {
 } from 'interfaces/user.type';
 
 
-export async function getUser(payload: { userName: string }): Promise<User> {
+export async function getUser(payload: { user_name: string }): Promise<User> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserQuery: QueryConfig = {
@@ -15,7 +15,7 @@ export async function getUser(payload: { userName: string }): Promise<User> {
     text: `SELECT entity_id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status, salt
         FROM users
         WHERE user_name = $1;`,
-    values: [payload.userName]
+    values: [payload.user_name]
   };
 
   const data = await postgresClient.query<User>(getUserQuery);
@@ -57,14 +57,17 @@ export async function deleteUser(payload: ValidateUser): Promise<boolean> {
   }
 }
 
-export async function ValidateUser(payload: ValidateUser) {
+export async function validateUser(payload: ValidateUser) {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
-      text: `SELECT email, user_name, password, salt FROM users WHERE user_name = $1;`,
-      values: [payload.user_name]
+      text: `SELECT id, email, user_name, password, salt FROM users 
+      WHERE (user_name = $1)
+      OR (email = $1)
+      AND password = $2;`,
+      values: [payload.user_name, payload.password]
     };
 
     const queryData = await postgresClient.query<ValidateUser>(
