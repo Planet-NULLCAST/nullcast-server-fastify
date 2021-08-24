@@ -62,7 +62,7 @@ const getPosts: RouteOptions = {
   handler: async(request, reply) => {
     const queryParams = request.query as SearchQuery;
     if (queryParams) {
-      const posts = await controller.getPostController(queryParams);
+      const posts = await controller.getPostsController(queryParams);
       reply.code(200).send({posts});
     } else {
       reply.code(500).send({message: 'some error'});
