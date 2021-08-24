@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS posts (
     canonical_url VARCHAR(255),
     preview_url VARCHAR(255),
     banner_image VARCHAR(255),
-    primary_tag INTEGER NOT NULL REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    primary_tag INTEGER REFERENCES tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
     meta_title VARCHAR(255),
     meta_description TEXT,
     og_image VARCHAR(255),

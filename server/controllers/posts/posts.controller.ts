@@ -1,5 +1,5 @@
 import {
-  Post, UpdatePost, DeletePost, mobiledoc
+  Post, UpdatePost, DeletePost, mobiledoc, SearchQuery
 } from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
@@ -58,6 +58,16 @@ export async function deletePostController(postData:DeletePost) : Promise<boolea
 
     await postHandler.deleteOneById(id);
     return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPostController(getData:SearchQuery): Promise<Post> {
+  try {
+    return await postHandler.dbHandler<{ getData: SearchQuery }, Post>('GET_POSTS', {
+      getData
+    });
   } catch (error) {
     throw error;
   }

@@ -1,7 +1,7 @@
 import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers';
-import {Post, DeletePost} from 'interfaces/post.type';
+import {Post, DeletePost, SearchQuery} from 'interfaces/post.type';
 
 
 const createPost: RouteOptions = {
@@ -23,16 +23,6 @@ const createPost: RouteOptions = {
 
   }
 };
-
-// const getPost: RouteOptions = {
-//     method: 'GET',
-//     url: '/post/:postName',
-//     handler: async (request, reply) => {
-//         const params = request.params as {postName: string};
-//         const postData =  await controller.getPostController(params.postName);
-//         reply.code(200).send({data: postData});
-//     }
-// }
 
 const updatePost: RouteOptions = {
   method: 'PUT',
@@ -64,13 +54,32 @@ const deletePost: RouteOptions = {
   }
 };
 
+const getPosts: RouteOptions = {
+  method: 'GET',
+  url: '/posts',
+  handler: async(request, reply) => {
+    const queryParams = request.query as SearchQuery;
+    if (queryParams) {
+      const posts = await controller.getPostController(queryParams);
+      reply.code(200).send({posts});
+    } else {
+      reply.code(500).send({message: 'some error'});
+    }
+  }
+};
 
 function initPosts(server:FastifyInstance, _:any, done: () => void) {
   server.route(createPost);
   // server.route(getPost);
   server.route(updatePost);
   server.route(deletePost);
-
+  server.route(getPosts);
+  //getPostsbyuserid
+  //getPublishedPostsCountByUserId
+  //getPublishedPosts <-
+  //getPostBySlug <-
+  //changePostStatus <- PATCH
+  //asc limit 10
   done();
 }
 
