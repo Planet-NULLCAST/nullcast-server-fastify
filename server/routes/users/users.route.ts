@@ -75,7 +75,7 @@ const deleteUser: RouteOptions = {
     const requesyBody = request.body as DeleteUser;
 
     if (await controller.deleteUserController(requesyBody)) {
-      reply.code(201).send({message: 'User deleted'});
+      reply.code(200).send({message: 'User deleted'});
     } else {
       reply.code(500).send({message: 'User not deleted'});
     }
