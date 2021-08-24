@@ -40,10 +40,10 @@ export async function createPostController(postData:Post): Promise<boolean> {
 
 export async function getPostController(postId:number):Promise<Post> {
   try {
-    const fields = ["visibilty", "featured", "updated_by", "status", "banner_image", "primary_tag", "html", "type", "slug", "created_by", "published_by"];
+    const fields = ['visibilty', 'featured', 'updated_by', 'status', 'banner_image', 'primary_tag', 'html', 'type', 'slug', 'created_by', 'published_by'];
 
-    return await postHandler.findOneById(postId,fields);
-  } catch(error) {
+    return await postHandler.findOneById(postId, fields);
+  } catch (error) {
     return error;
   }
 }
