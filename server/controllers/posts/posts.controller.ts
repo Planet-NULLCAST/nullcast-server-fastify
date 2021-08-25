@@ -19,14 +19,7 @@ export async function createPostController(postData:Post): Promise<boolean> {
       html,
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
-      status: postData.status,
-      visibilty: postData.visibilty,
-      featured: postData.featured,
-      banner_image: postData.banner_image,
-      type: postData.type,
-      updated_at: new Date().toISOString(),
-      published_at: new Date().toISOString(),
-      updated_by: postData.updated_by
+      created_by: postData.created_by
     };
 
 

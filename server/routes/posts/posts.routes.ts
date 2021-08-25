@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
@@ -15,7 +16,12 @@ const createPost: RouteOptions = {
   schema: createPostSchema,
   handler: async(request, reply) => {
     try {
-      const post = await controller.createPostController(request.body as Post);
+      const requestBody = {
+        created_by: request.user?.id,
+        ...request.body as Post
+      };
+      console.log(requestBody);
+      const post = await controller.createPostController(requestBody as Post);
 
       if (post) {
         reply.code(201).send({ message: 'Post created' });

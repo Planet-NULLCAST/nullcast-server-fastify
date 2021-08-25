@@ -5,7 +5,7 @@ export const createPostSchema = {
   tags: ['Post'],
   body:  {
     type: 'object',
-    required: ['slug', 'primary_tag'],
+    required: ['slug'],
     properties: {
       slug: {
         type: 'string',
@@ -80,7 +80,14 @@ export const updatePostSchema = {
   description: 'A PUT route to update data in posts',
   tags: ['Post'],
   params: {
-    type: 'object'
+    type: 'object',
+    description: 'asdad',
+    properties: {
+      id : {
+        type: 'string',
+        description: 'asdasd'
+      }
+    }
   },
   body:  {
     type: 'object',
