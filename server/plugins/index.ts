@@ -1,4 +1,5 @@
 import {FastifyInstance} from 'fastify';
+
 import {fastifyAuthPlugin} from './auth.plugin';
 import {fastifyCookiePlugin} from './cookie.plugin';
 import {fastifyCorsPlugin} from './cors.plugin';
