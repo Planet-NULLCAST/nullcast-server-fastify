@@ -37,7 +37,7 @@ const createUser: RouteOptions = {
       const userToken = await controller.createUserController(request.body as User);
 
       if (userToken) {
-        reply.setCookie('token', userToken, {signed: false, domain:"localhost", path:"/", secure:true, httpOnly:true, maxAge:16*60, sameSite:'none'});
+        reply.setCookie('token', userToken, {signed: false, domain:'localhost', path:'/', secure:true, httpOnly:true, maxAge:16*60, sameSite:'none'});
         reply.code(201).send({message: 'User created'});
       } else {
         reply.code(500).send({message:'Something Error happend'});
