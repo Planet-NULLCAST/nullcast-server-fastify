@@ -43,7 +43,7 @@ export async function createUserController(userData: User): Promise<string> {
       salt: hashData.salt,
       password: hashData.password,
       primary_badge: badge.id,
-      slug: userData.slug,
+      slug: userData.user_name.toLowerCase(),
       user_name: userData.user_name.toLowerCase(),
       full_name: userData.full_name.toLowerCase(),
       email: userData.email.toLowerCase()

@@ -4,8 +4,16 @@ export interface Post {
     slug?: string;
     created_by?: string;
     published_by?: string;
-    html: string,
-    mobiledoc: mobiledoc
+    html?: string,
+    mobiledoc?: mobiledoc,
+    status?: string;
+    visibilty?: string;
+    featured?: string;
+    banner_image?: string;
+    type?: string;
+    updated_at?: string;
+    published_at?: string;
+    updated_by?: number;
 }
 
 export interface mobiledoc {

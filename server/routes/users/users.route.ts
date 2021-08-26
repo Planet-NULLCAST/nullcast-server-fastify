@@ -37,7 +37,7 @@ const createUser: RouteOptions = {
       const userToken = await controller.createUserController(request.body as User);
 
       if (userToken) {
-        reply.setCookie('token', userToken, {signed: false});
+        reply.setCookie('token', userToken, {signed: false, domain:'localhost', path:'/', secure:true, httpOnly:true, maxAge:16*60, sameSite:'none'});
         reply.code(201).send({message: 'User created'});
       } else {
         reply.code(500).send({message:'Something Error happend'});
@@ -75,7 +75,7 @@ const deleteUser: RouteOptions = {
     const requesyBody = request.body as DeleteUser;
 
     if (await controller.deleteUserController(requesyBody)) {
-      reply.code(201).send({message: 'User deleted'});
+      reply.code(200).send({message: 'User deleted'});
     } else {
       reply.code(500).send({message: 'User not deleted'});
     }
