@@ -42,8 +42,7 @@
     "lodash": "^4.17.21",
     "oembed-parser": "^1.4.7",
     "pg": "^8.7.1",
-    "validator": "^13.6.0",
-    "yarn": "^1.22.11"
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.4",
