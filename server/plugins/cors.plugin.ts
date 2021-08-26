@@ -10,6 +10,6 @@ export function fastifyCorsPlugin(server:FastifyInstance) {
     allowedHeaders: ['Access-Control-Allow-Headers',
       'x-access-token, Origin, Content-Type, Accept'],
     credentials: true,
-    exposedHeaders: ["set-cookie"],
+    exposedHeaders: ['set-cookie']
   });
 }
