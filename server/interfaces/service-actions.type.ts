@@ -3,7 +3,8 @@ export type Actions =
   | 'GET_USER'
   | 'DELETE_USER'
   | 'UPDATE_USER'
-  | 'VALIDATE_USER';
+  | 'VALIDATE_USER'
+  | 'GET_POSTS';
 
 export type CommonActions =
   | 'INSERT_ONE'
