@@ -8,8 +8,6 @@ import {
 export async function getPosts(
   queryParams: SearchQuery
 ) {
-  let i = 0;
-  const response = [];
   const defaultLimitValues =
       'id, primary_tag, slug, created_by, published_by, html, mobiledoc';
     // TODO: Check if certain query params exists and modify the prepared statements accordingly
@@ -49,18 +47,5 @@ export async function getPosts(
 
   const data = await postgresClient.query<Post>(getPostsQuery);
 
-  if (!data.rows.length) {
-    while (data.rows.length > i) {
-      response.push({
-        primary_tag: data.rows[i]?.primary_tag as number,
-        slug: data.rows[i]?.slug as string,
-        created_by: data.rows[i]?.created_by as string,
-        published_by: data.rows[i]?.published_by as string,
-        html: data.rows[i]?.html as string,
-        mobiledoc: data.rows[i]?.mobiledoc as mobiledoc
-      });
-      i++;
-    }
-  }
-  return response;
+  return data.rows;
 }
