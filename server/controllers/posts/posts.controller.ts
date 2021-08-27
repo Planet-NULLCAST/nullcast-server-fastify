@@ -1,5 +1,5 @@
 import {
-  Post, DeletePost, mobiledoc
+  Post, DeletePost, mobiledoc, SearchQuery
 } from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
@@ -24,7 +24,7 @@ export async function createPostController(postData:Post): Promise<boolean> {
       featured: postData.featured,
       banner_image: postData.banner_image,
       type: postData.type,
-      updated_at: new Date().toISOString()
+      created_by: postData.created_by
     };
 
 
@@ -83,6 +83,16 @@ export async function deletePostController(postData:DeletePost) : Promise<boolea
 
     await postHandler.deleteOneById(id);
     return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPostsController(getData:SearchQuery): Promise<Post> {
+  try {
+    return await postHandler.dbHandler<{ getData: SearchQuery }, Post>('GET_POSTS', {
+      getData
+    });
   } catch (error) {
     throw error;
   }

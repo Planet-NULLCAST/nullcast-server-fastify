@@ -1,10 +1,13 @@
-import {RouteOptions} from 'fastify';
-import {FastifyInstance} from 'fastify/types/instance';
+/* eslint-disable no-unused-vars */
+import { RouteOptions } from 'fastify';
+import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
-import {Post, DeletePost} from 'interfaces/post.type';
-import  {
+import {
+  Post, DeletePost, SearchQuery
+} from 'interfaces/post.type';
+import {
   createPostSchema, getPostSchema, updatePostSchema, deletePostSchema
-}  from '../../route-schemas/post/post.schema';
+} from '../../route-schemas/post/post.schema';
 
 
 const createPost: RouteOptions = {
@@ -13,12 +16,17 @@ const createPost: RouteOptions = {
   schema: createPostSchema,
   handler: async(request, reply) => {
     try {
-      const post = await controller.createPostController(request.body as Post);
+      const requestBody = {
+        created_by: request.user?.id,
+        ...request.body as Post
+      };
+      console.log(requestBody);
+      const post = await controller.createPostController(requestBody as Post);
 
       if (post) {
-        reply.code(201).send({message: 'Post created'});
+        reply.code(201).send({ message: 'Post created' });
       } else {
-        reply.code(500).send({message:'Something Error happend'});
+        reply.code(500).send({ message: 'Something Error happend' });
       }
 
     } catch (error) {
@@ -34,10 +42,10 @@ const getPost: RouteOptions = {
   schema: getPostSchema,
   handler: async(request, reply) => {
     try {
-      const params = request.params as {postId: number};
-      const postData =  await controller.getPostController(params.postId);
+      const params = request.params as { postId: number };
+      const postData = await controller.getPostController(params.postId);
       console.log(postData, '-------');
-      reply.code(200).send({data: postData});
+      reply.code(200).send({ data: postData });
     } catch (error) {
       throw error;
     }
@@ -51,9 +59,9 @@ const updatePost: RouteOptions = {
   handler: async(request, reply) => {
     try {
       if (await controller.updatePostController(request.body as Post)) {
-        reply.code(200).send({message: 'Post updated'});
+        reply.code(200).send({ message: 'Post updated' });
       } else {
-        reply.code(500).send({message:'Something Error happend'});
+        reply.code(500).send({ message: 'Something Error happend' });
       }
     } catch (error) {
       throw error;
@@ -69,20 +77,39 @@ const deletePost: RouteOptions = {
     const requestBody = request.body as DeletePost;
 
     if (await controller.deletePostController(requestBody)) {
-      reply.code(200).send({message: 'Post deleted'});
+      reply.code(200).send({ message: 'Post deleted' });
     } else {
-      reply.code(500).send({message: 'Post not deleted'});
+      reply.code(500).send({ message: 'Post not deleted' });
     }
   }
 };
 
+const getPosts: RouteOptions = {
+  method: 'GET',
+  url: '/posts',
+  handler: async(request, reply) => {
+    const queryParams = request.query as SearchQuery;
+    if (queryParams) {
+      const posts = await controller.getPostsController(queryParams);
+      reply.code(200).send({ posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
 
-function initPosts(server:FastifyInstance, _:any, done: () => void) {
+function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(createPost);
   server.route(getPost);
   server.route(updatePost);
   server.route(deletePost);
-
+  server.route(getPosts);
+  //getPostsbyuserid
+  //getPublishedPostsCountByUserId
+  //getPublishedPosts <-
+  //getPostBySlug <-
+  //changePostStatus <- PATCH
+  //asc limit 10
   done();
 }
 
