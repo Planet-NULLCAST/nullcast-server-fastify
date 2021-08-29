@@ -63,11 +63,10 @@ export async function validateUser(payload: ValidateUser) {
 
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
-      text: `SELECT id, email, user_name, password, salt FROM users 
+      text: `SELECT id, email, user_name, password, salt, full_name FROM users 
       WHERE (user_name = $1)
-      OR (email = $1)
-      AND password = $2;`,
-      values: [payload.user_name, payload.password]
+      OR (email = $1)`,
+      values: [payload.email]
     };
 
     const queryData = await postgresClient.query<ValidateUser>(

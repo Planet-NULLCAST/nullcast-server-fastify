@@ -1,9 +1,5 @@
 import { Client, QueryConfig } from 'pg';
-import {
-  mobiledoc,
-  Post,
-  SearchQuery
-} from 'interfaces/post.type';
+import { Post, SearchQuery } from 'interfaces/post.type';
 
 export async function getPosts(
   queryParams: SearchQuery

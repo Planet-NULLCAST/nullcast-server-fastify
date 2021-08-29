@@ -42,10 +42,9 @@ const getPost: RouteOptions = {
   schema: getPostSchema,
   handler: async(request, reply) => {
     try {
-      const params = request.params as { postId: number };
-      const postData = await controller.getPostController(params.postId);
-      console.log(postData, '-------');
-      reply.code(200).send({ data: postData });
+      const params = request.params as {postId: number};
+      const postData =  await controller.getPostController(params.postId);
+      reply.code(200).send({data: postData});
     } catch (error) {
       throw error;
     }

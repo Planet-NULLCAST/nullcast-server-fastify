@@ -4,7 +4,8 @@ import {
   ValidateResponse,
   User,
   UpdateUser,
-  DeleteUser
+  DeleteUser,
+  cookieData
 } from 'interfaces/user.type';
 import { createHash, createRandomBytes } from '../../utils/hash-utils';
 
@@ -17,7 +18,7 @@ const userHandler = new DatabaseHandler(USER_TABLE);
 const entityHandler = new DatabaseHandler(ENTITY_TABLE);
 const badgeHandler = new DatabaseHandler(BADGE_TABLE);
 
-export async function createUserController(userData: User): Promise<string> {
+export async function createUserController(userData: User): Promise<cookieData> {
   try {
     // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
     const salt = createRandomBytes();
@@ -30,12 +31,9 @@ export async function createUserController(userData: User): Promise<string> {
     const entity = await entityHandler.findOneByField({ name: ENTITY_NAME }, [
       'id'
     ]);
-    console.log('entity', entity);
     const badge = await badgeHandler.findOneByField({ name: BADGE_NAME }, [
       'id'
     ]);
-
-    console.log(badge);
 
     const payload: User = {
       ...userData,
@@ -50,10 +48,16 @@ export async function createUserController(userData: User): Promise<string> {
     };
 
     await userHandler.insertOne(payload);
-    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name']);
+    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name', 'full_name']);
     // if create success.
     const token = issueToken({user_name: user.user_name, id: user.id});
-    return token;
+
+    const loginData: cookieData = {
+      token,
+      user
+    };
+
+    return loginData ;
   } catch (error) {
     throw error;
   }
@@ -95,7 +99,7 @@ export async function updateUserController(userData: User): Promise<boolean> {
     const payload: UpdateUser = {
       user_name: userData.user_name.toLowerCase(),
       full_name: userData.full_name.toLowerCase(),
-      slug: userData.slug,
+      slug: userData.user_name.toLowerCase(),
       email: userData.email.toLowerCase(),
       updated_at: new Date().toISOString()
     };
@@ -107,9 +111,7 @@ export async function updateUserController(userData: User): Promise<boolean> {
   }
 }
 
-export async function validateUserController(
-  userData: ValidateUser
-) {
+export async function validateUserController(userData: ValidateUser) {
   try {
     const dbData =  await userHandler.dbHandler<ValidateUser, ValidateResponse>(
       'VALIDATE_USER',
@@ -123,8 +125,18 @@ export async function validateUserController(
     const hashData = createHash(userData.password, dbData.salt);
 
     if (dbData.password === hashData.password) {
+      const user = {
+        id: dbData.id,
+        user_name: dbData.user_name,
+        full_name: dbData.full_name
+      };
       const token = issueToken({user_name: dbData.user_name, id: dbData.id});
-      return token;
+
+      const cookieData = {
+        user,
+        token
+      };
+      return cookieData;
     }
     return;
   } catch (error) {
