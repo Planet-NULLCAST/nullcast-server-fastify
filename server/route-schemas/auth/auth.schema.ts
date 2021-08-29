@@ -4,9 +4,9 @@ export const signInSchema = {
   tags: ['User'],
   body: {
     type: 'object',
-    required: ['user_name', 'password'],
+    required: ['email', 'password'],
     properties: {
-      user_name: {
+      email: {
         type: 'string',
         description: 'Email Id of the user'
       },
@@ -21,8 +21,22 @@ export const signInSchema = {
       description: 'Token issued ',
       type: 'object',
       properties: {
-        token: {
+        message: {
           type: 'string'
+        },
+        user: {
+          type: 'object',
+          properties:{
+            id: {
+              type: 'string'
+            },
+            user_name: {
+              type: 'string'
+            },
+            full_name: {
+              type: 'string'
+            }
+          }
         }
       }
     },

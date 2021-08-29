@@ -35,12 +35,25 @@ export const createUserSchema = {
   },
   response: {
     201: {
-      description: 'User created success.',
+      description: 'User created successfully.',
       type: 'object',
       properties: {
         message: {
-          default: 'Response Message',
           type: 'string'
+        },
+        user: {
+          type: 'object',
+          properties:{
+            id: {
+              type: 'string'
+            },
+            user_name: {
+              type: 'string'
+            },
+            full_name: {
+              type: 'string'
+            }
+          }
         }
       }
     },
