@@ -1,8 +1,9 @@
-enum status { published=1, draft=2 }
+enum status { published, drafted }
 enum order { ASC, DESC }
 export interface Post {
     id?: number;
     primary_tag?: number;
+    title?: string;
     slug?: string;
     created_by?: string;
     published_by?: string;
@@ -42,7 +43,9 @@ export interface SearchQuery {
     limit?: number;
     status?: status,
     order?: order,
-    sort_field?: string
+    sort_field?: string,
+    with_table?: string,
+    by_slug?: boolean
 }
 
 export interface GetResponse {

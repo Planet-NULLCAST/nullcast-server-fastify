@@ -1,19 +1,19 @@
+import { BAD_REQUEST, CREATED } from 'route-schemas/response';
+import { queryStringProps } from './post.properties';
+
+const { limit_fields, with_table } = queryStringProps;
 
 export const createPostSchema = {
   summary: 'Create Post',
   description: 'A POST route to create a post and store its data',
   tags: ['Post'],
-  body:  {
+  body: {
     type: 'object',
-    required: ['slug'],
+    required: [],
     properties: {
       slug: {
         type: 'string',
         description: 'user should provide slug'
-      },
-      primary_tag: {
-        type: 'string',
-        description: 'user should provide primary tag'
       },
       html: {
         type: 'string',
@@ -54,24 +54,8 @@ export const createPostSchema = {
     }
   },
   response: {
-    201: {
-      description: 'Post created successfully.',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
+    201: CREATED,
+    400: BAD_REQUEST
   }
 };
 
@@ -83,13 +67,13 @@ export const updatePostSchema = {
     type: 'object',
     description: 'asdad',
     properties: {
-      id : {
+      id: {
         type: 'string',
         description: 'asdasd'
       }
     }
   },
-  body:  {
+  body: {
     type: 'object',
     properties: {
       html: {
@@ -136,22 +120,21 @@ export const updatePostSchema = {
         }
       }
     },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
+    400: BAD_REQUEST
   }
 };
 
 export const getPostSchema = {
-  summary: 'Get User',
-  description: 'To get post information',
+  summary: 'Get post',
+  description: 'To get post information by id',
   tags: ['Post'],
+  queryString: {
+    type: 'object',
+    properties: {
+      limit_fields,
+      with_table
+    }
+  },
   params: {
     type: 'object',
     properties: {
@@ -159,23 +142,42 @@ export const getPostSchema = {
     }
   },
   response: {
-    200: {
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
+    400: BAD_REQUEST
+  }
+};
+
+export const getPostBySlugSchema = {
+  summary: 'Get post by slug',
+  description: 'To get post information by slug',
+  tags: ['Post'],
+  queryString: {
+    type: 'object',
+    properties: {
+      limit_fields,
+      with_table
     }
+  },
+  params: {
+    type: 'object',
+    properties: {
+      slug: { type: 'string', description: 'Slug of the post' }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getPostsSchema = {
+  summary: 'Get posts',
+  description: 'To get post information',
+  tags: ['Post'],
+  querystring: {
+    type: 'object',
+    properties: queryStringProps
+  },
+  response: {
+    400: BAD_REQUEST
   }
 };
 
@@ -199,14 +201,6 @@ export const deletePostSchema = {
         }
       }
     },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
+    400: BAD_REQUEST
   }
 };
