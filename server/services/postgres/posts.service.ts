@@ -1,14 +1,15 @@
 import { Client, QueryConfig } from 'pg';
 import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = 'id, slug, created_by, html, mobiledoc, created_at',
+const DEFAULT_FIELDS = 'id, slug, created_by, html, mobiledoc, created_at, published_at',
   DEFAULT_JOINS = 'users';
 
 function constructJoinQuery({
   limit_fields = DEFAULT_FIELDS,
   with_table = DEFAULT_JOINS
-}: QueryParams) {
+}: QueryParams, userId?: number) {
   // Set default values for query param
 
   limit_fields = limit_fields
@@ -49,13 +50,29 @@ function constructJoinQuery({
                           COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
                           LEFT JOIN post_votes AS votes ON votes.id = post.id`;
+
+
+      if (userId) {
+        // Check if the user has voted or not,
+        // If voted, find if it's up or down
+        SELECT_CLAUSE = `${SELECT_CLAUSE}, 
+                        CASE
+                        WHEN votes.user_id = ${userId} THEN
+                                CASE
+                                        WHEN votes.value = 1 THEN 'up'
+                                        WHEN votes.value = -1 THEN 'down'
+                                END
+                        ELSE null
+                        END as vote_kind`;
+        GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, votes.user_id, votes.value`;
+      }
     }
   }
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE };
 }
 
-export async function getPosts(queryParams: QueryParams) {
+export async function getPosts(queryParams: QueryParams, user: TokenUser) {
   // Set default values for query params
   const {
     limit_fields,
@@ -64,7 +81,7 @@ export async function getPosts(queryParams: QueryParams) {
     limit = 10,
     status = 'drafted',
     order = 'ASC',
-    sort_field = 'id',
+    sort_field = 'published_at',
     with_table
   } = queryParams;
 
@@ -82,7 +99,7 @@ export async function getPosts(queryParams: QueryParams) {
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
-  });
+  }, user.id);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -106,7 +123,8 @@ export async function getPosts(queryParams: QueryParams) {
 
 export async function getSinglePost(
   payload: { key: string | number; field: string },
-  queryParams: QueryParams
+  queryParams: QueryParams,
+  user: TokenUser
 ) {
   const { key, field = 'id' } = payload;
   // Set default values for query params
@@ -119,7 +137,7 @@ export async function getSinglePost(
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
-  });
+  }, user.id);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -138,7 +156,10 @@ export async function getSinglePost(
 }
 
 export async function getPostsBytag() {
+
+
   /**
+   *
    * select posts.id as post_id, posts.html as html,
 COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name)) FILTER (WHERE t.id IS NOT NULL), '[]') AS tag,
 JSON_BUILD_OBJECT('id', u.id, 'user_name', u.user_name) AS user,
@@ -147,14 +168,20 @@ count(CASE WHEN votes.value = -1 THEN 1 END) as downvotes
 
 from tags
 
-join post_tags on post_tags.tag_id = tags.id
+LEFT join post_tags on post_tags.tag_id = tags.id
 LEFT join posts on posts.id = post_tags.post_id
+
 LEFT JOIN post_votes as votes on votes.id = posts.id
+
 JOIN users AS u ON u.id = posts.created_by
+
+
+-- get all the tags from posts
 LEFT join post_tags as pt on pt.post_id = posts.id
-JOIN tags as t on post_tags.tag_id = pt.tag_id
+LEFT JOIN tags as t on t.id = pt.tag_id
 
 where tags.name = 'js'
 GROUP BY posts.id, u.user_name, u.id
+ORDER BY posts.created_at
    */
 }

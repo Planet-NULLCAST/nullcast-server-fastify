@@ -2,6 +2,7 @@ import { Actions } from 'interfaces/service-actions.type';
 import { QueryResult, QueryResultRow } from 'pg';
 import { commonActions, serviceActions } from './action-list';
 import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 
 export class DatabaseHandler {
   private tableName: string;
@@ -10,13 +11,14 @@ export class DatabaseHandler {
   }
 
   // Todo: rename function name to query
-  public async dbHandler<payLoadType, ResponseType>(
+  public async dbHandler<PayLoadType, ResponseType>(
     action: Actions,
-    payload: payLoadType,
-    queryParams?: QueryParams
+    payload: PayLoadType,
+    queryParams?: QueryParams,
+    user?: TokenUser
   ): Promise<ResponseType> {
     try {
-      return (await serviceActions[action](payload, queryParams)) as ResponseType;
+      return (await serviceActions[action](payload, queryParams, user)) as ResponseType;
     } catch (error) {
       throw error;
     }
@@ -25,11 +27,11 @@ export class DatabaseHandler {
   /**
    * A function to insert one record into database
    *
-   * @param payload {payLoadType}
+   * @param payload {PayLoadType}
    * @returns {Promise}
    */
-  public async insertOne<payLoadType, ResponseType>(
-    payload: payLoadType
+  public async insertOne<PayLoadType, ResponseType>(
+    payload: PayLoadType
   ): Promise<QueryResult<ResponseType>> {
     try {
       return await commonActions.INSERT_ONE(this.tableName, payload);
@@ -41,7 +43,7 @@ export class DatabaseHandler {
   /**
    * A function to insert many records into database
    *
-   * @param payload {payLoadType}
+   * @param payload {PayLoadType}
    * @returns {Promise}
    */
   public async insertMany(
@@ -98,9 +100,9 @@ export class DatabaseHandler {
    * @param id {Number}
    * @returns {Promise}
    */
-  public async updateOneById<payLoadType>(
+  public async updateOneById<PayLoadType>(
     id: number,
-    payload: payLoadType
+    payload: PayLoadType
   ): Promise<QueryResult> {
     try {
       return (await commonActions.UPDATE_BY_ID(
@@ -120,8 +122,8 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-  public async findOneByField<payLoadType>(
-    payload: payLoadType,
+  public async findOneByField<PayLoadType>(
+    payload: PayLoadType,
     attributes: any[]
   ): Promise<QueryResultRow> {
     try {
