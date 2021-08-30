@@ -79,7 +79,7 @@ async function jwtAuth(request: FastifyRequest) {
     if (verificationStatus) {
       request.user = {
         user_name: verificationStatus.user_name as string,
-        id: verificationStatus.id as string
+        id: +verificationStatus.id as number
       };
       return;
     }

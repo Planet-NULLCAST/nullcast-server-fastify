@@ -1,43 +1,23 @@
-
-export type UserStatus =
-'active' |
-'inactive'
-
-// export interface User {
-//     id?: number;
-//     entityId?: number;
-//     userName: string;
-//     fullName: string;
-//     email: string;
-//     password: string;
-//     salt: string;
-//     createdAt: string;
-//     updatedAt: string;
-//     coverImage?: string;
-//     bio?: string;
-//     status?: UserStatus,
-//     slug?: string;
-//     primaryBadge?: number;
-// }
+export type UserStatus = 'active' | 'inactive';
 
 export interface User {
-    id?: number,
-    entity_id?: number;
-    password?: string;
-    user_name: string;
-    full_name: string;
-    email: string;
-    salt?:string;
-    created_at?: string;
-    updated_at?: string;
-    bio?: string;
-    status?: UserStatus;
-    slug: string;
-    primary_badge: number;
-    cover_image?: string
+  id?: number;
+  entity_id?: number;
+  password?: string;
+  user_name: string;
+  full_name: string;
+  email: string;
+  salt?: string;
+  created_at?: string;
+  updated_at?: string;
+  bio?: string;
+  status?: UserStatus;
+  slug: string;
+  primary_badge: number;
+  cover_image?: string;
 }
 
-export type CreateUserQuery = User
+export type CreateUserQuery = User;
 
 export interface ValidateUser  {
     email?: string;
@@ -55,23 +35,27 @@ export interface ValidateResponse {
 }
 
 export interface UpdateUser {
-    user_name: string;
-    full_name: string;
-    email: string;
-    updated_at?: string;
-    bio?: string;
-    status?: UserStatus;
-    slug: string;
-    cover_image?: string
+  user_name: string;
+  full_name: string;
+  email: string;
+  updated_at?: string;
+  bio?: string;
+  status?: UserStatus;
+  slug: string;
+  cover_image?: string;
 }
 
 export interface DeleteUser {
-    id: number;
+  id: number;
 }
 
 export interface SignIn {
-    email: string,
-    password: string
+  email: string;
+  password: string;
+}
+export interface TokenUser {
+  user_name: string;
+  id: number;
 }
 
 export interface cookieData {
