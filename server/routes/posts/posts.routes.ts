@@ -6,8 +6,9 @@ import {
   Post, DeletePost, SearchQuery
 } from 'interfaces/post.type';
 import {
-  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema
+  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema
 } from '../../route-schemas/post/post.schema';
+import { QueryParams } from 'interfaces/query-params.type';
 
 
 const createPost: RouteOptions = {
@@ -16,12 +17,8 @@ const createPost: RouteOptions = {
   schema: createPostSchema,
   handler: async(request, reply) => {
     try {
-      const requestBody = {
-        created_by: request.user?.id,
-        ...request.body as Post
-      };
-      console.log(requestBody);
-      const post = await controller.createPostController(requestBody as Post);
+      (request.body as Post).created_by = request.user?.id;
+      const post = await controller.createPostController(request.body as Post);
 
       if (post) {
         reply.code(201).send({ message: 'Post created' });
@@ -36,20 +33,44 @@ const createPost: RouteOptions = {
   }
 };
 
+const getPosts: RouteOptions = {
+  method: 'GET',
+  url: '/posts',
+  schema: getPostsSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as SearchQuery;
+
+    if (queryParams) {
+      const posts = await controller.getPostsController(queryParams);
+      reply.code(200).send({ data: posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
+
 const getPost: RouteOptions = {
   method: 'GET',
   url: '/post/:postId',
   schema: getPostSchema,
   handler: async(request, reply) => {
     try {
-      const params = request.params as {postId: number};
-      const postData =  await controller.getPostController(params.postId);
-      reply.code(200).send({data: postData});
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const params = request.params as { postId: number };
+
+      const postData = await controller.getPostController(params.postId, queryParams);
+
+      if (!postData) {
+        reply.code(400).send({data: 'sdsds'});
+      }
+      reply.code(200).send({ data: postData });
     } catch (error) {
       throw error;
     }
   }
 };
+
+// TODO: GET Posts by slug similar to getPosts
 
 const updatePost: RouteOptions = {
   method: 'PUT',
@@ -79,20 +100,6 @@ const deletePost: RouteOptions = {
       reply.code(200).send({ message: 'Post deleted' });
     } else {
       reply.code(500).send({ message: 'Post not deleted' });
-    }
-  }
-};
-
-const getPosts: RouteOptions = {
-  method: 'GET',
-  url: '/posts',
-  handler: async(request, reply) => {
-    const queryParams = request.query as SearchQuery;
-    if (queryParams) {
-      const posts = await controller.getPostsController(queryParams);
-      reply.code(200).send({ posts });
-    } else {
-      reply.code(500).send({ message: 'some error' });
     }
   }
 };

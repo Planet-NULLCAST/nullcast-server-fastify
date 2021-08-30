@@ -1,22 +1,22 @@
-import {Actions} from 'interfaces/service-actions.type';
-import {QueryResult, QueryResultRow} from 'pg';
-import {commonActions, serviceActions} from './action-list';
-
+import { Actions } from 'interfaces/service-actions.type';
+import { QueryResult, QueryResultRow } from 'pg';
+import { commonActions, serviceActions } from './action-list';
+import { QueryParams } from 'interfaces/query-params.type';
 
 export class DatabaseHandler {
-
   private tableName: string;
   constructor(_tableName: string) {
     this.tableName = _tableName;
   }
 
-
   // Todo: rename function name to query
-  public async dbHandler<payLoadType, ResponseType>(action: Actions, payload: payLoadType): Promise<ResponseType> {
+  public async dbHandler<payLoadType, ResponseType>(
+    action: Actions,
+    payload: payLoadType,
+    queryParams?: QueryParams
+  ): Promise<ResponseType> {
     try {
-
-      return await serviceActions[action](payload) as ResponseType;
-
+      return (await serviceActions[action](payload, queryParams)) as ResponseType;
     } catch (error) {
       throw error;
     }
@@ -28,10 +28,11 @@ export class DatabaseHandler {
    * @param payload {payLoadType}
    * @returns {Promise}
    */
-  public async insertOne<payLoadType, ResponseType>(payload: payLoadType): Promise<QueryResult<ResponseType>> {
+  public async insertOne<payLoadType, ResponseType>(
+    payload: payLoadType
+  ): Promise<QueryResult<ResponseType>> {
     try {
       return await commonActions.INSERT_ONE(this.tableName, payload);
-
     } catch (error) {
       throw error;
     }
@@ -43,10 +44,14 @@ export class DatabaseHandler {
    * @param payload {payLoadType}
    * @returns {Promise}
    */
-  public async insertMany(payload: [{ [x: string]: any }]): Promise<QueryResult> {
+  public async insertMany(
+    payload: [{ [x: string]: any }]
+  ): Promise<QueryResult> {
     try {
-      return await commonActions.INSERT_MANY(this.tableName, payload) as QueryResult;
-
+      return (await commonActions.INSERT_MANY(
+        this.tableName,
+        payload
+      )) as QueryResult;
     } catch (error) {
       throw error;
     }
@@ -59,10 +64,12 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-  public async findOneById(id: number, attributes: string []): Promise<QueryResultRow> {
+  public async findOneById(
+    id: number,
+    attributes: string[]
+  ): Promise<QueryResultRow> {
     try {
       return await commonActions.FIND_BY_ID(this.tableName, id, attributes);
-
     } catch (error) {
       throw error;
     }
@@ -76,8 +83,10 @@ export class DatabaseHandler {
    */
   public async deleteOneById(id: number): Promise<QueryResult> {
     try {
-      return await commonActions.DELETE_BY_ID(this.tableName, id) as QueryResult;
-
+      return (await commonActions.DELETE_BY_ID(
+        this.tableName,
+        id
+      )) as QueryResult;
     } catch (error) {
       throw error;
     }
@@ -89,15 +98,20 @@ export class DatabaseHandler {
    * @param id {Number}
    * @returns {Promise}
    */
-  public async updateOneById<payLoadType>(id: number, payload: payLoadType): Promise<QueryResult> {
+  public async updateOneById<payLoadType>(
+    id: number,
+    payload: payLoadType
+  ): Promise<QueryResult> {
     try {
-      return await commonActions.UPDATE_BY_ID(this.tableName, id, payload) as QueryResult;
-
+      return (await commonActions.UPDATE_BY_ID(
+        this.tableName,
+        id,
+        payload
+      )) as QueryResult;
     } catch (error) {
       throw error;
     }
   }
-
 
   /**
    * A function to find one record by id
@@ -106,15 +120,20 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-  public async findOneByField<payLoadType>(payload: payLoadType, attributes: any []): Promise<QueryResultRow> {
+  public async findOneByField<payLoadType>(
+    payload: payLoadType,
+    attributes: any[]
+  ): Promise<QueryResultRow> {
     try {
-      return await commonActions.FIND_ONE_BY_FIELD(this.tableName, payload, attributes);
-
+      return await commonActions.FIND_ONE_BY_FIELD(
+        this.tableName,
+        payload,
+        attributes
+      );
     } catch (error) {
       throw error;
     }
   }
 }
-
 
 export default new DatabaseHandler('' as string);
