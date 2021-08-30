@@ -9,6 +9,7 @@ import {
   createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema
 } from '../../route-schemas/post/post.schema';
 import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 
 
 const createPost: RouteOptions = {
@@ -57,8 +58,9 @@ const getPost: RouteOptions = {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
       const params = request.params as { postId: number };
+      const user = request.user as TokenUser;
 
-      const postData = await controller.getPostController(params.postId, queryParams);
+      const postData = await controller.getPostController(params.postId, queryParams, user);
 
       if (!postData) {
         reply.code(400).send({data: 'sdsds'});
@@ -70,7 +72,7 @@ const getPost: RouteOptions = {
   }
 };
 
-// TODO: GET Posts by slug similar to getPosts
+// TODO: GET Posts by slug similar to getPost
 
 const updatePost: RouteOptions = {
   method: 'PUT',

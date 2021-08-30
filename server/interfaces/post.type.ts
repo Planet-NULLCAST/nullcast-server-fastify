@@ -5,7 +5,7 @@ export interface Post {
     primary_tag?: number;
     title?: string;
     slug?: string;
-    created_by?: string;
+    created_by?: number;
     published_by?: string;
     html?: string,
     mobiledoc?: mobiledoc,

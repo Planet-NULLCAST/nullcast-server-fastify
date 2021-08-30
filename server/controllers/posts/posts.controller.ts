@@ -5,6 +5,7 @@ import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
 import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 
 const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
 
@@ -33,24 +34,22 @@ export async function createPostController(postData:Post): Promise<boolean> {
   }
 }
 
-export async function getPostsController(getData:SearchQuery): Promise<Post> {
+export async function getPostsController(qParam:SearchQuery): Promise<Post> {
   try {
-    return await postHandler.dbHandler<SearchQuery, Post>('GET_POSTS', getData);
+    return await postHandler.dbHandler<SearchQuery, Post>('GET_POSTS', qParam);
   } catch (error) {
     throw error;
   }
 }
 
-export async function getPostController(postId:number, queryParams: QueryParams):Promise<Post> {
+export async function getPostController(postId:number, queryParams: QueryParams, user: TokenUser):Promise<Post> {
   try {
-    // const fields = ['visibilty', 'featured', 'updated_by', 'status', 'banner_image', 'primary_tag', 'html', 'type', 'slug', 'created_by', 'published_by'];
     const payload = {
       key: postId,
       field: 'id'
     };
-    return await postHandler.dbHandler('GET_POST', payload, queryParams);
+    return await postHandler.dbHandler('GET_POST', payload, queryParams, user);
 
-    // return await postHandler.findOneById(postId, fields);
   } catch (error) {
     return error;
   }
