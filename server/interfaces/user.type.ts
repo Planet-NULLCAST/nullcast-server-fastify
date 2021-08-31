@@ -19,17 +19,19 @@ export interface User {
 
 export type CreateUserQuery = User;
 
-export interface ValidateUser {
-  user_name: string;
-  password: string;
+export interface ValidateUser  {
+    email?: string;
+    user_name?: string;
+    password: string
 }
 
 export interface ValidateResponse {
-  user_name: string;
-  password: string;
-  salt: string;
-  email: string;
-  id: string;
+    user_name: string,
+    password: string,
+    salt: string,
+    email: string,
+    id: string,
+    full_name: string,
 }
 
 export interface UpdateUser {
@@ -54,4 +56,9 @@ export interface SignIn {
 export interface TokenUser {
   user_name: string;
   id: number;
+}
+
+export interface cookieData {
+    token: string;
+    user: any
 }
