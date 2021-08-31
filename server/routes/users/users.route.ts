@@ -34,11 +34,11 @@ const createUser: RouteOptions = {
   schema: createUserSchema,
   handler: async(request, reply) => {
     try {
-      const userToken = await controller.createUserController(request.body as User);
-
-      if (userToken) {
-        reply.setCookie('token', userToken, {signed: false, domain:'localhost', path:'/', secure:true, httpOnly:true, maxAge:16*60, sameSite:'none'});
-        reply.code(201).send({message: 'User created'});
+      const userData = await controller.createUserController(request.body as User);
+      if (userData.token) {
+        reply.setCookie('token', userData.token,
+          {signed: false, domain:'localhost', path:'/', secure:true, httpOnly:false, maxAge:16*60, sameSite:'none'});
+        reply.code(201).send({message: 'User created', user: userData.user});
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }
