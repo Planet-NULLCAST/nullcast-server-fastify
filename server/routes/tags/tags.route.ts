@@ -1,5 +1,6 @@
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
+import { QueryParams } from 'interfaces/query-params.type';
 import { Tag } from 'interfaces/tags.type';
 import * as controller from '../../controllers';
 
@@ -26,7 +27,7 @@ const getTag: RouteOptions = {
   url: '/tag/:tag_name',
   handler: async(request, reply) => {
     try {
-      const params = request.params as {tag_name: string};
+      const params = request.params as { tag_name: string };
       const tagData = await controller.getTagController(params.tag_name);
       reply.code(200).send(tagData);
     } catch (error) {
@@ -39,12 +40,31 @@ const getTag: RouteOptions = {
   }
 };
 
+const getTags: RouteOptions = {
+  method: 'GET',
+  url: '/tags',
+  handler: async(request, reply) => {
+    try {
+      // console.log(request.query);
+
+      const results = await controller.getTagsController(request.query as QueryParams);
+      return reply.code(200).send(results);
+    } catch (error) {
+      if (error.statusCode) {
+        return reply.code(error.statusCode).send(error);
+      }
+      throw error;
+    }
+
+  }
+};
+
 const updateTag: RouteOptions = {
   method: 'PUT',
   url: '/tag/:tag_name',
   handler: async(request, reply) => {
     try {
-      const params = request.params as {tag_name: string};
+      const params = request.params as { tag_name: string };
       await controller.updateTagController(params.tag_name, request.body as Tag);
       reply.code(200).send();
     } catch (error) {
@@ -53,10 +73,25 @@ const updateTag: RouteOptions = {
   }
 };
 
+// const deleteTag: RouteOptions = {
+//   method: 'DELETE',
+//   url: '/tag/tag_id',
+//   handler: async(request, reply) => {
+//     try {
+//       const params = request.params as { tag_id: number };
+//       await controller.deleteTagController(params.tag_id);
+//       reply.code(200).send();
+//     } catch (error) {
+//       throw error;
+//     }
+//   }
+// };
+
 function initTagsRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.route(createTag);
   server.route(getTag);
   server.route(updateTag);
+  server.route(getTags);
 
   done();
 }

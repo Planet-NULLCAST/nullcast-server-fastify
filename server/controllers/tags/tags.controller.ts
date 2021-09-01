@@ -1,5 +1,6 @@
 import { TAGS_STATUS } from 'constants/constants';
 import { TAGS_TABLE, USER_TABLE } from 'constants/tables';
+import { QueryParams } from 'interfaces/query-params.type';
 import { Tag } from 'interfaces/tags.type';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 
@@ -64,6 +65,24 @@ export async function updateTagController(tagName: string, payload: Tag) {
     }
     throw { statusCode: 404, message: 'tag update failed' };
 
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getTagsController(qParam:QueryParams) {
+  try {
+    const tags: Tag[] = await tagsHandler.dbHandler('GET_TAGS', qParam);
+    return tags;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteTagController(tagId: number) {
+  try {
+    await tagsHandler.deleteOneById(tagId);
+    return true;
   } catch (error) {
     throw error;
   }
