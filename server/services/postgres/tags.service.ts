@@ -17,7 +17,7 @@ export async function getTags(queryParams: QueryParams) {
 
   const queryValues = [+limit, (page - 1) * +limit, `${sort_field} ${order}`];
 
-  const limitFields:any[] = limit_fields as string[];
+  const limitFields:any[] = typeof limit_fields === 'string' ? [limit_fields] : limit_fields;
   const DefaultFields = 'id, name, description, meta_title, status, slug, visibility';
   const SELECT_CLAUSE = `SELECT ${(limitFields.length) ? limitFields.join(',') : DefaultFields}`;
 
