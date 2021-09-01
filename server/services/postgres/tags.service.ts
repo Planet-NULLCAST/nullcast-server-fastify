@@ -7,7 +7,7 @@ export async function getTags(queryParams: QueryParams) {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const {
-    limit_fields = [],
+    limit_fields = ['id', 'name', 'description', 'meta_title', 'status', 'slug', 'visibility'],
     search = '',
     page = 1,
     limit = 25,
@@ -16,10 +16,9 @@ export async function getTags(queryParams: QueryParams) {
   } = queryParams;
 
   const queryValues = [+limit, (page - 1) * +limit, `${sort_field} ${order}`];
+  const limitFields: any[] = typeof limit_fields === 'string' ? [limit_fields] : limit_fields;
 
-  const limitFields:any[] = typeof limit_fields === 'string' ? [limit_fields] : limit_fields;
-  const DefaultFields = 'id, name, description, meta_title, status, slug, visibility';
-  const SELECT_CLAUSE = `SELECT ${(limitFields.length) ? limitFields.join(',') : DefaultFields}`;
+  const SELECT_CLAUSE = `SELECT ${limitFields.join(',')}`;
 
   let WHERE_CLAUSE = '';
   if (search) {
@@ -27,7 +26,7 @@ export async function getTags(queryParams: QueryParams) {
     WHERE_CLAUSE = `WHERE name LIKE $${queryValues.length}`;
   }
 
-  const CONDITIONS_CLAUSE = `ORDER BY $3
+  const EXTRA_CLAUSES = `ORDER BY $3
   LIMIT $1
   OFFSET $2`;
 
@@ -35,22 +34,11 @@ export async function getTags(queryParams: QueryParams) {
     text: `${SELECT_CLAUSE} 
           FROM tags
           ${WHERE_CLAUSE}
-          ${CONDITIONS_CLAUSE}`,
+          ${EXTRA_CLAUSES}`,
     values: queryValues
   };
 
   const data = await postgresClient.query<Tag>(getTagsQuery);
 
   return data.rows;
-  // if (search) {
-  //   const getTagsQuery: QueryConfig = {
-  //     text: `SELECT id, name, description, meta_title, feature_image, slug, visibility, status
-  //         FROM tags
-  //         WHERE name LIKE '%${search}%'
-  //         ORDER BY name ${order}
-  //         limit ${limit};`
-  //   };
-  // const data = await postgresClient.query<Tag>(getTagsQuery);
-  // return data.rows;
-  // }
 }
