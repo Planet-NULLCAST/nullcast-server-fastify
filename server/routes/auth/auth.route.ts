@@ -28,7 +28,7 @@ const signIn: RouteOptions = {
     const userData = await controller.validateUserController(request.body as ValidateUser);
     if (userData?.token) {
       reply.setCookie('token', userData.token,
-        { signed: false, domain:'localhost', path:'/', secure:true, httpOnly:false, maxAge:16*60, sameSite:'none'});
+        { signed: false, domain:'localhost', path:'/', secure:false, httpOnly:false, maxAge:16*60, sameSite:'none'});
       reply.code(200).send({message: 'User logged in successfully', user:userData.user});
     }
     reply.code(401).send({ message: 'Invalid username or password'});
