@@ -8,6 +8,7 @@ import {
 } from './users.service';
 import { getPosts, getSinglePost } from './posts.service';
 import * as commonService from './query-builder.service';
+import { getTags } from './tags.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   CREATE_USER: createUser,
@@ -16,7 +17,8 @@ export const serviceActions: { [x in Actions]: any } = {
   UPDATE_USER: updateUser,
   VALIDATE_USER: validateUser,
   GET_POSTS: getPosts,
-  GET_POST: getSinglePost
+  GET_POST: getSinglePost,
+  GET_TAGS: getTags
 };
 
 export const commonActions = {
