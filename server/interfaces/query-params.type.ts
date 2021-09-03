@@ -8,5 +8,5 @@ export interface QueryParams {
     status?: string,
     order?: order,
     sort_field?: string,
-    with_table?: string
+    with_table?: string,
 }
