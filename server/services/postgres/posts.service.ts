@@ -3,16 +3,18 @@ import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = ['id, slug, created_by, html, mobiledoc, created_at, published_at, banner_image'],
+const DEFAULT_FIELDS = ["id", "slug", "created_by", "html", "mobiledoc", "created_at", "published_at", "banner_image"],
   DEFAULT_JOINS = 'users';
 
 function constructJoinQuery({
   limit_fields,
   with_table = DEFAULT_JOINS
 }: QueryParams, userId?: number) {
-  // Set default values for query param
 
-  const limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+
+  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+
+  limitFields = limitFields.map(item => `post.${item}`);
 
   let SELECT_CLAUSE = `SELECT ${limitFields}`,
     JOIN_CLAUSE = '',
@@ -158,7 +160,7 @@ export async function getPostsBytag(
   user: TokenUser
 ) {
 
-  const DEFAULT_FIELDS = ['slug, created_by, mobiledoc, created_at, published_at, banner_image'];
+  const DEFAULT_FIELDS = ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at', 'banner_image'];
 
   const {
     limit_fields,
@@ -170,7 +172,9 @@ export async function getPostsBytag(
     sort_field = 'published_at'
   } = queryParams;
 
-  const limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+
+  limitFields = limitFields.map(item => `post.${item}`);
 
   const tag = payload.key;
 
