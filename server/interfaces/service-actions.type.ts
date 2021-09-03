@@ -6,7 +6,8 @@ export type Actions =
   | 'VALIDATE_USER'
   | 'GET_POSTS'
   | 'GET_POST'
-  | 'GET_POSTS_BY_TAG';
+  | 'GET_POSTS_BY_TAG'
+  | 'GET_TAGS';
 
 export type CommonActions =
   | 'INSERT_ONE'
