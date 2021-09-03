@@ -3,21 +3,18 @@ import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = 'id, slug, created_by, html, mobiledoc, created_at, published_at, banner_image',
+const DEFAULT_FIELDS = ['id, slug, created_by, html, mobiledoc, created_at, published_at, banner_image'],
   DEFAULT_JOINS = 'users';
 
 function constructJoinQuery({
-  limit_fields = DEFAULT_FIELDS,
+  limit_fields,
   with_table = DEFAULT_JOINS
 }: QueryParams, userId?: number) {
   // Set default values for query param
 
-  limit_fields = limit_fields
-    .split(',')
-    .map((item) => `post.${item.trim()}`)
-    .join(', ');
+  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
-  let SELECT_CLAUSE = `SELECT ${limit_fields}`,
+  let SELECT_CLAUSE = `SELECT ${limitFields}`,
     JOIN_CLAUSE = '',
     GROUP_BY_CLAUSE = '';
 
@@ -161,10 +158,10 @@ export async function getPostsBytag(
   user: TokenUser
 ) {
 
-  const DEFAULT_FIELDS = 'slug, created_by, mobiledoc, created_at, published_at, banner_image';
+  const DEFAULT_FIELDS = ['slug, created_by, mobiledoc, created_at, published_at, banner_image'];
 
   const {
-    limit_fields = DEFAULT_FIELDS,
+    limit_fields,
     search = '',
     page = 1,
     limit = 10,
@@ -173,16 +170,13 @@ export async function getPostsBytag(
     sort_field = 'published_at'
   } = queryParams;
 
+  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+
   const tag = payload.key;
 
   const GROUP_BY_CLAUSE = `GROUP BY posts.id, u.id, votes.user_id, votes.value`;
 
-  const selected_fields = limit_fields
-    .split(',')
-    .map((item) => `posts.${item.trim()}`)
-    .join(', ');
-
-  let SELECT_CLAUSE = `SELECT ${selected_fields}`;
+  let SELECT_CLAUSE = `SELECT ${limitFields}`;
 
   SELECT_CLAUSE = `${SELECT_CLAUSE}, posts.id as post_id, posts.html as html,
                     COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name)) 
