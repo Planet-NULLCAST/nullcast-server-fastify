@@ -3,7 +3,7 @@ enum order { ASC, DESC }
 export interface Post {
     id?: number;
     primary_tag?: number;
-    title?: string;
+    meta_title?: string;
     slug?: string;
     created_by?: number;
     published_by?: string;
