@@ -25,7 +25,7 @@ export async function insertOne(
       .join(', ');
 
     // Build the query text for prepared statement
-    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs});`;
+    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id;`;
 
     const insertOneQuery: QueryConfig = {
       text,
@@ -91,7 +91,7 @@ export async function insertMany(
 
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) 
-                    VALUES (${valueRefs});`;
+                    VALUES ${valueRefs} RETURNING id;`;
 
     const query: QueryConfig = {
       text,
