@@ -12,7 +12,7 @@ function constructJoinQuery({
 }: QueryParams, userId?: number) {
 
 
-  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+  let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
   limitFields = limitFields.map((item) => `post.${item}`);
 
@@ -172,7 +172,7 @@ export async function getPostsBytag(
     sort_field = 'published_at'
   } = queryParams;
 
-  let limitFields: any[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+  let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
   limitFields = limitFields.map((item) => `post.${item}`);
 
