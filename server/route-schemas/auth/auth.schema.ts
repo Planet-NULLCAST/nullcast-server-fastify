@@ -4,11 +4,15 @@ export const signInSchema = {
   tags: ['User'],
   body: {
     type: 'object',
-    required: ['email', 'password'],
+    required: ['password'],
     properties: {
       email: {
         type: 'string',
         description: 'Email Id of the user'
+      },
+      user_name: {
+        type: 'string',
+        description: 'username of the user'
       },
       password: {
         type: 'string',

@@ -3,21 +3,20 @@ import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = 'id, slug, created_by, html, mobiledoc, created_at, published_at',
+const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image'],
   DEFAULT_JOINS = 'users';
 
 function constructJoinQuery({
-  limit_fields = DEFAULT_FIELDS,
+  limit_fields,
   with_table = DEFAULT_JOINS
 }: QueryParams, userId?: number) {
-  // Set default values for query param
 
-  limit_fields = limit_fields
-    .split(',')
-    .map((item) => `post.${item.trim()}`)
-    .join(', ');
 
-  let SELECT_CLAUSE = `SELECT ${limit_fields}`,
+  let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
+
+  limitFields = limitFields.map((item) => `post.${item}`);
+
+  let SELECT_CLAUSE = `SELECT ${limitFields}`,
     JOIN_CLAUSE = '',
     GROUP_BY_CLAUSE = '';
 
@@ -82,7 +81,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
     status = 'drafted',
     order = 'ASC',
     sort_field = 'published_at',
-    with_table
+    with_table = ''
   } = queryParams;
 
   let WHERE_CLAUSE = 'WHERE post.status = $1';
@@ -99,7 +98,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
-  }, user.id);
+  }, user?.id);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -137,7 +136,7 @@ export async function getSinglePost(
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
-  }, user.id);
+  }, user?.id);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -155,33 +154,89 @@ export async function getSinglePost(
   return data.rows[0];
 }
 
-export async function getPostsBytag() {
+export async function getPostsBytag(
+  payload: { key: string; field: string },
+  queryParams: QueryParams,
+  user: TokenUser
+) {
 
+  const DEFAULT_FIELDS = ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at', 'banner_image'];
 
-  /**
-   *
-   * select posts.id as post_id, posts.html as html,
-COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name)) FILTER (WHERE t.id IS NOT NULL), '[]') AS tag,
-JSON_BUILD_OBJECT('id', u.id, 'user_name', u.user_name) AS user,
-count(CASE WHEN votes.value = 1 THEN 1 END) as upvotes,
-count(CASE WHEN votes.value = -1 THEN 1 END) as downvotes
+  const {
+    limit_fields,
+    search = '',
+    page = 1,
+    limit = 10,
+    // status = 'published',
+    order = 'ASC',
+    sort_field = 'published_at'
+  } = queryParams;
 
-from tags
+  let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
-LEFT join post_tags on post_tags.tag_id = tags.id
-LEFT join posts on posts.id = post_tags.post_id
+  limitFields = limitFields.map((item) => `post.${item}`);
 
-LEFT JOIN post_votes as votes on votes.id = posts.id
+  const tag = payload.key;
 
-JOIN users AS u ON u.id = posts.created_by
+  const GROUP_BY_CLAUSE = `GROUP BY posts.id, u.id, votes.user_id, votes.value`;
 
+  let SELECT_CLAUSE = `SELECT ${limitFields}`;
 
--- get all the tags from posts
-LEFT join post_tags as pt on pt.post_id = posts.id
-LEFT JOIN tags as t on t.id = pt.tag_id
+  SELECT_CLAUSE = `${SELECT_CLAUSE}, posts.id as post_id, posts.html as html,
+                    COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name)) 
+                    FILTER (WHERE t.id IS NOT NULL), '[]') AS tag,
+                    JSON_BUILD_OBJECT('id', u.id, 'user_name', u.user_name) AS user,
+                    count(CASE WHEN votes.value = 1 THEN 1 END) as upvotes,
+                    count(CASE WHEN votes.value = -1 THEN 1 END) as downvotes`;
 
-where tags.name = 'js'
-GROUP BY posts.id, u.user_name, u.id
-ORDER BY posts.created_at
-   */
+  if (user?.id) {
+    // Check if the user has voted or not,
+    // If voted, find if it's up or down
+    SELECT_CLAUSE = `${SELECT_CLAUSE}, 
+                    CASE
+                      WHEN votes.user_id = ${user.id} THEN
+                        CASE
+                          WHEN votes.value = 1 THEN 'up'
+                          WHEN votes.value = -1 THEN 'down'
+                        END
+                      ELSE null
+                    END as vote_kind`;
+  }
+
+  let WHERE_CLAUSE = 'tags.name = $1';
+
+  const queryValues = [tag, +limit, (page - 1) * +limit];
+
+  if (search) {
+    queryValues.push(`%${search}%`);
+    WHERE_CLAUSE = `${WHERE_CLAUSE} 
+      AND (posts.meta_title LIKE $${queryValues.length} 
+      OR posts.meta_description LIKE $${queryValues.length} 
+      OR posts.custom_excerpt LIKE $${queryValues.length})`;
+  }
+
+  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+  const getPostsQuery: QueryConfig = {
+    text: ` ${SELECT_CLAUSE}
+            from tags
+            LEFT join post_tags on post_tags.tag_id = tags.id
+            LEFT join posts on posts.id = post_tags.post_id
+            LEFT JOIN post_votes as votes on votes.id = posts.id
+            JOIN users AS u ON u.id = posts.created_by
+            LEFT join post_tags as pt on pt.post_id = posts.id
+            LEFT JOIN tags as t on t.id = pt.tag_id
+            ${WHERE_CLAUSE}
+            ${GROUP_BY_CLAUSE}
+            ORDER BY 
+            posts.${sort_field} ${order}
+            LIMIT $2
+            OFFSET $3;`,
+    values: queryValues
+  };
+
+  const data = await postgresClient.query<Post>(getPostsQuery);
+
+  return data.rows;
 }
+
