@@ -2,11 +2,9 @@
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
+import {Post, DeletePost} from 'interfaces/post.type';
 import {
-  Post, DeletePost, SearchQuery
-} from 'interfaces/post.type';
-import {
-  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema
+  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema
 } from '../../route-schemas/post/post.schema';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
@@ -39,8 +37,8 @@ const getPosts: RouteOptions = {
   url: '/posts',
   schema: getPostsSchema,
   handler: async(request, reply) => {
-    const queryParams = JSON.parse(JSON.stringify(request.query)) as SearchQuery;
-
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    // const user = request.user as TokenUser;
     if (queryParams) {
       const posts = await controller.getPostsController(queryParams);
       reply.code(200).send({ data: posts });
@@ -72,7 +70,49 @@ const getPost: RouteOptions = {
   }
 };
 
-// TODO: GET Posts by slug similar to getPost
+const getPostBySlug: RouteOptions = {
+  method: 'GET',
+  url: '/post-slug/:slug',
+  schema: getPostBySlugSchema,
+  handler: async(request, reply) => {
+    try {
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const params = request.params as { slug: string };
+      const user = request.user as TokenUser;
+
+      const postData = await controller.getPostBySlugController(params.slug, queryParams, user);
+
+      if (!postData) {
+        reply.code(400).send({message: 'Post not found'});
+      }
+      reply.code(200).send({ data: postData });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+const getPostsByTag: RouteOptions = {
+  method: 'GET',
+  url: '/posts/:tagName',
+  schema: getPostsSchema,
+  handler: async(request, reply) => {
+    try {
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const params = request.params as { tagName: string };
+      const user = request.user as TokenUser;
+
+      const postData = await controller.getPostsByTagController(params.tagName, queryParams, user);
+
+      if (!postData) {
+        reply.code(400).send({message: 'Post not found'});
+      }
+      reply.code(200).send({ data: postData });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
 
 const updatePost: RouteOptions = {
   method: 'PUT',
@@ -112,10 +152,11 @@ function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(updatePost);
   server.route(deletePost);
   server.route(getPosts);
+  server.route(getPostBySlug);
+  server.route(getPostsByTag);
   //getPostsbyuserid
   //getPublishedPostsCountByUserId
   //getPublishedPosts <-
-  //getPostBySlug <-
   //changePostStatus <- PATCH
   //asc limit 10
   done();

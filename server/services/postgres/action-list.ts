@@ -6,7 +6,9 @@ import {
   updateUser,
   validateUser
 } from './users.service';
-import { getPosts, getSinglePost } from './posts.service';
+import {
+  getPosts, getSinglePost, getPostsBytag
+} from './posts.service';
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 
@@ -18,6 +20,7 @@ export const serviceActions: { [x in Actions]: any } = {
   VALIDATE_USER: validateUser,
   GET_POSTS: getPosts,
   GET_POST: getSinglePost,
+  GET_POSTS_BY_TAG: getPostsBytag,
   GET_TAGS: getTags
 };
 

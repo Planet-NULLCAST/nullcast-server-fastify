@@ -1,5 +1,5 @@
 import {
-  Post, DeletePost, mobiledoc, SearchQuery
+  Post, DeletePost, mobiledoc
 } from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
@@ -18,7 +18,7 @@ export async function createPostController(postData:Post): Promise<boolean> {
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
       html,
-      title: postData.title,
+      meta_title: postData.meta_title,
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
       banner_image: postData.banner_image,
@@ -34,9 +34,9 @@ export async function createPostController(postData:Post): Promise<boolean> {
   }
 }
 
-export async function getPostsController(qParam:SearchQuery): Promise<Post> {
+export async function getPostsController(qParam:QueryParams): Promise<Post> {
   try {
-    return await postHandler.dbHandler<SearchQuery, Post>('GET_POSTS', qParam);
+    return await postHandler.dbHandler<QueryParams, Post>('GET_POSTS', qParam);
   } catch (error) {
     throw error;
   }
@@ -49,6 +49,32 @@ export async function getPostController(postId:number, queryParams: QueryParams,
       field: 'id'
     };
     return await postHandler.dbHandler('GET_POST', payload, queryParams, user);
+
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getPostBySlugController(slug:string, queryParams: QueryParams, user: TokenUser):Promise<Post> {
+  try {
+    const payload = {
+      key: slug,
+      field: 'slug'
+    };
+    return await postHandler.dbHandler('GET_POST', payload, queryParams, user);
+
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getPostsByTagController(tag: string, queryParams: QueryParams, user: TokenUser):Promise<Post> {
+  try {
+    const payload = {
+      key: tag,
+      field: 'tag'
+    };
+    return await postHandler.dbHandler('GET_POSTS_BY_TAG', payload, queryParams, user);
 
   } catch (error) {
     return error;
