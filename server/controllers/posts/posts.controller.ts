@@ -25,7 +25,7 @@ export async function createPostController(postData:Post): Promise<Post> {
       created_by: postData.created_by
     };
 
-    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title']
+    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title'];
 
     const data = await postHandler.insertOne(payload, Fields);
     return data.rows[0] as Post;
@@ -102,7 +102,7 @@ export async function updatePostController(postData:Post) :Promise<Post> {
       updated_by: postData.updated_by
     };
 
-    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title']
+    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title'];
 
     const data = await postHandler.updateOneById(id, payload, Fields);
     return data.rows[0] as Post;
