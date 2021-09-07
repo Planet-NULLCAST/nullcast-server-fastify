@@ -12,7 +12,8 @@ export async function deallocateStatement(
 
 export async function insertOne(
   tableName: string,
-  payload: { [x: string]: any }
+  payload: { [x: string]: any },
+  Fields?: string[]
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -24,8 +25,13 @@ export async function insertOne(
       .map((_, index) => `$${index + 1}`)
       .join(', ');
 
+    let returningFields: string = ""
+    if(Fields) {
+      returningFields = Fields.map(item => item).join(', ');
+    }
+
     // Build the query text for prepared statement
-    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id;`;
+    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id, ${returningFields};`;
 
     const insertOneQuery: QueryConfig = {
       text,
@@ -160,7 +166,8 @@ export async function deleteOneById(
 export async function updateOneById(
   tableName: string,
   id: number,
-  payload: { [x: string]: any }
+  payload: { [x: string]: any },
+  Fields?: string[]
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -176,8 +183,13 @@ export async function updateOneById(
       }
     });
 
+    let returningValues: string = "";
+    if(Fields) {
+      returningValues = Fields.map(item => item).join(', ');
+    }
+
     // Build the query text for prepared statement
-    const text = `UPDATE ${tableName} ${updateStatement} WHERE id = $1`;
+    const text = `UPDATE ${tableName} ${updateStatement} WHERE id = $1 RETURNING id, ${returningValues}`;
 
     const query: QueryConfig = {
       text,

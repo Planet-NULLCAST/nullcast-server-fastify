@@ -12,7 +12,7 @@ const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRender
 const postHandler = new DatabaseHandler(POST_TABLE);
 
 
-export async function createPostController(postData:Post): Promise<boolean> {
+export async function createPostController(postData:Post): Promise<Post> {
   try {
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
@@ -25,9 +25,10 @@ export async function createPostController(postData:Post): Promise<boolean> {
       created_by: postData.created_by
     };
 
+    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title']
 
-    await postHandler.insertOne(payload);
-    return true;
+    const data = await postHandler.insertOne(payload, Fields);
+    return data.rows[0] as Post;
 
   } catch (error) {
     throw error;
@@ -81,11 +82,11 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
   }
 }
 
-export async function updatePostController(postData:Post) :Promise<boolean> {
+export async function updatePostController(postData:Post) :Promise<Post> {
   try {
     const id = postData.id as number;
     if (!postData.id) {
-      return false;
+      return '' as Post;
     }
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
@@ -100,8 +101,11 @@ export async function updatePostController(postData:Post) :Promise<boolean> {
       updated_at: new Date().toISOString(),
       updated_by: postData.updated_by
     };
-    await postHandler.updateOneById(id, payload);
-    return true;
+
+    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title']
+
+    const data = await postHandler.updateOneById(id, payload, Fields);
+    return data.rows[0] as Post;
 
   } catch (error) {
     throw error;
