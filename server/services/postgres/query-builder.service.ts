@@ -25,9 +25,9 @@ export async function insertOne(
       .map((_, index) => `$${index + 1}`)
       .join(', ');
 
-    let returningFields: string = ""
-    if(Fields) {
-      returningFields = Fields.map(item => item).join(', ');
+    let returningFields = '';
+    if (Fields) {
+      returningFields = Fields.map((item) => item).join(', ');
     }
 
     // Build the query text for prepared statement
@@ -183,9 +183,9 @@ export async function updateOneById(
       }
     });
 
-    let returningValues: string = "";
-    if(Fields) {
-      returningValues = Fields.map(item => item).join(', ');
+    let returningValues = '';
+    if (Fields) {
+      returningValues = Fields.map((item) => item).join(', ');
     }
 
     // Build the query text for prepared statement
