@@ -3,6 +3,31 @@ import { queryStringProps } from './post.properties';
 
 const { limit_fields, with_table } = queryStringProps;
 
+const mobiledoc = {
+  type: "object",
+  description: 'user provided mobiledoc',
+  properties: {
+    atoms: {
+      type: "array"
+    },
+    markups: {
+      type: "array"
+    },
+    cards: {
+      type: "array"
+    },
+    sections: {
+      type: "array"
+    },
+    version: {
+      type: "string"
+    },
+    ghostVersion: {
+      type: "string"
+    }
+  }
+}
+
 export const createPostSchema = {
   summary: 'Create Post',
   description: 'A POST route to create a post and store its data',
@@ -38,27 +63,28 @@ export const createPostSchema = {
       type: {
         type: 'string',
         description: 'Post type'
-      }
+      },
+      mobiledoc: mobiledoc
     }
   },
   response: {
-    201: {
-      description: 'Post created successfully.',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        },
-        data: {
-          type: 'object',
-          properties:{
-            id: {
-              type: 'string'
-            }
-          }
-        }
-      }
-    },
+    // 201: {
+    //   description: 'Post created successfully.',
+    //   type: 'object',
+    //   properties: {
+    //     message: {
+    //       type: 'string'
+    //     },
+    //     data: {
+    //       type: 'object',
+    //       properties:{
+    //         id: {
+    //           type: 'string'
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
     400: BAD_REQUEST
   }
 };
@@ -115,15 +141,15 @@ export const updatePostSchema = {
     }
   },
   response: {
-    201: {
-      description: 'Post Updated successfully.',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    },
+    // 200: {
+    //   description: 'Post Updated successfully.',
+    //   type: 'object',
+    //   properties: {
+    //     message: {
+    //       type: 'string'
+    //     }
+    //   }
+    // },
     400: BAD_REQUEST
   }
 };

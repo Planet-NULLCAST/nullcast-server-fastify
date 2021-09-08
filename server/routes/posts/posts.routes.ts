@@ -20,7 +20,7 @@ const createPost: RouteOptions = {
       const post = await controller.createPostController(request.body as Post);
 
       if (post) {
-        reply.code(200).send({ message: 'Post created', data: post });
+        reply.code(201).send({ message: 'Post created', data: post });
       } else {
         reply.code(500).send({ message: 'Something Error happend' });
       }
@@ -120,7 +120,8 @@ const updatePost: RouteOptions = {
   schema: updatePostSchema,
   handler: async(request, reply) => {
     try {
-      const post = await controller.updatePostController(request.body as Post);
+      const user = request.user as TokenUser;
+      const post = await controller.updatePostController(request.body as Post, user.id);
       if (post) {
         reply.code(200).send({ message: 'Post updated', data: post});
       } else {

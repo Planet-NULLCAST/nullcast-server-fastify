@@ -13,7 +13,7 @@ export async function deallocateStatement(
 export async function insertOne(
   tableName: string,
   payload: { [x: string]: any },
-  Fields?: string[]
+  fields?: string[]
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -26,8 +26,8 @@ export async function insertOne(
       .join(', ');
 
     let returningFields = '';
-    if (Fields) {
-      returningFields = Fields.map((item) => item).join(', ');
+    if (fields) {
+      returningFields = fields.map((item) => item).join(', ');
     }
 
     // Build the query text for prepared statement
@@ -167,7 +167,7 @@ export async function updateOneById(
   tableName: string,
   id: number,
   payload: { [x: string]: any },
-  Fields?: string[]
+  fields?: string[]
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -184,8 +184,8 @@ export async function updateOneById(
     });
 
     let returningValues = '';
-    if (Fields) {
-      returningValues = Fields.map((item) => item).join(', ');
+    if (fields) {
+      returningValues = fields.map((item) => item).join(', ');
     }
 
     // Build the query text for prepared statement
