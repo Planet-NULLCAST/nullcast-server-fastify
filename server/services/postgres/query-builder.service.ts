@@ -175,11 +175,14 @@ export async function updateOneById(
     let updateStatement = 'SET';
     const payloadArray = Object.entries(payload);
 
+    const queryValues = [id]
+
     payloadArray.forEach(([key, value], index) => {
+      queryValues.push(value)
       if (index !== payloadArray.length - 1) {
-        updateStatement = `${updateStatement} ${key} = '${value}',`;
+        updateStatement = `${updateStatement} ${key} = $${queryValues.length},`;
       } else {
-        updateStatement = `${updateStatement} ${key} = '${value}'`;
+        updateStatement = `${updateStatement} ${key} = $${queryValues.length}`;
       }
     });
 
@@ -193,8 +196,9 @@ export async function updateOneById(
 
     const query: QueryConfig = {
       text,
-      values: [id]
+      values: queryValues
     };
+
 
     return await postgresClient.query(query);
   } catch (error) {

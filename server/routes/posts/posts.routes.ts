@@ -16,8 +16,8 @@ const createPost: RouteOptions = {
   schema: createPostSchema,
   handler: async(request, reply) => {
     try {
-      (request.body as Post).created_by = request.user?.id;
-      const post = await controller.createPostController(request.body as Post);
+      const user = request.user as TokenUser;
+      const post = await controller.createPostController(request.body as Post, user.id);
 
       if (post) {
         reply.code(201).send({ message: 'Post created', data: post });

@@ -137,7 +137,8 @@ export const updatePostSchema = {
       updated_by: {
         type: 'string',
         description: 'User who had updated it'
-      }
+      },
+      mobiledoc
     }
   },
   response: {
