@@ -117,7 +117,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
 
   const data = await postgresClient.query<Post>(getPostsQuery);
 
-  return data.rows;
+  return {post: data.rows, limit: limit, page: page};
 }
 
 export async function getSinglePost(
