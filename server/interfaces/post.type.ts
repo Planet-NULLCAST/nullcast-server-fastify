@@ -2,6 +2,7 @@ enum status { published, drafted }
 enum order { ASC, DESC }
 export interface Post {
     id?: number;
+    title?: string;
     primary_tag?: number;
     meta_title?: string;
     slug?: string;

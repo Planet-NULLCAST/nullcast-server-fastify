@@ -4,7 +4,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
 const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image'],
-  DEFAULT_JOINS = 'users';
+  DEFAULT_JOINS = ['users'];
 
 function constructJoinQuery({
   limit_fields,
@@ -81,7 +81,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
     status = 'drafted',
     order = 'ASC',
     sort_field = 'published_at',
-    with_table = ''
+    with_table = []
   } = queryParams;
 
   let WHERE_CLAUSE = 'WHERE post.status = $1';
@@ -161,6 +161,7 @@ export async function getPostsBytag(
 ) {
 
   const DEFAULT_FIELDS = ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at', 'banner_image'];
+  const DEFAULT_JOINS = ['users', 'tags'];
 
   const {
     limit_fields,
@@ -169,42 +170,63 @@ export async function getPostsBytag(
     limit = 10,
     // status = 'published',
     order = 'ASC',
-    sort_field = 'published_at'
+    sort_field = 'published_at',
+    with_table = DEFAULT_JOINS
   } = queryParams;
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
-  limitFields = limitFields.map((item) => `post.${item}`);
+  limitFields = limitFields.map((item) => `posts.${item}`);
 
   const tag = payload.key;
+  
+  let SELECT_CLAUSE = `SELECT ${limitFields}, posts.id as post_id, posts.html as html`,
+  GROUP_BY_CLAUSE = '';
 
-  const GROUP_BY_CLAUSE = `GROUP BY posts.id, u.id, votes.user_id, votes.value`;
+  if(with_table) {
+    GROUP_BY_CLAUSE = 'GROUP BY posts.id'
 
-  let SELECT_CLAUSE = `SELECT ${limitFields}`;
+    if (with_table.includes('users')) {
+      // JSON_BUILD_OBJECT is to build object based on selected colums of the row
+      const buildUserObj = `'user_name', u.user_name, 'id', u.id, 'avatar', u.avatar`;
 
-  SELECT_CLAUSE = `${SELECT_CLAUSE}, posts.id as post_id, posts.html as html,
-                    COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', t.id, 'name', t.name)) 
-                    FILTER (WHERE t.id IS NOT NULL), '[]') AS tag,
-                    JSON_BUILD_OBJECT('id', u.id, 'user_name', u.user_name) AS user,
-                    count(CASE WHEN votes.value = 1 THEN 1 END) as upvotes,
-                    count(CASE WHEN votes.value = -1 THEN 1 END) as downvotes`;
+      SELECT_CLAUSE = `${SELECT_CLAUSE}, JSON_BUILD_OBJECT(${buildUserObj}) AS user`;
+      GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, u.id`;
+    }
 
-  if (user?.id) {
-    // Check if the user has voted or not,
-    // If voted, find if it's up or down
-    SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                    CASE
-                      WHEN votes.user_id = ${user.id} THEN
+    if (with_table.includes('tags')) {
+      const buildTagsObj = `'id', t.id, 'name', t.name`;
+      SELECT_CLAUSE = `${SELECT_CLAUSE},
+                        COALESCE(JSON_AGG(JSON_BUILD_OBJECT(${buildTagsObj})) 
+                        FILTER (WHERE t.id IS NOT NULL), '[]') AS tag`;
+    }
+
+    if (with_table.includes('votes')) {
+      SELECT_CLAUSE = `${SELECT_CLAUSE}, 
+                          count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
+                          count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
+                          COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
+
+
+      if (user?.id) {
+        // Check if the user has voted or not,
+        // If voted, find if it's up or down
+        SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                         CASE
-                          WHEN votes.value = 1 THEN 'up'
-                          WHEN votes.value = -1 THEN 'down'
-                        END
-                      ELSE null
-                    END as vote_kind`;
+                        WHEN votes.user_id = ${user.id} THEN
+                                CASE
+                                        WHEN votes.value = 1 THEN 'up'
+                                        WHEN votes.value = -1 THEN 'down'
+                                END
+                        ELSE null
+                        END as vote_kind`;
+        GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, votes.user_id, votes.value`;
+      }
+    }
   }
 
   let WHERE_CLAUSE = 'tags.name = $1';
-
+  
   const queryValues = [tag, +limit, (page - 1) * +limit];
 
   if (search) {

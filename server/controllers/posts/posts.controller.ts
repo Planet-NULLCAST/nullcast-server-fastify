@@ -18,6 +18,7 @@ export async function createPostController(postData:Post): Promise<Post> {
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
       html,
+      title: postData.title,
       meta_title: postData.meta_title,
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
@@ -25,9 +26,9 @@ export async function createPostController(postData:Post): Promise<Post> {
       created_by: postData.created_by
     };
 
-    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title'];
+    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
-    const data = await postHandler.insertOne(payload, Fields);
+    const data = await postHandler.insertOne(payload, fields);
     return data.rows[0] as Post;
 
   } catch (error) {
@@ -82,11 +83,11 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
   }
 }
 
-export async function updatePostController(postData:Post) :Promise<Post> {
+export async function updatePostController(postData:Post, userId:number) :Promise<Post | boolean> {
   try {
     const id = postData.id as number;
     if (!postData.id) {
-      return '' as Post;
+      return false;
     }
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
@@ -94,17 +95,14 @@ export async function updatePostController(postData:Post) :Promise<Post> {
       html,
       mobiledoc: postData.mobiledoc as mobiledoc,
       status: postData.status,
-      visibilty: postData.visibilty,
-      featured: postData.featured,
       banner_image: postData.banner_image,
-      type: postData.type,
       updated_at: new Date().toISOString(),
-      updated_by: postData.updated_by
+      updated_by: userId
     };
 
-    const Fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title'];
+    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
-    const data = await postHandler.updateOneById(id, payload, Fields);
+    const data = await postHandler.updateOneById(id, payload, fields);
     return data.rows[0] as Post;
 
   } catch (error) {
