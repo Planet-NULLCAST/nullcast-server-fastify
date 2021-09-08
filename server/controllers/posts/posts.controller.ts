@@ -12,7 +12,7 @@ const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRender
 const postHandler = new DatabaseHandler(POST_TABLE);
 
 
-export async function createPostController(postData:Post): Promise<Post> {
+export async function createPostController(postData:Post, userId:number): Promise<Post> {
   try {
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
@@ -23,7 +23,7 @@ export async function createPostController(postData:Post): Promise<Post> {
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
       banner_image: postData.banner_image,
-      created_by: postData.created_by
+      created_by: userId
     };
 
     const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
