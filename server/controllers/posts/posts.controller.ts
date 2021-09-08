@@ -12,12 +12,13 @@ const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRender
 const postHandler = new DatabaseHandler(POST_TABLE);
 
 
-export async function createPostController(postData:Post): Promise<boolean> {
+export async function createPostController(postData:Post): Promise<Post> {
   try {
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
       html,
+      title: postData.title,
       meta_title: postData.meta_title,
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
@@ -25,9 +26,10 @@ export async function createPostController(postData:Post): Promise<boolean> {
       created_by: postData.created_by
     };
 
+    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
-    await postHandler.insertOne(payload);
-    return true;
+    const data = await postHandler.insertOne(payload, fields);
+    return data.rows[0] as Post;
 
   } catch (error) {
     throw error;
@@ -81,7 +83,7 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
   }
 }
 
-export async function updatePostController(postData:Post) :Promise<boolean> {
+export async function updatePostController(postData:Post, userId:number) :Promise<Post | boolean> {
   try {
     const id = postData.id as number;
     if (!postData.id) {
@@ -93,15 +95,15 @@ export async function updatePostController(postData:Post) :Promise<boolean> {
       html,
       mobiledoc: postData.mobiledoc as mobiledoc,
       status: postData.status,
-      visibilty: postData.visibilty,
-      featured: postData.featured,
       banner_image: postData.banner_image,
-      type: postData.type,
       updated_at: new Date().toISOString(),
-      updated_by: postData.updated_by
+      updated_by: userId
     };
-    await postHandler.updateOneById(id, payload);
-    return true;
+
+    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
+
+    const data = await postHandler.updateOneById(id, payload, fields);
+    return data.rows[0] as Post;
 
   } catch (error) {
     throw error;

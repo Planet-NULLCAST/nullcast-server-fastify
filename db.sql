@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS user_badges (
 CREATE TABLE IF NOT EXISTS posts (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     mobiledoc jsonb,
+    title VARCHAR(255),
     status VARCHAR(10) DEFAULT 'drafted',
     visibility VARCHAR(10) DEFAULT 'public',
     featured boolean DEFAULT FALSE,

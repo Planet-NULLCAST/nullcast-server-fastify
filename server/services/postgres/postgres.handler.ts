@@ -31,10 +31,11 @@ export class DatabaseHandler {
    * @returns {Promise}
    */
   public async insertOne<PayLoadType, ResponseType>(
-    payload: PayLoadType
+    payload: PayLoadType,
+    fields?: string[]
   ): Promise<QueryResult<ResponseType>> {
     try {
-      return await commonActions.INSERT_ONE(this.tableName, payload);
+      return await commonActions.INSERT_ONE(this.tableName, payload, fields);
     } catch (error) {
       throw error;
     }
@@ -102,13 +103,15 @@ export class DatabaseHandler {
    */
   public async updateOneById<PayLoadType>(
     id: number,
-    payload: PayLoadType
+    payload: PayLoadType,
+    fields?: string[]
   ): Promise<QueryResult> {
     try {
       return (await commonActions.UPDATE_BY_ID(
         this.tableName,
         id,
-        payload
+        payload,
+        fields
       )) as QueryResult;
     } catch (error) {
       throw error;
