@@ -175,10 +175,10 @@ export async function updateOneById(
     let updateStatement = 'SET';
     const payloadArray = Object.entries(payload);
 
-    const queryValues = [id]
+    const queryValues = [id];
 
     payloadArray.forEach(([key, value], index) => {
-      queryValues.push(value)
+      queryValues.push(value);
       if (index !== payloadArray.length - 1) {
         updateStatement = `${updateStatement} ${key} = $${queryValues.length},`;
       } else {
