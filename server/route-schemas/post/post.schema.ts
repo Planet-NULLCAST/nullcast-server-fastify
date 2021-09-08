@@ -4,29 +4,29 @@ import { queryStringProps } from './post.properties';
 const { limit_fields, with_table } = queryStringProps;
 
 const mobiledoc = {
-  type: "object",
+  type: 'object',
   description: 'user provided mobiledoc',
   properties: {
     atoms: {
-      type: "array"
+      type: 'array'
     },
     markups: {
-      type: "array"
+      type: 'array'
     },
     cards: {
-      type: "array"
+      type: 'array'
     },
     sections: {
-      type: "array"
+      type: 'array'
     },
     version: {
-      type: "string"
+      type: 'string'
     },
     ghostVersion: {
-      type: "string"
+      type: 'string'
     }
   }
-}
+};
 
 export const createPostSchema = {
   summary: 'Create Post',
@@ -64,7 +64,7 @@ export const createPostSchema = {
         type: 'string',
         description: 'Post type'
       },
-      mobiledoc: mobiledoc
+      mobiledoc
     }
   },
   response: {

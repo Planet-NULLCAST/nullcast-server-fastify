@@ -179,12 +179,12 @@ export async function getPostsBytag(
   limitFields = limitFields.map((item) => `posts.${item}`);
 
   const tag = payload.key;
-  
-  let SELECT_CLAUSE = `SELECT ${limitFields}, posts.id as post_id, posts.html as html`,
-  GROUP_BY_CLAUSE = '';
 
-  if(with_table) {
-    GROUP_BY_CLAUSE = 'GROUP BY posts.id'
+  let SELECT_CLAUSE = `SELECT ${limitFields}, posts.id as post_id, posts.html as html`,
+    GROUP_BY_CLAUSE = '';
+
+  if (with_table) {
+    GROUP_BY_CLAUSE = 'GROUP BY posts.id';
 
     if (with_table.includes('users')) {
       // JSON_BUILD_OBJECT is to build object based on selected colums of the row
@@ -226,7 +226,7 @@ export async function getPostsBytag(
   }
 
   let WHERE_CLAUSE = 'tags.name = $1';
-  
+
   const queryValues = [tag, +limit, (page - 1) * +limit];
 
   if (search) {
