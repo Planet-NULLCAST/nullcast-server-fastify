@@ -3,7 +3,7 @@ import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image'],
+const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'],
   DEFAULT_JOINS = ['users'];
 
 function constructJoinQuery({
