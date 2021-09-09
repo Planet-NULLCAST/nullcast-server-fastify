@@ -1,6 +1,4 @@
-import {
-  Post, DeletePost, mobiledoc
-} from 'interfaces/post.type';
+import {Post, mobiledoc} from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
@@ -110,15 +108,13 @@ export async function updatePostController(postData:Post, userId:number) :Promis
   }
 }
 
-export async function deletePostController(postData:DeletePost) : Promise<boolean> {
+export async function deletePostController(postId: number) : Promise<boolean> {
   try {
-    const id = postData.id as number;
-
-    if (!id) {
+    if (!postId) {
       return false;
     }
 
-    await postHandler.deleteOneById(id);
+    await postHandler.deleteOneById(postId);
     return true;
   } catch (error) {
     throw error;

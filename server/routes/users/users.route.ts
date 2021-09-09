@@ -24,7 +24,11 @@ const getUser: RouteOptions = {
   handler: async(request, reply) => {
     const params = request.params as {user_name: string};
     const userData =  await controller.getUserController(params.user_name);
-    reply.code(200).send({data: userData});
+    if (userData) {
+      reply.code(200).send({message: 'User Found', data: userData});
+    }
+    reply.code(400).send({message: 'User not Found'});
+
   }
 };
 
@@ -56,8 +60,9 @@ const updateUser: RouteOptions = {
   schema: updateUserSchema,
   handler: async(request, reply) => {
     try {
-      if (await controller.updateUserController(request.body as User)) {
-        reply.code(200).send({message: 'User updated'});
+      const user = await controller.updateUserController(request.body as User);
+      if (user) {
+        reply.code(200).send({message: 'User updated', data:user});
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }

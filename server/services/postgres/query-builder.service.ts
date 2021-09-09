@@ -27,16 +27,17 @@ export async function insertOne(
 
     let returningFields = '';
     if (fields) {
-      returningFields = fields.map((item) => item).join(', ');
+      returningFields = `, ${fields.map((item) => item).join(', ')}`;
     }
 
     // Build the query text for prepared statement
-    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id, ${returningFields};`;
+    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id ${returningFields};`;
 
     const insertOneQuery: QueryConfig = {
       text,
       values
     };
+    console.log(insertOneQuery, '000000');
 
     return await postgresClient.query(insertOneQuery);
   } catch (error) {
@@ -188,11 +189,14 @@ export async function updateOneById(
 
     let returningValues = '';
     if (fields) {
-      returningValues = fields.map((item) => item).join(', ');
+      returningValues = `, ${fields.map((item) => item).join(', ')}`;
     }
 
     // Build the query text for prepared statement
-    const text = `UPDATE ${tableName} ${updateStatement} WHERE id = $1 RETURNING id, ${returningValues}`;
+    const text = `UPDATE ${tableName} 
+                  ${updateStatement} 
+                  WHERE id = $1 
+                  RETURNING id ${returningValues}`;
 
     const query: QueryConfig = {
       text,
