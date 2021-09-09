@@ -36,7 +36,6 @@ export async function createUserController(userData: User): Promise<cookieData> 
     ]);
 
     const payload: User = {
-      ...userData,
       entity_id: entity.id,
       salt: hashData.salt,
       password: hashData.password,
@@ -89,7 +88,7 @@ export async function deleteUserController(
   }
 }
 
-export async function updateUserController(userData: User): Promise<boolean> {
+export async function updateUserController(userData: User): Promise<User|boolean> {
   try {
     const id = userData?.id as number;
     if (!id) {
@@ -103,9 +102,10 @@ export async function updateUserController(userData: User): Promise<boolean> {
       email: userData.email.toLowerCase(),
       updated_at: new Date().toISOString()
     };
-    await userHandler.updateOneById<UpdateUser>(id, payload);
 
-    return true;
+    const data = await userHandler.updateOneById<UpdateUser>(id, payload);
+
+    return data.rows[0] as User;
   } catch (error) {
     throw error;
   }
