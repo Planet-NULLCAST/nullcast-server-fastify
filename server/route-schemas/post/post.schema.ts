@@ -48,13 +48,12 @@ export const updatePostSchema = {
   summary: 'Update Post',
   description: 'A PUT route to update data in posts',
   tags: ['Post'],
-  queryString: {
+  params: {
     type: 'object',
-    description: 'asdad',
     properties: {
       postId: {
         type: 'number',
-        description: 'asdasd'
+        description: 'id of the post'
       }
     }
   },
@@ -149,11 +148,10 @@ export const deletePostSchema = {
   summary: 'Delete User',
   description: 'To Delete Post information',
   tags: ['Post'],
-  queryString: {
+  params: {
     type: 'object',
-    required: ['id'],
     properties: {
-      id: { type: 'number', description: 'Id of the post' }
+      postId: { type: 'number', description: 'Id of the post' }
     }
   },
   response: {

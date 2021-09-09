@@ -96,7 +96,7 @@ export const postProps = {
     description: 'user should provide canonical_url'
   },
   featured: {
-    type: 'string',
+    type: 'boolean',
     description: 'user should provide featured'
   },
   visibility: {
