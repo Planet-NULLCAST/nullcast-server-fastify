@@ -6,7 +6,7 @@ import  {
   createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema
 }  from '../../route-schemas/users/users.schema';
 
-import {User, DeleteUser} from 'interfaces/user.type';
+import {User} from 'interfaces/user.type';
 
 
 // const getUsers: RouteOptions = {
@@ -56,11 +56,12 @@ const createUser: RouteOptions = {
 
 const updateUser: RouteOptions = {
   method: 'PUT',
-  url: '/user',
+  url: '/user/:userId',
   schema: updateUserSchema,
   handler: async(request, reply) => {
     try {
-      const user = await controller.updateUserController(request.body as User);
+      const params = request.params as {userId: number};
+      const user = await controller.updateUserController(request.body as User, params.userId);
       if (user) {
         reply.code(200).send({message: 'User updated', data:user});
       } else {
@@ -74,12 +75,12 @@ const updateUser: RouteOptions = {
 
 const deleteUser: RouteOptions = {
   method: 'DELETE',
-  url: '/user',
+  url: '/user/:userId',
   schema: deleteUserSchema,
   handler: async(request, reply) => {
-    const requesyBody = request.body as DeleteUser;
+    const params = request.params as {userId: number};
 
-    if (await controller.deleteUserController(requesyBody)) {
+    if (await controller.deleteUserController(params.userId)) {
       reply.code(200).send({message: 'User deleted'});
     } else {
       reply.code(500).send({message: 'User not deleted'});

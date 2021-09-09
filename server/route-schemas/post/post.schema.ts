@@ -48,12 +48,12 @@ export const updatePostSchema = {
   summary: 'Update Post',
   description: 'A PUT route to update data in posts',
   tags: ['Post'],
-  params: {
+  queryString: {
     type: 'object',
     description: 'asdad',
     properties: {
-      id: {
-        type: 'string',
+      postId: {
+        type: 'number',
         description: 'asdasd'
       }
     }

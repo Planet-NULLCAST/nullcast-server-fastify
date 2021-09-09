@@ -196,12 +196,14 @@ export async function updateOneById(
     const text = `UPDATE ${tableName} 
                   ${updateStatement} 
                   WHERE id = $1 
-                  RETURNING id ${returningValues}`;
+                  RETURNING id ${returningValues};`;
 
     const query: QueryConfig = {
       text,
       values: queryValues
     };
+
+    console.log(query,'---------')
 
 
     return await postgresClient.query(query);
