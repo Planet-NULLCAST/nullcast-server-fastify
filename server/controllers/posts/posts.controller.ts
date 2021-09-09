@@ -81,10 +81,9 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
   }
 }
 
-export async function updatePostController(postData:Post, userId:number) :Promise<Post | boolean> {
+export async function updatePostController(postData:Post, userId:number, postId: number) :Promise<Post | boolean> {
   try {
-    const id = postData.id as number;
-    if (!postData.id) {
+    if (!postId) {
       return false;
     }
 
@@ -100,7 +99,7 @@ export async function updatePostController(postData:Post, userId:number) :Promis
 
     const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
-    const data = await postHandler.updateOneById(id, payload, fields);
+    const data = await postHandler.updateOneById(postId, payload, fields);
     return data.rows[0] as Post;
 
   } catch (error) {

@@ -116,12 +116,13 @@ const getPostsByTag: RouteOptions = {
 
 const updatePost: RouteOptions = {
   method: 'PUT',
-  url: '/post',
+  url: '/post/:postId',
   schema: updatePostSchema,
   handler: async(request, reply) => {
     try {
       const user = request.user as TokenUser;
-      const post = await controller.updatePostController(request.body as Post, user.id);
+      const params = request.params as { postId: number };
+      const post = await controller.updatePostController(request.body as Post, user.id, params.postId);
       if (post) {
         reply.code(200).send({ message: 'Post updated', data: post});
       } else {
