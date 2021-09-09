@@ -14,12 +14,12 @@ export const createUserSchema = {
         description: 'user password'
       },
       created_by: {
-        type: 'string',
-        description: 'Bio of the user'
+        type: 'number',
+        description: 'userId of whoever creating this user'
       },
       created_at: {
         type: 'string',
-        description: 'Bio of the user'
+        description: 'Date and time at which this user was created for the first time'
       },
       ...userProps
     }
@@ -67,6 +67,13 @@ export const updateUserSchema = {
   summary: 'Update User',
   description: 'A PUT route to update register user information',
   tags: ['User'],
+  params: {
+    type: 'object',
+    required: ['id'],
+    properties: {
+      userId: { type: 'number', description: 'UserId of user' }
+    }
+  },
   body:  {
     type: 'object',
     properties: {
@@ -76,11 +83,11 @@ export const updateUserSchema = {
       },
       updated_at: {
         type: 'string',
-        description: 'Bio of the user'
+        description: 'userId of whoever updating this user'
       },
       updated_by: {
-        type: 'string',
-        description: 'Bio of the user'
+        type: 'number',
+        description: 'Date and time at which this user was updated for the last time'
       },
       ...userProps
     }
@@ -147,6 +154,13 @@ export const deleteUserSchema = {
   summary: 'Delete User',
   description: 'To Delete user information',
   tags: ['User'],
+  params: {
+    type: 'object',
+    required: ['id'],
+    properties: {
+      userId: { type: 'number', description: 'UserId of user' }
+    }
+  },
   response: {
     200: {
       type: 'object',

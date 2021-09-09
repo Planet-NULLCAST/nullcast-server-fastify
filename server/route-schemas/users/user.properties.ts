@@ -43,6 +43,10 @@ export const userProps = {
     type: 'string',
     description: 'meta_title of the user'
   },
+  title: {
+    type: 'string',
+    description: 'title of the user'
+  },
   dob: {
     type: 'integer',
     description: 'dob of the user'
