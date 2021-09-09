@@ -203,8 +203,6 @@ export async function updateOneById(
       values: queryValues
     };
 
-    console.log(query,'---------')
-
 
     return await postgresClient.query(query);
   } catch (error) {
