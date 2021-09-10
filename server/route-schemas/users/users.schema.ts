@@ -1,3 +1,5 @@
+import { userProps } from './user.properties';
+
 
 export const createUserSchema = {
   summary: 'Create User',
@@ -7,30 +9,19 @@ export const createUserSchema = {
     type: 'object',
     required: ['user_name', 'full_name', 'email', 'password'],
     properties: {
-      user_name: {
-        type: 'string',
-        description: 'user provided username'
-      },
-      full_name: {
-        type: 'string',
-        description: 'user provided full name'
-      },
-      email: {
-        type: 'string',
-        description: 'user email'
-      },
       password: {
         type: 'string',
         description: 'user password'
       },
-      coverImage: {
-        type: 'string',
-        description: 'cover image s3 url'
+      created_by: {
+        type: 'number',
+        description: 'userId of whoever creating this user'
       },
-      bio: {
+      created_at: {
         type: 'string',
-        description: 'Bio of the user'
-      }
+        description: 'Date and time at which this user was created for the first time'
+      },
+      ...userProps
     }
   },
   response: {
@@ -45,13 +36,16 @@ export const createUserSchema = {
           type: 'object',
           properties:{
             id: {
-              type: 'string'
+              type: 'number',
+              description: 'userId of the user'
             },
             user_name: {
-              type: 'string'
+              type: 'string',
+              description: 'user name of the user'
             },
             full_name: {
-              type: 'string'
+              type: 'string',
+              description: 'full name of the user'
             }
           }
         }
@@ -75,50 +69,39 @@ export const updateUserSchema = {
   tags: ['User'],
   params: {
     type: 'object',
-    required: ['user_name'],
+    required: ['id'],
     properties: {
-      user_name: { type: 'string', description: 'user name of user' }
+      userId: { type: 'number', description: 'UserId of user' }
     }
   },
   body:  {
     type: 'object',
     properties: {
-      user_name: {
-        type: 'string',
-        description: 'user provided username'
-      },
-      full_name: {
-        type: 'string',
-        description: 'user provided full name'
-      },
-      email: {
-        type: 'string',
-        description: 'user email'
-      },
       password: {
         type: 'string',
         description: 'user password'
       },
-      coverImage: {
+      updated_at: {
         type: 'string',
-        description: 'cover image s3 url'
+        description: 'userId of whoever updating this user'
       },
-      bio: {
-        type: 'string',
-        description: 'Bio of the user'
-      }
+      updated_by: {
+        type: 'number',
+        description: 'Date and time at which this user was updated for the last time'
+      },
+      ...userProps
     }
   },
   response: {
-    201: {
-      description: 'User created success.',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    },
+    // 200: {
+    //   description: 'User created success.',
+    //   type: 'object',
+    //   properties: {
+    //     message: {
+    //       type: 'string'
+    //     }
+    //   }
+    // },
     400: {
       description: 'Bad request',
       type: 'object',
@@ -148,6 +131,10 @@ export const getUserSchema = {
       properties: {
         message: {
           type: 'string'
+        },
+        data: {
+          type: 'object',
+          properties: userProps
         }
       }
     },
@@ -169,13 +156,13 @@ export const deleteUserSchema = {
   tags: ['User'],
   params: {
     type: 'object',
-    required: ['user_name'],
+    required: ['id'],
     properties: {
-      user_name: { type: 'string', description: 'user name of user' }
+      userId: { type: 'number', description: 'UserId of user' }
     }
   },
   response: {
-    201: {
+    200: {
       type: 'object',
       properties: {
         message: {

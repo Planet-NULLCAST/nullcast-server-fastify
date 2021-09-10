@@ -12,7 +12,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 
   const getUserQuery: QueryConfig = {
     name: 'get-user',
-    text: `SELECT entity_id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status, salt
+    text: `SELECT entity_id, id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status, salt
         FROM users
         WHERE user_name = $1;`,
     values: [payload.user_name]
@@ -22,6 +22,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 
   if (data.rows && data.rows.length) {
     return {
+      id: data.rows[0]?.id as number,
       user_name: data.rows[0]?.user_name as string,
       password: '',
       salt: data.rows[0]?.salt as string,

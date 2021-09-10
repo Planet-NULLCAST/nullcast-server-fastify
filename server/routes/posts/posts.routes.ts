@@ -2,7 +2,7 @@
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
-import {Post, DeletePost} from 'interfaces/post.type';
+import {Post} from 'interfaces/post.type';
 import {
   createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema
 } from '../../route-schemas/post/post.schema';
@@ -16,8 +16,8 @@ const createPost: RouteOptions = {
   schema: createPostSchema,
   handler: async(request, reply) => {
     try {
-      (request.body as Post).created_by = request.user?.id;
-      const post = await controller.createPostController(request.body as Post);
+      const user = request.user as TokenUser;
+      const post = await controller.createPostController(request.body as Post, user.id);
 
       if (post) {
         reply.code(201).send({ message: 'Post created', data: post });
@@ -61,7 +61,7 @@ const getPost: RouteOptions = {
       const postData = await controller.getPostController(params.postId, queryParams, user);
 
       if (!postData) {
-        reply.code(400).send({data: 'sdsds'});
+        reply.code(400).send({message: 'User not Found'});
       }
       reply.code(200).send({ data: postData });
     } catch (error) {
@@ -116,12 +116,13 @@ const getPostsByTag: RouteOptions = {
 
 const updatePost: RouteOptions = {
   method: 'PUT',
-  url: '/post',
+  url: '/post/:postId',
   schema: updatePostSchema,
   handler: async(request, reply) => {
     try {
       const user = request.user as TokenUser;
-      const post = await controller.updatePostController(request.body as Post, user.id);
+      const params = request.params as { postId: number };
+      const post = await controller.updatePostController(request.body as Post, user.id, params.postId);
       if (post) {
         reply.code(200).send({ message: 'Post updated', data: post});
       } else {
@@ -135,12 +136,12 @@ const updatePost: RouteOptions = {
 
 const deletePost: RouteOptions = {
   method: 'DELETE',
-  url: '/post',
+  url: '/post/:postId',
   schema: deletePostSchema,
   handler: async(request, reply) => {
-    const requestBody = request.body as DeletePost;
+    const params = request.params as { postId: number };
 
-    if (await controller.deletePostController(requestBody)) {
+    if (await controller.deletePostController(params.postId)) {
       reply.code(200).send({ message: 'Post deleted' });
     } else {
       reply.code(500).send({ message: 'Post not deleted' });

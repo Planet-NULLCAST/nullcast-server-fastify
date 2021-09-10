@@ -4,7 +4,6 @@ import {
   ValidateResponse,
   User,
   UpdateUser,
-  DeleteUser,
   cookieData
 } from 'interfaces/user.type';
 import { createHash, createRandomBytes } from '../../utils/hash-utils';
@@ -36,7 +35,6 @@ export async function createUserController(userData: User): Promise<cookieData> 
     ]);
 
     const payload: User = {
-      ...userData,
       entity_id: entity.id,
       salt: hashData.salt,
       password: hashData.password,
@@ -74,38 +72,35 @@ export async function getUserController(user_name: string): Promise<User> {
 }
 
 export async function deleteUserController(
-  userData: DeleteUser
+  userId: number
 ): Promise<boolean> {
   try {
-    const id = userData?.id as number;
-    if (!id) {
+    if (!userId) {
       return false;
     }
 
-    await userHandler.deleteOneById(id);
+    await userHandler.deleteOneById(userId);
     return true;
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateUserController(userData: User): Promise<boolean> {
+export async function updateUserController(userData: User, userId: number): Promise<User|boolean> {
   try {
-    const id = userData?.id as number;
-    if (!id) {
+    if (!userId) {
       return false;
     }
 
     const payload: UpdateUser = {
-      user_name: userData.user_name.toLowerCase(),
       full_name: userData.full_name.toLowerCase(),
       slug: userData.user_name.toLowerCase(),
-      email: userData.email.toLowerCase(),
       updated_at: new Date().toISOString()
     };
-    await userHandler.updateOneById<UpdateUser>(id, payload);
 
-    return true;
+    const data = await userHandler.updateOneById<UpdateUser>(userId, payload);
+
+    return data.rows[0] as User;
   } catch (error) {
     throw error;
   }
