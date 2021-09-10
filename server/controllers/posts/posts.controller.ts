@@ -1,6 +1,4 @@
-import {
-  Post, DeletePost, mobiledoc
-} from 'interfaces/post.type';
+import {Post, mobiledoc} from 'interfaces/post.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import {POST_TABLE} from 'constants/tables';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
@@ -12,7 +10,7 @@ const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRender
 const postHandler = new DatabaseHandler(POST_TABLE);
 
 
-export async function createPostController(postData:Post): Promise<Post> {
+export async function createPostController(postData:Post, userId:number): Promise<Post> {
   try {
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
@@ -23,7 +21,7 @@ export async function createPostController(postData:Post): Promise<Post> {
       mobiledoc: postData.mobiledoc as mobiledoc,
       slug: postData.slug,
       banner_image: postData.banner_image,
-      created_by: postData.created_by
+      created_by: userId
     };
 
     const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
@@ -83,10 +81,9 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
   }
 }
 
-export async function updatePostController(postData:Post, userId:number) :Promise<Post | boolean> {
+export async function updatePostController(postData:Post, userId:number, postId: number) :Promise<Post | boolean> {
   try {
-    const id = postData.id as number;
-    if (!postData.id) {
+    if (!postId) {
       return false;
     }
 
@@ -102,7 +99,7 @@ export async function updatePostController(postData:Post, userId:number) :Promis
 
     const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
-    const data = await postHandler.updateOneById(id, payload, fields);
+    const data = await postHandler.updateOneById(postId, payload, fields);
     return data.rows[0] as Post;
 
   } catch (error) {
@@ -110,15 +107,13 @@ export async function updatePostController(postData:Post, userId:number) :Promis
   }
 }
 
-export async function deletePostController(postData:DeletePost) : Promise<boolean> {
+export async function deletePostController(postId: number) : Promise<boolean> {
   try {
-    const id = postData.id as number;
-
-    if (!id) {
+    if (!postId) {
       return false;
     }
 
-    await postHandler.deleteOneById(id);
+    await postHandler.deleteOneById(postId);
     return true;
   } catch (error) {
     throw error;

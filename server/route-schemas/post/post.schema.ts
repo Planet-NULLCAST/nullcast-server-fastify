@@ -1,32 +1,7 @@
 import { BAD_REQUEST } from 'route-schemas/response';
-import { queryStringProps } from './post.properties';
+import { queryStringProps, postProps } from './post.properties';
 
 const { limit_fields, with_table } = queryStringProps;
-
-const mobiledoc = {
-  type: 'object',
-  description: 'user provided mobiledoc',
-  properties: {
-    atoms: {
-      type: 'array'
-    },
-    markups: {
-      type: 'array'
-    },
-    cards: {
-      type: 'array'
-    },
-    sections: {
-      type: 'array'
-    },
-    version: {
-      type: 'string'
-    },
-    ghostVersion: {
-      type: 'string'
-    }
-  }
-};
 
 export const createPostSchema = {
   summary: 'Create Post',
@@ -36,35 +11,15 @@ export const createPostSchema = {
     type: 'object',
     required: [],
     properties: {
-      slug: {
+      created_at: {
         type: 'string',
-        description: 'user should provide slug'
+        description: 'time at which user creates the post'
       },
-      html: {
-        type: 'string',
-        description: 'user provided html'
+      created_by: {
+        type: 'number',
+        description: 'user who creates it'
       },
-      status: {
-        type: 'string',
-        description: 'Post status'
-      },
-      visibilty: {
-        type: 'string',
-        description: 'Post visibilty'
-      },
-      featured: {
-        type: 'string',
-        description: 'Boolean defining whether a post is featured or not'
-      },
-      banner_image: {
-        type: 'string',
-        description: 'user provided banner_image'
-      },
-      type: {
-        type: 'string',
-        description: 'Post type'
-      },
-      mobiledoc
+      ...postProps
     }
   },
   response: {
@@ -95,49 +50,25 @@ export const updatePostSchema = {
   tags: ['Post'],
   params: {
     type: 'object',
-    description: 'asdad',
     properties: {
-      id: {
-        type: 'string',
-        description: 'asdasd'
+      postId: {
+        type: 'number',
+        description: 'id of the post'
       }
     }
   },
   body: {
     type: 'object',
     properties: {
-      html: {
-        type: 'string',
-        description: 'user provided html'
-      },
-      status: {
-        type: 'string',
-        description: 'Post status'
-      },
-      visibilty: {
-        type: 'string',
-        description: 'Post visibilty'
-      },
-      featured: {
-        type: 'string',
-        description: 'Boolean defining whether a post is featured or not'
-      },
-      banner_image: {
-        type: 'string',
-        description: 'user provided banner_image'
-      },
-      type: {
-        type: 'string',
-        description: 'Post type'
-      },
       updated_at: {
         type: 'string',
         description: 'Latest updated time by the user'
       },
       updated_by: {
-        type: 'string',
+        type: 'number',
         description: 'User who had updated it'
-      }
+      },
+      ...postProps
     }
   },
   response: {
@@ -160,10 +91,11 @@ export const getPostSchema = {
   tags: ['Post'],
   queryString: {
     type: 'object',
-    properties: {
+    required: [
       limit_fields,
       with_table
-    }
+    ],
+    properties: queryStringProps
   },
   params: {
     type: 'object',
@@ -182,10 +114,11 @@ export const getPostBySlugSchema = {
   tags: ['Post'],
   queryString: {
     type: 'object',
-    properties: {
+    required: [
       limit_fields,
       with_table
-    }
+    ],
+    properties: queryStringProps
   },
   params: {
     type: 'object',
@@ -217,13 +150,12 @@ export const deletePostSchema = {
   tags: ['Post'],
   params: {
     type: 'object',
-    required: ['id'],
     properties: {
-      id: { type: 'string', description: 'Id of the post' }
+      postId: { type: 'number', description: 'Id of the post' }
     }
   },
   response: {
-    201: {
+    200: {
       type: 'object',
       properties: {
         message: {

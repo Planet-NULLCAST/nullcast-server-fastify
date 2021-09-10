@@ -3,7 +3,7 @@ import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
-const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image'],
+const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'],
   DEFAULT_JOINS = ['users'];
 
 function constructJoinQuery({
@@ -168,7 +168,7 @@ export async function getPostsBytag(
     search = '',
     page = 1,
     limit = 10,
-    // status = 'published',
+    status = 'published',
     order = 'ASC',
     sort_field = 'published_at',
     with_table = DEFAULT_JOINS
@@ -225,9 +225,9 @@ export async function getPostsBytag(
     }
   }
 
-  let WHERE_CLAUSE = 'tags.name = $1';
+  let WHERE_CLAUSE = 'tags.name = $1, posts.status = $2';
 
-  const queryValues = [tag, +limit, (page - 1) * +limit];
+  const queryValues = [tag, status, +limit, (page - 1) * +limit];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -252,8 +252,8 @@ export async function getPostsBytag(
             ${GROUP_BY_CLAUSE}
             ORDER BY 
             posts.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $3
+            OFFSET $4;`,
     values: queryValues
   };
 

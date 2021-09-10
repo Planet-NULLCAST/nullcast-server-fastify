@@ -35,9 +35,9 @@ export interface ValidateResponse {
 }
 
 export interface UpdateUser {
-  user_name: string;
+  user_name?: string;
   full_name: string;
-  email: string;
+  email?: string;
   updated_at?: string;
   bio?: string;
   status?: UserStatus;
