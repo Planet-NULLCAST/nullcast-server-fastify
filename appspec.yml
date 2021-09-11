@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/fastify
+hooks:
+  ApplicationStop:
+    - location: scripts/application_stop.sh
+      timout: 300
+      runas: ubuntu
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timout: 300
+      runas: ubuntu
+  ApplicationStart:
+    - location: scripts/application_start.sh
+      timout: 300
+      runas: ubuntu
