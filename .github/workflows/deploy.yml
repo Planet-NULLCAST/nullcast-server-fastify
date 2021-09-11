@@ -17,19 +17,19 @@ on:
 jobs:
   deploy:
     name: "Deploy (developement)"
-    runs-on: ubuntu-latest
-    env:
-      TARGET_ENV: "production"
-      SERVERIP: ${{ secrets.DEV_SERVERIP }}
-      SSHKEY: ${{ secrets.DEV_SSHKEY }}
-      USERNAME: ${{ secrets.DEV_USERNAME }}
+    # runs-on: ubuntu-latest
+    # env:
+    #   TARGET_ENV: "production"
+    #   SERVERIP: ${{ secrets.DEV_SERVERIP }}
+    #   SSHKEY: ${{ secrets.DEV_SSHKEY }}
+    #   USERNAME: ${{ secrets.DEV_USERNAME }}
     uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DEV_SERVERIP }}
-        username: ${{ secrets.DEV_USERNAME }}
-        key: ${{ secrets.DEV_SSHKEY }}
-        port: 22
-        script: ./scripts/dev_deploy.sh
+    with:
+      host: ${{ secrets.DEV_SERVERIP }}
+      username: ${{ secrets.DEV_USERNAME }}
+      key: ${{ secrets.DEV_SSHKEY }}
+      port: 22
+      script: ./scripts/dev_deploy.sh
     # run the deploy pipeline on master only
     # if: github.ref == 'refs/heads/54-trial-deployment'
     # steps:
