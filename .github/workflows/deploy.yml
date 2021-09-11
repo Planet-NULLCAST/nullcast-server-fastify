@@ -5,7 +5,12 @@ name: deploy
 #       deployment_notes: 
 #         description: "Deployment notes"
 #         required: true
-on: [push, pull_request]
+on: 
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
+    types: [closed]
 # Trigger the workflow on push or pull request,
 # branches:
 #   - development
