@@ -7,8 +7,9 @@ true:
         required: true
 on: [push, pull_request]
 # Trigger the workflow on push or pull request,
-branches:
-  - development
+# branches:
+#   - development
+jobs:
   deploy:
     name: "Deploy (developement)"
     runs-on: ubuntu-latest
