@@ -7,9 +7,9 @@ name: deploy
 #         required: true
 on: 
   push:
-    branches: [development]
+    branches: [development, 54-trial-deployment]
   pull_request:
-    branches: [development]
+    branches: [development, 54-trial-deployment]
     types: [closed]
 # Trigger the workflow on push or pull request,
 # branches:
