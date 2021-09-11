@@ -7,7 +7,6 @@ true:
         required: true
 on: [push, pull_request]
   # Trigger the workflow on push or pull request,
-  # but only for the development branch
   branches:
     - development
     deploy:
