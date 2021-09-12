@@ -24,6 +24,7 @@ jobs:
     #   SSHKEY: ${{ secrets.DEV_SSHKEY }}
     #   USERNAME: ${{ secrets.DEV_USERNAME }}
     steps:
+    - uses: actions/checkout@v2
     - name: check files
       run: ls -a
     - name: chmod
