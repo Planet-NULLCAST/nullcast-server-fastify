@@ -32,8 +32,8 @@ jobs:
         key: ${{ secrets.DEV_SSHKEY }}
         port: 22
         script: |
-        echo ${{ secrets.DEV_USERNAME }}
-        cat ./scripts/dev_deploy.sh
+          echo "${{ secrets.DEV_USERNAME }}"
+          cat ./scripts/dev_deploy.sh
       # run the deploy pipeline on master only
       # if: github.ref == 'refs/heads/54-trial-deployment'
       # steps:
