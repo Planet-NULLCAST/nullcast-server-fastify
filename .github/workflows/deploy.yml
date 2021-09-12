@@ -25,7 +25,7 @@ jobs:
     #   USERNAME: ${{ secrets.DEV_USERNAME }}
     steps:
     - name: Executing appleboy ssh action
-      uses: appleboy/ssh-action@masterx
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.DEV_SERVERIP }}
         username: ${{ secrets.DEV_USERNAME }}
