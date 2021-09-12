@@ -17,30 +17,32 @@ on:
 jobs:
   deploy:
     name: "Deploy (developement)"
-    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     # env:
     #   TARGET_ENV: "production"
     #   SERVERIP: ${{ secrets.DEV_SERVERIP }}
     #   SSHKEY: ${{ secrets.DEV_SSHKEY }}
     #   USERNAME: ${{ secrets.DEV_USERNAME }}
-    uses: appleboy/ssh-action@master
-    with:
-      host: ${{ secrets.DEV_SERVERIP }}
-      username: ${{ secrets.DEV_USERNAME }}
-      key: ${{ secrets.DEV_SSHKEY }}
-      port: 22
-      script: ./scripts/dev_deploy.sh
-    # run the deploy pipeline on master only
-    # if: github.ref == 'refs/heads/54-trial-deployment'
-    # steps:
-    # - name: Nullcast | Check ssh
-    #   run: |
-    #     'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    #     mkdir -p ~/.ssh
-    #     eval $(ssh-agent -s)
-    #     '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    # - name: Nullcast | Run deploy script
-    #   run: |
-    #     ssh-add <(echo "$SSHKEY" | tr -d '\r')
-    #     ./scripts/dev_deploy.sh | ssh -o StrictHostKeyChecking=no $USERNAME@$SERVERIP
-    #     echo "Deploy step finished"
+    steps:
+    - name: Executing appleboy ssh action
+      uses: appleboy/ssh-action@masterx
+      with:
+        host: ${{ secrets.DEV_SERVERIP }}
+        username: ${{ secrets.DEV_USERNAME }}
+        key: ${{ secrets.DEV_SSHKEY }}
+        port: 22
+        script: ./scripts/dev_deploy.sh
+      # run the deploy pipeline on master only
+      # if: github.ref == 'refs/heads/54-trial-deployment'
+      # steps:
+      # - name: Nullcast | Check ssh
+      #   run: |
+      #     'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+      #     mkdir -p ~/.ssh
+      #     eval $(ssh-agent -s)
+      #     '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+      # - name: Nullcast | Run deploy script
+      #   run: |
+      #     ssh-add <(echo "$SSHKEY" | tr -d '\r')
+      #     ./scripts/dev_deploy.sh | ssh -o StrictHostKeyChecking=no $USERNAME@$SERVERIP
+      #     echo "Deploy step finished"
