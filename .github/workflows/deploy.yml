@@ -25,9 +25,9 @@ jobs:
     #   USERNAME: ${{ secrets.DEV_USERNAME }}
     steps:
     - name: chmod
-      run: chmod +x ./scripts/*
+      run: chmod +x scripts/*
     - name: Check
-      run: MY_SECRET="${{ secrets.DEV_USERNAME }}" ./scripts/check.sh
+      run: MY_SECRET="${{ secrets.DEV_USERNAME }}" scripts/check.sh
     - name: Executing appleboy ssh action
       uses: appleboy/ssh-action@master
       with:
