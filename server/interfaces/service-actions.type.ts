@@ -1,9 +1,6 @@
 export type Actions =
-  | 'CREATE_USER'
   | 'GET_USER'
-  | 'UPDATE_USER'
-  | 'DELETE_USER'
-  | 'VALIDATE_USER'
+  | 'SIGN_IN_USER'
   | 'GET_USERS'
   | 'GET_POSTS'
   | 'GET_POST'
