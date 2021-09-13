@@ -1,4 +1,6 @@
+import { BAD_REQUEST } from 'route-schemas/response';
 import { userProps } from './user.properties';
+import { queryStringProps } from 'route-schemas/post/post.properties';
 
 
 export const createUserSchema = {
@@ -46,62 +48,15 @@ export const createUserSchema = {
             full_name: {
               type: 'string',
               description: 'full name of the user'
+            },
+            avatar: {
+              type: 'string',
+              description: 'Avatar of the user'
             }
           }
         }
       }
     },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
-  }
-};
-
-export const updateUserSchema = {
-  summary: 'Update User',
-  description: 'A PUT route to update register user information',
-  tags: ['User'],
-  params: {
-    type: 'object',
-    required: ['id'],
-    properties: {
-      userId: { type: 'number', description: 'UserId of user' }
-    }
-  },
-  body:  {
-    type: 'object',
-    properties: {
-      password: {
-        type: 'string',
-        description: 'user password'
-      },
-      updated_at: {
-        type: 'string',
-        description: 'userId of whoever updating this user'
-      },
-      updated_by: {
-        type: 'number',
-        description: 'Date and time at which this user was updated for the last time'
-      },
-      ...userProps
-    }
-  },
-  response: {
-    // 200: {
-    //   description: 'User created success.',
-    //   type: 'object',
-    //   properties: {
-    //     message: {
-    //       type: 'string'
-    //     }
-    //   }
-    // },
     400: {
       description: 'Bad request',
       type: 'object',
@@ -150,6 +105,57 @@ export const getUserSchema = {
   }
 };
 
+export const updateUserSchema = {
+  summary: 'Update User',
+  description: 'A PUT route to update register user information',
+  tags: ['User'],
+  params: {
+    type: 'object',
+    required: ['userId'],
+    properties: {
+      userId: { type: 'string', description: 'UserId of user' }
+    }
+  },
+  body:  {
+    type: 'object',
+    properties: {
+      password: {
+        type: 'string',
+        description: 'user password'
+      },
+      updated_at: {
+        type: 'string',
+        description: 'userId of whoever updating this user'
+      },
+      updated_by: {
+        type: 'number',
+        description: 'Date and time at which this user was updated for the last time'
+      },
+      ...userProps
+    }
+  },
+  response: {
+    // 200: {
+    //   description: 'User created success.',
+    //   type: 'object',
+    //   properties: {
+    //     message: {
+    //       type: 'string'
+    //     }
+    //   }
+    // },
+    400: {
+      description: 'Bad request',
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
+    }
+  }
+};
+
 export const deleteUserSchema = {
   summary: 'Delete User',
   description: 'To Delete user information',
@@ -179,5 +185,18 @@ export const deleteUserSchema = {
         }
       }
     }
+  }
+};
+
+export const getUsersSchema = {
+  summary: 'Get users',
+  description: 'To get user information',
+  tags: ['User'],
+  querystring: {
+    type: 'object',
+    properties: queryStringProps
+  },
+  response: {
+    400: BAD_REQUEST
   }
 };

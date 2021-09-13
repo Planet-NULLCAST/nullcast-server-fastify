@@ -3,34 +3,13 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 
 import  {
-  createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema
+  createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema,
+  getUsersSchema
 }  from '../../route-schemas/users/users.schema';
 
 import {User} from 'interfaces/user.type';
+import { QueryParams } from 'interfaces/query-params.type';
 
-
-// const getUsers: RouteOptions = {
-//   method: 'GET',
-//   url: '/users',
-//   handler: async(_, reply) => {
-//     reply.code(200).send({data:'Some data'});
-//   }
-// };
-
-const getUser: RouteOptions = {
-  method: 'GET',
-  url: '/user/:user_name',
-  schema: getUserSchema,
-  handler: async(request, reply) => {
-    const params = request.params as {user_name: string};
-    const userData =  await controller.getUserController(params.user_name);
-    if (userData) {
-      reply.code(200).send({message: 'User Found', data: userData});
-    }
-    reply.code(400).send({message: 'User not Found'});
-
-  }
-};
 
 const createUser: RouteOptions = {
   method: 'POST',
@@ -50,6 +29,21 @@ const createUser: RouteOptions = {
     } catch (error) {
       throw error;
     }
+
+  }
+};
+
+const getUser: RouteOptions = {
+  method: 'GET',
+  url: '/user/:user_name',
+  schema: getUserSchema,
+  handler: async(request, reply) => {
+    const params = request.params as {user_name: string};
+    const userData =  await controller.getUserController(params.user_name);
+    if (userData) {
+      reply.code(200).send({message: 'User Found', data: userData});
+    }
+    reply.code(400).send({message: 'User not Found'});
 
   }
 };
@@ -88,11 +82,28 @@ const deleteUser: RouteOptions = {
   }
 };
 
+const getUsers: RouteOptions = {
+  method: 'GET',
+  url: '/users',
+  schema: getUsersSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    if (queryParams) {
+      const users = await controller.getUsersController(queryParams);
+      reply.code(200).send({ data: users });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
+
 function initUsers(server:FastifyInstance, _:any, done: () => void) {
-  server.route(getUser);
   server.route(createUser);
-  server.route(deleteUser);
+  server.route(getUser);
   server.route(updateUser);
+  server.route(deleteUser);
+  server.route(getUsers);
+
   done();
 }
 
