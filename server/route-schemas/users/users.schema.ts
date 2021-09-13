@@ -1,4 +1,6 @@
+import { BAD_REQUEST } from 'route-schemas/response';
 import { userProps } from './user.properties';
+import { queryStringProps } from 'route-schemas/post/post.properties';
 
 
 export const createUserSchema = {
@@ -48,6 +50,42 @@ export const createUserSchema = {
               description: 'full name of the user'
             }
           }
+        }
+      }
+    },
+    400: {
+      description: 'Bad request',
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
+    }
+  }
+};
+
+export const getUserSchema = {
+  summary: 'Get User',
+  description: 'To get user information',
+  tags: ['User'],
+  params: {
+    type: 'object',
+    required: ['user_name'],
+    properties: {
+      user_name: { type: 'string', description: 'user name of user' }
+    }
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        },
+        data: {
+          type: 'object',
+          properties: userProps
         }
       }
     },
@@ -114,42 +152,6 @@ export const updateUserSchema = {
   }
 };
 
-export const getUserSchema = {
-  summary: 'Get User',
-  description: 'To get user information',
-  tags: ['User'],
-  params: {
-    type: 'object',
-    required: ['user_name'],
-    properties: {
-      user_name: { type: 'string', description: 'user name of user' }
-    }
-  },
-  response: {
-    200: {
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        },
-        data: {
-          type: 'object',
-          properties: userProps
-        }
-      }
-    },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
-  }
-};
-
 export const deleteUserSchema = {
   summary: 'Delete User',
   description: 'To Delete user information',
@@ -179,5 +181,18 @@ export const deleteUserSchema = {
         }
       }
     }
+  }
+};
+
+export const getUsersSchema = {
+  summary: 'Get users',
+  description: 'To get user information',
+  tags: ['Users'],
+  querystring: {
+    type: 'object',
+    properties: queryStringProps
+  },
+  response: {
+    400: BAD_REQUEST
   }
 };

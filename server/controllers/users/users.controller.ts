@@ -6,6 +6,7 @@ import {
   UpdateUser,
   cookieData
 } from 'interfaces/user.type';
+import { QueryParams } from 'interfaces/query-params.type';
 import { createHash, createRandomBytes } from '../../utils/hash-utils';
 
 import {
@@ -71,21 +72,6 @@ export async function getUserController(user_name: string): Promise<User> {
   }
 }
 
-export async function deleteUserController(
-  userId: number
-): Promise<boolean> {
-  try {
-    if (!userId) {
-      return false;
-    }
-
-    await userHandler.deleteOneById(userId);
-    return true;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function updateUserController(userData: User, userId: number): Promise<User|boolean> {
   try {
     if (!userId) {
@@ -101,6 +87,21 @@ export async function updateUserController(userData: User, userId: number): Prom
     const data = await userHandler.updateOneById<UpdateUser>(userId, payload);
 
     return data.rows[0] as User;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteUserController(
+  userId: number
+): Promise<boolean> {
+  try {
+    if (!userId) {
+      return false;
+    }
+
+    await userHandler.deleteOneById(userId);
+    return true;
   } catch (error) {
     throw error;
   }
@@ -134,6 +135,14 @@ export async function validateUserController(userData: ValidateUser) {
       return cookieData;
     }
     return;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUsersController(qParam:QueryParams): Promise<User> {
+  try {
+    return await userHandler.dbHandler<QueryParams, User>('GET_USERS', qParam);
   } catch (error) {
     throw error;
   }

@@ -4,7 +4,8 @@ import {
   deleteUser,
   getUser,
   updateUser,
-  validateUser
+  validateUser,
+  getUsers
 } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag
@@ -18,6 +19,7 @@ export const serviceActions: { [x in Actions]: any } = {
   DELETE_USER: deleteUser,
   UPDATE_USER: updateUser,
   VALIDATE_USER: validateUser,
+  GET_USERS: getUsers,
   GET_POSTS: getPosts,
   GET_POST: getSinglePost,
   GET_POSTS_BY_TAG: getPostsBytag,
