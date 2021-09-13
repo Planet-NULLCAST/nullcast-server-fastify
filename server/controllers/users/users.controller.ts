@@ -1,7 +1,5 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import {
-  ValidateUser,
-  ValidateResponse,
   User,
   UpdateUser,
   cookieData
@@ -34,11 +32,13 @@ export async function createUserController(userData: User): Promise<cookieData> 
     const badge = await badgeHandler.findOneByField({ name: BADGE_NAME }, [
       'id'
     ]);
+    const randInt = Math.floor(Math.random() * 4);
 
     const payload: User = {
       entity_id: entity.id,
       salt: hashData.salt,
-      password: hashData.password,
+      password: hashData.password, 
+      avatar: `/images/dummy${randInt}.png`,
       primary_badge: badge.id,
       slug: userData.user_name.toLowerCase(),
       user_name: userData.user_name.toLowerCase(),
@@ -47,7 +47,7 @@ export async function createUserController(userData: User): Promise<cookieData> 
     };
 
     await userHandler.insertOne(payload);
-    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name', 'full_name']);
+    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name', 'full_name', 'avatar']);
     // if create success.
     const token = issueToken({user_name: user.user_name, id: user.id});
 
@@ -83,8 +83,9 @@ export async function updateUserController(userData: User, userId: number): Prom
       slug: userData.user_name.toLowerCase(),
       updated_at: new Date().toISOString()
     };
+    const fields = ['id', 'user_name', 'full_name', 'avatar'];
 
-    const data = await userHandler.updateOneById<UpdateUser>(userId, payload);
+    const data = await userHandler.updateOneById<UpdateUser>(userId, payload, fields);
 
     return data.rows[0] as User;
   } catch (error) {
@@ -102,39 +103,6 @@ export async function deleteUserController(
 
     await userHandler.deleteOneById(userId);
     return true;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function validateUserController(userData: ValidateUser) {
-  try {
-    const dbData =  await userHandler.dbHandler<ValidateUser, ValidateResponse>(
-      'VALIDATE_USER',
-      userData
-    );
-
-    if (!dbData) {
-      return;
-    }
-
-    const hashData = createHash(userData.password, dbData.salt);
-
-    if (dbData.password === hashData.password) {
-      const user = {
-        id: dbData.id,
-        user_name: dbData.user_name,
-        full_name: dbData.full_name
-      };
-      const token = issueToken({user_name: dbData.user_name, id: dbData.id});
-
-      const cookieData = {
-        user,
-        token
-      };
-      return cookieData;
-    }
-    return;
   } catch (error) {
     throw error;
   }

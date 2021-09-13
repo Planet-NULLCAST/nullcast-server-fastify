@@ -6,6 +6,7 @@ export interface User {
   password?: string;
   user_name: string;
   full_name: string;
+  avatar?:string;
   email: string;
   salt?: string;
   created_at?: string;

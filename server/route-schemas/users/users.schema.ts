@@ -48,6 +48,10 @@ export const createUserSchema = {
             full_name: {
               type: 'string',
               description: 'full name of the user'
+            },
+            avatar: {
+              type: 'string',
+              description: 'Avatar of the user'
             }
           }
         }
@@ -107,9 +111,9 @@ export const updateUserSchema = {
   tags: ['User'],
   params: {
     type: 'object',
-    required: ['id'],
+    required: ['userId'],
     properties: {
-      userId: { type: 'number', description: 'UserId of user' }
+      userId: { type: 'string', description: 'UserId of user' }
     }
   },
   body:  {
@@ -187,7 +191,7 @@ export const deleteUserSchema = {
 export const getUsersSchema = {
   summary: 'Get users',
   description: 'To get user information',
-  tags: ['Users'],
+  tags: ['User'],
   querystring: {
     type: 'object',
     properties: queryStringProps
