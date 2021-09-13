@@ -1,11 +1,6 @@
 import { Actions } from 'interfaces/service-actions.type';
-import {
-  createUser,
-  deleteUser,
-  getUser,
-  updateUser,
-  validateUser
-} from './users.service';
+import { signInUser } from './auth.service';
+import { getUser, getUsers } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag
 } from './posts.service';
@@ -13,11 +8,9 @@ import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 
 export const serviceActions: { [x in Actions]: any } = {
-  CREATE_USER: createUser,
   GET_USER: getUser,
-  DELETE_USER: deleteUser,
-  UPDATE_USER: updateUser,
-  VALIDATE_USER: validateUser,
+  SIGN_IN_USER: signInUser,
+  GET_USERS: getUsers,
   GET_POSTS: getPosts,
   GET_POST: getSinglePost,
   GET_POSTS_BY_TAG: getPostsBytag,

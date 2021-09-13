@@ -25,7 +25,7 @@ const signIn: RouteOptions = {
   url: '/signin',
   schema: signInSchema,
   handler: async(request, reply) => {
-    const userData = await controller.validateUserController(request.body as ValidateUser);
+    const userData = await controller.signInUserController(request.body as ValidateUser);
     if (userData?.token) {
       reply.setCookie('token', userData.token,
         { signed: false, domain:'localhost', path:'/', secure:false, httpOnly:false, maxAge:16*60, sameSite:'none'});
