@@ -1,7 +1,9 @@
 import { Actions } from 'interfaces/service-actions.type';
 import { signInUser } from './auth.service';
 import { getUser, getUsers } from './users.service';
-import { getPosts, getSinglePost, getPostsBytag } from './posts.service';
+import {
+  getPosts, getSinglePost, getPostsBytag
+} from './posts.service';
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 

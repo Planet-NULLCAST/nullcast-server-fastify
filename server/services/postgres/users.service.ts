@@ -72,7 +72,7 @@ export async function getUsers(queryParams: QueryParams) {
     const buildEntityObj = `'id', entity.id, 'name', entity.name, 'description', entity.description`;
     SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                       JSON_BUILD_OBJECT(${buildEntityObj}) AS entity`;
-                      JOIN_CLAUSE = `${JOIN_CLAUSE} LEFT JOIN entity on u.entity_id = entity.id`;
+    JOIN_CLAUSE = `${JOIN_CLAUSE} LEFT JOIN entity on u.entity_id = entity.id`;
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND u.entity_id = entity.id`;
     GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, entity.id`;
   }
