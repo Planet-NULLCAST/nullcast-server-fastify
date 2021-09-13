@@ -72,7 +72,7 @@ const getPost: RouteOptions = {
 
 const getPostBySlug: RouteOptions = {
   method: 'GET',
-  url: '/post-slug/:slug',
+  url: '/post-by-slug/:slug',
   schema: getPostBySlugSchema,
   handler: async(request, reply) => {
     try {
