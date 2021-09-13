@@ -37,7 +37,7 @@ export async function createUserController(userData: User): Promise<cookieData> 
     const payload: User = {
       entity_id: entity.id,
       salt: hashData.salt,
-      password: hashData.password, 
+      password: hashData.password,
       avatar: `/images/dummy${randInt}.png`,
       primary_badge: badge.id,
       slug: userData.user_name.toLowerCase(),
