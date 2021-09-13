@@ -8,7 +8,6 @@ import {
 import { QueryParams } from 'interfaces/query-params.type';
 
 
-
 export async function createUser(payload: User): Promise<boolean> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -173,10 +172,10 @@ export async function getUsers(queryParams: QueryParams) {
 
   limitFields = limitFields.map((item) => `u.${item}`);
 
-  let SELECT_CLAUSE = `SELECT ${limitFields}, u.id as user_id`, 
-  FROM_CLAUSE = 'FROM users AS u', 
-  WHERE_CLAUSE = 'WHERE u.status = $1', 
-  GROUP_BY_CLAUSE = 'GROUP BY user_id';
+  let SELECT_CLAUSE = `SELECT ${limitFields}, u.id as user_id`,
+    FROM_CLAUSE = 'FROM users AS u',
+    WHERE_CLAUSE = 'WHERE u.status = $1',
+    GROUP_BY_CLAUSE = 'GROUP BY user_id';
 
   const queryValues = [status, +limit, (page - 1) * +limit];
 
@@ -187,22 +186,22 @@ export async function getUsers(queryParams: QueryParams) {
       OR u.meta_description LIKE $${queryValues.length})`;
   }
 
-  if(with_table.includes('entity')) {
+  if (with_table.includes('entity')) {
     const buildEntityObj = `'id', entity.id, 'name', entity.name, 'description', entity.description`;
     SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                       JSON_BUILD_OBJECT(${buildEntityObj}) AS entity`;
     FROM_CLAUSE = `${FROM_CLAUSE}, entity`;
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND u.entity_id = entity.id`;
-    GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, entity.id`
+    GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, entity.id`;
   }
 
-  if(with_table.includes('badges')) {
+  if (with_table.includes('badges')) {
     const buildBadgeObj = `'id', badge.id, 'name', badge.name, 'description', badge.description`;
     SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                      JSON_BUILD_OBJECT(${buildBadgeObj}) AS entity`
+                      JSON_BUILD_OBJECT(${buildBadgeObj}) AS entity`;
     FROM_CLAUSE = `${FROM_CLAUSE}, badges as badge`;
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND u.primary_badge = badge.id`;
-    GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, badge.id`
+    GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, badge.id`;
   }
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
