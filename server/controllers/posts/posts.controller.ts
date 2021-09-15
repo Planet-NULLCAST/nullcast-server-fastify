@@ -119,3 +119,18 @@ export async function deletePostController(postId: number) : Promise<boolean> {
     throw error;
   }
 }
+
+
+export async function getPostsByUserIdController(
+  queryParams: QueryParams, currentUser: TokenUser, userId: number):Promise<Post> {
+  try {
+    const payload = {
+      key: userId,
+      field: 'id'
+    };
+    return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams, currentUser);
+
+  } catch (error) {
+    return error;
+  }
+}
