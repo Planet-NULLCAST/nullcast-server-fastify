@@ -190,9 +190,19 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
     values: queryValues
   };
 
-  const data = await postgresClient.query<Post>(getPostsQuery);
+  const getPostsCountQuery: QueryConfig = {
+    text: `SELECT COUNT(id)
+            FROM posts AS post
+            ${WHERE_CLAUSE}
+            LIMIT $2
+            OFFSET $3;`,
+    values: queryValues
+  };
 
-  return {posts: data.rows, limit, page};
+  const postData = await postgresClient.query<Post>(getPostsQuery);
+  const countData = await postgresClient.query<Post>(getPostsCountQuery)
+
+  return {posts: postData.rows, ...countData?.rows[0], limit, page};
 }
 
 export async function getSinglePost(
@@ -285,9 +295,21 @@ export async function getPostsBytag(
     values: queryValues
   };
 
-  const data = await postgresClient.query<Post>(getPostsQuery);
+  const getPostsCountQuery: QueryConfig = {
+    text: ` SELECT COUNT(posts.id)
+            from posts
+            LEFT JOIN post_tags on posts.id = post_tags.post_id
+            LEFT JOIN tags on tags.id = post_tags.tag_id
+            ${WHERE_CLAUSE}
+            LIMIT $3
+            OFFSET $4;`,
+    values: queryValues
+  };
 
-  return data.rows;
+  const postData = await postgresClient.query<Post>(getPostsQuery);
+  const countData = await postgresClient.query<Post>(getPostsCountQuery);
+
+  return { posts: postData.rows, ...countData.rows[0], limit, page };
 }
 
 export async function getPostsByUserId(
@@ -361,8 +383,23 @@ export async function getPostsByUserId(
     values: queryValues
   };
 
-  const data = await postgresClient.query<Post>(getPostsQuery);
+  const getPostsCountQuery: QueryConfig = {
+    text: ` SELECT COUNT(posts.id)
+            from posts
+            LEFT JOIN users AS u on u.id = posts.created_by
+            ${tag ? 
+            `LEFT JOIN post_tags on posts.id = post_tags.post_id 
+            LEFT JOIN tags on tags.id = post_tags.tag_id`
+            : ""}
+            ${WHERE_CLAUSE}
+            LIMIT $3
+            OFFSET $4;`,
+    values: queryValues
+  };
 
-  return data.rows;
+  const postData = await postgresClient.query<Post>(getPostsQuery);
+  const countData = await postgresClient.query<Post>(getPostsCountQuery);
+
+  return { posts: postData.rows , ...countData.rows[0], limit, page};
 }
 
