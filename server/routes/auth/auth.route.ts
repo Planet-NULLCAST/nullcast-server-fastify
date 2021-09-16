@@ -12,7 +12,9 @@ const getNewToken: RouteOptions = {
       const token = request.cookies.token as string;
       const userToken = controller.generateNewTokenController(token);
       if (userToken) {
-        reply.setCookie('token', userToken, { signed: false });
+        reply.setCookie('token',
+          userToken,
+          { signed: false, domain: 'localhost', path: '/', secure: false, httpOnly: false, maxAge: 86400, sameSite: 'none' });
         reply.code(200).send();
       }
     }
@@ -28,10 +30,10 @@ const signIn: RouteOptions = {
     const userData = await controller.signInUserController(request.body as ValidateUser);
     if (userData?.token) {
       reply.setCookie('token', userData.token,
-        { signed: false, domain:'localhost', path:'/', secure:false, httpOnly:false, maxAge:16*60, sameSite:'none'});
-      reply.code(200).send({message: 'User logged in successfully', user:userData.user});
+        { signed: false, domain: 'localhost', path: '/', secure: false, httpOnly: false, maxAge: 86400, sameSite: 'none' });
+      reply.code(200).send({ message: 'User logged in successfully', user: userData.user });
     }
-    reply.code(401).send({ message: 'Invalid username or password'});
+    reply.code(401).send({ message: 'Invalid username or password' });
   }
 };
 

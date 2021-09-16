@@ -7,7 +7,7 @@ export async function getTags(queryParams: QueryParams) {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const {
-    limit_fields = ['id', 'name', 'description', 'meta_title', 'status', 'slug', 'visibility'],
+    limit_fields = ['id', 'name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility', 'updated_by'],
     search = '',
     page = 1,
     limit = 25,
