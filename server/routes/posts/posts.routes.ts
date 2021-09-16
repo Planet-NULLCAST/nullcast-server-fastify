@@ -4,7 +4,8 @@ import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
 import {Post} from 'interfaces/post.type';
 import {
-  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema
+  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema,
+  getPostsByTagSchema, getPostsByUserIdSchema
 } from '../../route-schemas/post/post.schema';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
@@ -95,7 +96,7 @@ const getPostBySlug: RouteOptions = {
 const getPostsByTag: RouteOptions = {
   method: 'GET',
   url: '/posts/:tagName',
-  schema: getPostsSchema,
+  schema: getPostsByTagSchema,
   handler: async(request, reply) => {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
@@ -152,7 +153,7 @@ const deletePost: RouteOptions = {
 const getPostsByUserId: RouteOptions = {
   method: 'GET',
   url: '/posts-user/:userId',
-  schema: getPostsSchema,
+  schema: getPostsByUserIdSchema,
   handler: async(request, reply) => {
     const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
     const params = request.params as { userId: number };

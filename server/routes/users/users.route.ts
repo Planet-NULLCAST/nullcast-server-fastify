@@ -7,7 +7,7 @@ import  {
   getUsersSchema
 }  from '../../route-schemas/users/users.schema';
 
-import {User} from 'interfaces/user.type';
+import { User, UpdateUser } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 
 
@@ -55,7 +55,7 @@ const updateUser: RouteOptions = {
   handler: async(request, reply) => {
     try {
       const params = request.params as {userId: number};
-      const user = await controller.updateUserController(request.body as User, params.userId);
+      const user = await controller.updateUserController(request.body as UpdateUser, params.userId);
       if (user) {
         reply.code(200).send({message: 'User updated', data:user});
       } else {
