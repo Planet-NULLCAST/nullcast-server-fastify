@@ -89,10 +89,9 @@ export async function updatePostController(postData:Post, userId:number, postId:
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
+      ...postData,
       html,
       mobiledoc: postData.mobiledoc as mobiledoc,
-      status: postData.status,
-      banner_image: postData.banner_image,
       updated_at: new Date().toISOString(),
       updated_by: userId
     };
