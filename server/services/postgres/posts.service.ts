@@ -200,7 +200,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
-  const countData = await postgresClient.query<Post>(getPostsCountQuery)
+  const countData = await postgresClient.query<Post>(getPostsCountQuery);
 
   return {posts: postData.rows, ...countData?.rows[0], limit, page};
 }
@@ -387,10 +387,10 @@ export async function getPostsByUserId(
     text: ` SELECT COUNT(posts.id)
             from posts
             LEFT JOIN users AS u on u.id = posts.created_by
-            ${tag ? 
-            `LEFT JOIN post_tags on posts.id = post_tags.post_id 
+            ${tag ?
+    `LEFT JOIN post_tags on posts.id = post_tags.post_id 
             LEFT JOIN tags on tags.id = post_tags.tag_id`
-            : ""}
+    : ''}
             ${WHERE_CLAUSE}
             LIMIT $3
             OFFSET $4;`,
@@ -400,6 +400,6 @@ export async function getPostsByUserId(
   const postData = await postgresClient.query<Post>(getPostsQuery);
   const countData = await postgresClient.query<Post>(getPostsCountQuery);
 
-  return { posts: postData.rows , ...countData.rows[0], limit, page};
+  return { posts: postData.rows, ...countData.rows[0], limit, page};
 }
 
