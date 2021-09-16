@@ -89,7 +89,7 @@ export async function getUsers(queryParams: QueryParams) {
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-  const getPostsQuery: QueryConfig = {
+  const getUsersQuery: QueryConfig = {
     text: `${SELECT_CLAUSE}
             FROM users AS u
             ${JOIN_CLAUSE}
@@ -102,7 +102,18 @@ export async function getUsers(queryParams: QueryParams) {
     values: queryValues
   };
 
-  const data = await postgresClient.query(getPostsQuery);
+  const getUsersCountQuery: QueryConfig = {
+    text: `SELECT COUNT(u.id)
+            FROM users AS u
+            ${JOIN_CLAUSE}
+            ${WHERE_CLAUSE}
+            LIMIT $2
+            OFFSET $3;`,
+    values: queryValues
+  };
 
-  return {users: data.rows, limit, page};
+  const userData = await postgresClient.query(getUsersQuery);
+  const countData = await postgresClient.query(getUsersCountQuery);
+
+  return {users: userData.rows, ...countData.rows[0], limit, page};
 }
