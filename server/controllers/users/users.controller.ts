@@ -72,16 +72,16 @@ export async function getUserController(user_name: string): Promise<User> {
   }
 }
 
-export async function updateUserController(userData: User, userId: number): Promise<User|boolean> {
+export async function updateUserController(userData: UpdateUser, userId: number): Promise<User|boolean> {
   try {
     if (!userId) {
       return false;
     }
 
     const payload: UpdateUser = {
-      full_name: userData.full_name.toLowerCase(),
-      slug: userData.user_name.toLowerCase(),
-      updated_at: new Date().toISOString()
+      ...userData,
+      updated_at: new Date().toISOString(),
+      updated_by: userId
     };
     const fields = ['id', 'user_name', 'full_name', 'avatar'];
 
