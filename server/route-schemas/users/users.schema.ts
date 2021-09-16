@@ -1,6 +1,6 @@
 import { BAD_REQUEST } from 'route-schemas/response';
 import { userProps } from './user.properties';
-import { queryStringProps } from 'route-schemas/post/post.properties';
+import { queryStringProps } from 'route-schemas/shared-schemas/shared.properties';
 
 
 export const createUserSchema = {
@@ -14,14 +14,6 @@ export const createUserSchema = {
       password: {
         type: 'string',
         description: 'user password'
-      },
-      created_by: {
-        type: 'number',
-        description: 'userId of whoever creating this user'
-      },
-      created_at: {
-        type: 'string',
-        description: 'Date and time at which this user was created for the first time'
       },
       ...userProps
     }
@@ -111,25 +103,17 @@ export const updateUserSchema = {
   tags: ['User'],
   params: {
     type: 'object',
-    required: ['userId'],
     properties: {
-      userId: { type: 'string', description: 'UserId of user' }
+      userId: { type: 'number', description: 'UserId of user' }
     }
   },
   body:  {
     type: 'object',
+    required: ['password'],
     properties: {
       password: {
         type: 'string',
         description: 'user password'
-      },
-      updated_at: {
-        type: 'string',
-        description: 'userId of whoever updating this user'
-      },
-      updated_by: {
-        type: 'number',
-        description: 'Date and time at which this user was updated for the last time'
       },
       ...userProps
     }
@@ -194,7 +178,15 @@ export const getUsersSchema = {
   tags: ['User'],
   querystring: {
     type: 'object',
-    properties: queryStringProps
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['id', 'user_name', 'full_name', 'avatar'],
+        example: `['id', 'user_name', 'full_name', 'avatar']`
+      },
+      ...queryStringProps('user')
+    }
   },
   response: {
     400: BAD_REQUEST
