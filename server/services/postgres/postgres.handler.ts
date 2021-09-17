@@ -102,14 +102,14 @@ export class DatabaseHandler {
    * @returns {Promise}
    */
   public async updateOneById<PayLoadType>(
-    postId: number,
+    id: number,
     payload: PayLoadType,
     fields?: string[]
   ): Promise<QueryResult> {
     try {
       return (await commonActions.UPDATE_BY_ID(
         this.tableName,
-        postId,
+        id,
         payload,
         fields
       )) as QueryResult;
