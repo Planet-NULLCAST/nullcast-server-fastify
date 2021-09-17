@@ -1,10 +1,10 @@
-import { TAGS_STATUS, TAGS_VISIBILITY } from 'constants/constants';
 import { TAGS_TABLE } from 'constants/tables';
+
+import { Tag } from 'interfaces/tags.type';
 import { UserData } from 'interfaces/auth-token.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { Tag } from 'interfaces/tags.type';
-import { DatabaseHandler } from 'services/postgres/postgres.handler';
 
+import { DatabaseHandler } from 'services/postgres/postgres.handler';
 
 const tagsHandler = new DatabaseHandler(TAGS_TABLE);
 
@@ -16,8 +16,6 @@ export async function createTagController(payload: Tag, userData: UserData) {
       ...payload,
       name: payload.name.trim().toLowerCase(),
       slug: payload.name.trim().replace(' ', '_').toLowerCase(),
-      visibility: TAGS_VISIBILITY.includes(payload.visibility) ? payload.visibility : 'public',
-      status: TAGS_STATUS.includes(payload.status) ? payload.status : 'active',
       created_by: userData.id
     };
     const tag = await tagsHandler.insertOne<Tag, Tag>(tagData, ['name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility']);
