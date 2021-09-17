@@ -9,10 +9,11 @@ const basicProps = {
   },
   meta_description: {
     type: 'string',
-    description: 'Need to clarify on this field'
+    description: 'The description provided in meta tag'
   },
   feature_image: {
     type: 'string',
+    format: 'uri',
     description: 'A url for the image representing the tag'
   },
   visibility: {
@@ -30,7 +31,10 @@ const basicProps = {
 export const createTagProps = {
   name: {
     type: 'string',
-    description: 'Name of the tag that follows the expression `/^[a-z_]+$/`'
+    minLength: 1,
+    maxLength: 20,
+    pattern: '^[a-z_A-Z 0-9]+$',
+    description: 'Name of the tag that follows the expression `/^[a-z_A-Z 0-9]+$/`'
   },
   ...basicProps
 };

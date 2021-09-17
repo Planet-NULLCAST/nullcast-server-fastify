@@ -84,7 +84,6 @@ export const getTagsSchema = {
       },
       limit_fields: {
         type:  'array',
-        // enum: ['id', 'name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility', 'updated_by'],
         uniqueItems: true,
         minItems: 1,
         maxItems: 15,
