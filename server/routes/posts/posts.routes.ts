@@ -4,7 +4,8 @@ import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
 import {Post} from 'interfaces/post.type';
 import {
-  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema
+  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema,
+  getPostsByTagSchema, getPostsByUserIdSchema
 } from '../../route-schemas/post/post.schema';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
@@ -95,7 +96,7 @@ const getPostBySlug: RouteOptions = {
 const getPostsByTag: RouteOptions = {
   method: 'GET',
   url: '/posts/:tagName',
-  schema: getPostsSchema,
+  schema: getPostsByTagSchema,
   handler: async(request, reply) => {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
@@ -149,6 +150,23 @@ const deletePost: RouteOptions = {
   }
 };
 
+const getPostsByUserId: RouteOptions = {
+  method: 'GET',
+  url: '/posts-user/:userId',
+  schema: getPostsByUserIdSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    const params = request.params as { userId: number };
+    const currentUser = request.user as TokenUser;
+    if (queryParams) {
+      const posts = await controller.getPostsByUserIdController(queryParams, currentUser,  params.userId);
+      reply.code(200).send({ data: posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
+
 function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(createPost);
   server.route(getPost);
@@ -157,7 +175,7 @@ function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(getPosts);
   server.route(getPostBySlug);
   server.route(getPostsByTag);
-  //getPostsbyuserid
+  server.route(getPostsByUserId);
   //getPublishedPostsCountByUserId
   //getPublishedPosts <-
   //changePostStatus <- PATCH

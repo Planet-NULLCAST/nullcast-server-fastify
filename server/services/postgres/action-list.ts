@@ -2,7 +2,7 @@ import { Actions } from 'interfaces/service-actions.type';
 import { signInUser } from './auth.service';
 import { getUser, getUsers } from './users.service';
 import {
-  getPosts, getSinglePost, getPostsBytag
+  getPosts, getSinglePost, getPostsBytag, getPostsByUserId
 } from './posts.service';
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
@@ -14,6 +14,7 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_POSTS: getPosts,
   GET_POST: getSinglePost,
   GET_POSTS_BY_TAG: getPostsBytag,
+  GET_POSTS_BY_USER_ID: getPostsByUserId,
   GET_TAGS: getTags
 };
 

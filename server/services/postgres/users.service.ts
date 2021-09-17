@@ -38,7 +38,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 export async function getUsers(queryParams: QueryParams) {
   // Set default values for query params
 
-  const DEFAULT_FIELDS = ['user_name', 'full_name', 'avatar'];
+  const DEFAULT_FIELDS = ['id', 'user_name', 'full_name', 'avatar'];
   const {
     limit_fields,
     search = '',
@@ -47,7 +47,7 @@ export async function getUsers(queryParams: QueryParams) {
     status = 'active',
     order = 'ASC',
     sort_field = 'created_at',
-    with_table = []
+    with_table = ['entity', 'primary_badge']
   } = queryParams;
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
@@ -89,7 +89,7 @@ export async function getUsers(queryParams: QueryParams) {
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-  const getPostsQuery: QueryConfig = {
+  const getUsersQuery: QueryConfig = {
     text: `${SELECT_CLAUSE}
             FROM users AS u
             ${JOIN_CLAUSE}
@@ -102,7 +102,18 @@ export async function getUsers(queryParams: QueryParams) {
     values: queryValues
   };
 
-  const data = await postgresClient.query(getPostsQuery);
+  const getUsersCountQuery: QueryConfig = {
+    text: `SELECT COUNT(u.id)
+            FROM users AS u
+            ${JOIN_CLAUSE}
+            ${WHERE_CLAUSE}
+            LIMIT $2
+            OFFSET $3;`,
+    values: queryValues
+  };
 
-  return {users: data.rows, limit, page};
+  const userData = await postgresClient.query(getUsersQuery);
+  const countData = await postgresClient.query(getUsersCountQuery);
+
+  return {users: userData.rows, ...countData.rows[0], limit, page};
 }

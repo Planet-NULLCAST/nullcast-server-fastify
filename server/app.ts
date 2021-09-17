@@ -8,7 +8,7 @@ async function start() {
     const server = fastify({
       ajv: {
         customOptions: {
-          coerceTypes: false
+          coerceTypes: true
         }
       }
     });
