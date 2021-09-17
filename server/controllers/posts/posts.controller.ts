@@ -89,10 +89,9 @@ export async function updatePostController(postData:Post, userId:number, postId:
 
     const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
     const payload : Post = {
+      ...postData,
       html,
       mobiledoc: postData.mobiledoc as mobiledoc,
-      status: postData.status,
-      banner_image: postData.banner_image,
       updated_at: new Date().toISOString(),
       updated_by: userId
     };
@@ -117,5 +116,20 @@ export async function deletePostController(postId: number) : Promise<boolean> {
     return true;
   } catch (error) {
     throw error;
+  }
+}
+
+
+export async function getPostsByUserIdController(
+  queryParams: QueryParams, currentUser: TokenUser, userId: number):Promise<Post> {
+  try {
+    const payload = {
+      key: userId,
+      field: 'id'
+    };
+    return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams, currentUser);
+
+  } catch (error) {
+    return error;
   }
 }

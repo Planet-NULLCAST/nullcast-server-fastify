@@ -2,6 +2,7 @@ enum order { ASC, DESC }
 
 export interface QueryParams {
     limit_fields?: string[];
+    tag?: string;
     search?: string;
     page?: number;
     limit?: number;

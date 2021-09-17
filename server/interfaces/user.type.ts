@@ -7,6 +7,7 @@ export interface User {
   user_name: string;
   full_name: string;
   avatar?:string;
+  banner_image?: string;
   email: string;
   salt?: string;
   created_at?: string;
@@ -38,8 +39,10 @@ export interface ValidateResponse {
 export interface UpdateUser {
   user_name?: string;
   full_name: string;
+  banner_image?: string;
   email?: string;
   updated_at?: string;
+  updated_by?:number;
   bio?: string;
   status?: UserStatus;
   slug: string;

@@ -5,6 +5,7 @@ export type Actions =
   | 'GET_POSTS'
   | 'GET_POST'
   | 'GET_POSTS_BY_TAG'
+  | 'GET_POSTS_BY_USER_ID'
   | 'GET_TAGS';
 
 export type CommonActions =

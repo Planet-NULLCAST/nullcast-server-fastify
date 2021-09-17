@@ -1,7 +1,7 @@
 import { BAD_REQUEST } from 'route-schemas/response';
-import { queryStringProps, postProps } from './post.properties';
+import { postProps } from './post.properties';
+import { queryStringProps } from 'route-schemas/shared-schemas/shared.properties';
 
-const { limit_fields, with_table } = queryStringProps;
 
 export const createPostSchema = {
   summary: 'Create Post',
@@ -9,16 +9,8 @@ export const createPostSchema = {
   tags: ['Post'],
   body: {
     type: 'object',
-    required: [],
+    required: ['html'],
     properties: {
-      created_at: {
-        type: 'string',
-        description: 'time at which user creates the post'
-      },
-      created_by: {
-        type: 'number',
-        description: 'user who creates it'
-      },
       ...postProps
     }
   },
@@ -60,14 +52,6 @@ export const updatePostSchema = {
   body: {
     type: 'object',
     properties: {
-      updated_at: {
-        type: 'string',
-        description: 'Latest updated time by the user'
-      },
-      updated_by: {
-        type: 'number',
-        description: 'User who had updated it'
-      },
       ...postProps
     }
   },
@@ -89,18 +73,23 @@ export const getPostSchema = {
   summary: 'Get post',
   description: 'To get post information by id',
   tags: ['Post'],
-  queryString: {
+  querystring: {
     type: 'object',
-    required: [
-      limit_fields,
-      with_table
-    ],
-    properties: queryStringProps
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
+          'published_at', 'banner_image', 'title', 'meta_title'],
+        example: `['id', 'slug', 'created_by']`
+      },
+      ...queryStringProps('post')
+    }
   },
   params: {
     type: 'object',
     properties: {
-      id: { type: 'number', description: 'Id of the post' }
+      postId: { type: 'number', description: 'Id of the post' }
     }
   },
   response: {
@@ -112,13 +101,18 @@ export const getPostBySlugSchema = {
   summary: 'Get post by slug',
   description: 'To get post information by slug',
   tags: ['Post'],
-  queryString: {
+  querystring: {
     type: 'object',
-    required: [
-      limit_fields,
-      with_table
-    ],
-    properties: queryStringProps
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
+          'published_at', 'banner_image', 'title', 'meta_title'],
+        example: `['id', 'slug', 'created_by']`
+      },
+      ...queryStringProps('post')
+    }
   },
   params: {
     type: 'object',
@@ -137,7 +131,72 @@ export const getPostsSchema = {
   tags: ['Post'],
   querystring: {
     type: 'object',
-    properties: queryStringProps
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
+          'published_at', 'banner_image', 'title', 'meta_title'],
+        example: `['id', 'slug', 'created_by']`
+      },
+      ...queryStringProps('post')
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getPostsByTagSchema = {
+  summary: 'Get posts by tagname',
+  description: 'To get post information',
+  tags: ['Post'],
+  querystring: {
+    type: 'object',
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at',
+          'banner_image', 'title', 'meta_title'],
+        example: `['slug', 'created_by', 'mobiledoc']`
+      },
+      ...queryStringProps('post')
+    }
+  },
+  params: {
+    type: 'object',
+    properties: {
+      tagName: { type: 'string', description: 'tag of the post' }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getPostsByUserIdSchema = {
+  summary: 'Get posts by tagname',
+  description: 'To get post information',
+  tags: ['Post'],
+  querystring: {
+    type: 'object',
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at',
+          'banner_image', 'title', 'meta_title'],
+        example: `['slug', 'created_by', 'mobiledoc']`
+      },
+      ...queryStringProps('post')
+    }
+  },
+  params: {
+    type: 'object',
+    properties: {
+      userId: { type: 'number', description: 'Id of the user whom have created the post' }
+    }
   },
   response: {
     400: BAD_REQUEST
@@ -151,7 +210,7 @@ export const deletePostSchema = {
   params: {
     type: 'object',
     properties: {
-      postId: { type: 'number', description: 'Id of the post' }
+      postId: { type: 'string', description: 'Id of the post' }
     }
   },
   response: {

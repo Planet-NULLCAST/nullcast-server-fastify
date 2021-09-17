@@ -1,8 +1,4 @@
 export const userProps = {
-  id: {
-    type: 'number',
-    description: 'Id of the user'
-  },
   user_name: {
     type: 'string',
     description: 'user provided username'
