@@ -38,7 +38,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 export async function getUsers(queryParams: QueryParams) {
   // Set default values for query params
 
-  const DEFAULT_FIELDS = ['user_name', 'full_name', 'avatar'];
+  const DEFAULT_FIELDS = ['id', 'user_name', 'full_name', 'avatar'];
   const {
     limit_fields,
     search = '',
@@ -47,7 +47,7 @@ export async function getUsers(queryParams: QueryParams) {
     status = 'active',
     order = 'ASC',
     sort_field = 'created_at',
-    with_table = []
+    with_table = ['entity', 'primary_badge']
   } = queryParams;
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
