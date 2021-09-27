@@ -6,16 +6,20 @@ import {
 } from './posts.service';
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
+import { getCourse } from './course.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
   SIGN_IN_USER: signInUser,
   GET_USERS: getUsers,
+
   GET_POSTS: getPosts,
   GET_POST: getSinglePost,
   GET_POSTS_BY_TAG: getPostsBytag,
   GET_POSTS_BY_USER_ID: getPostsByUserId,
-  GET_TAGS: getTags
+  GET_TAGS: getTags,
+
+  GET_COURSE: getCourse
 };
 
 export const commonActions = {
