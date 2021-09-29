@@ -4,3 +4,4 @@ export * from './tags/tags.controller';
 export * from './tokens/tokens.controller';
 export * from './auth/auth.controller';
 export * from './courses/courses.controller';
+export * from './chapters/chapters.controller';

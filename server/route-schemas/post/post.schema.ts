@@ -176,7 +176,7 @@ export const getPostsByTagSchema = {
 };
 
 export const getPostsByUserIdSchema = {
-  summary: 'Get posts by tagname',
+  summary: 'Get posts by userId',
   description: 'To get post information',
   tags: ['Post'],
   querystring: {

@@ -7,6 +7,7 @@ import {
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 import { getCourse } from './course.service';
+import { getChapter } from './chapter.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
@@ -19,7 +20,9 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_POSTS_BY_USER_ID: getPostsByUserId,
   GET_TAGS: getTags,
 
-  GET_COURSE: getCourse
+  GET_COURSE: getCourse,
+
+  GET_CHAPTER: getChapter
 };
 
 export const commonActions = {

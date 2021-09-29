@@ -20,6 +20,22 @@ export async function createCourseController(courseData: Course, user:TokenUser)
   return data.rows[0] as Course;
 }
 
+export async function addCoursesController(courseData: Course[], user: TokenUser): Promise<Course> {
+  for (const course of courseData) {
+    course.name = course.name.toLowerCase();
+    course.created_by = user.id;
+  }
+
+  const payload: Course[] = courseData;
+
+  const fields = ['name', 'certificate_id', 'created_by', 'created_at'];
+  const uniqueField = 'name';
+
+  const data = await courseHandler.insertMany(payload, fields, uniqueField);
+
+  return data.rows[0];
+}
+
 export async function getCourseController(course_name: string): Promise<Course> {
   try {
     return await courseHandler.dbHandler<{ course_name: string }, Course>('GET_COURSE', {

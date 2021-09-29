@@ -5,7 +5,7 @@ export async function getCourse(payload: { course_name: string }): Promise<Cours
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getCourseQuery: QueryConfig = {
-    name: 'get-user',
+    name: 'get-course',
     text: `SELECT id, name, certificate_id, created_by
         FROM courses
         WHERE name = $1;`,

@@ -9,7 +9,9 @@ export type Actions =
   | 'GET_POSTS_BY_USER_ID'
   | 'GET_TAGS'
 
-  | 'GET_COURSE';
+  | 'GET_COURSE'
+
+  | 'GET_CHAPTER';
 
 export type CommonActions =
   | 'INSERT_ONE'
