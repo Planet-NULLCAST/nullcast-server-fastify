@@ -14,13 +14,13 @@ export function chapterProps(field = 'course_id') {
     data.course_name = {
       type: 'string',
       description: 'Name of the Course'
-    }
+    };
   } else {
     data.course_id = {
       type: 'number',
       description: 'Id of the Course'
-    }
-  };
+    };
+  }
   return (
     data
   );
