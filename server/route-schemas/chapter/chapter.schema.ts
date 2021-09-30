@@ -1,21 +1,21 @@
 import { BAD_REQUEST } from 'route-schemas/response';
-import { courseProps } from './course.properties';
+import { chapterProps } from './chapter.properties';
 
 
-export const createCourseSchema = {
-  summary: 'Create Course',
-  description: 'A POST route to add course information',
-  tags: ['Course'],
+export const createChapterSchema = {
+  summary: 'Create Chapter',
+  description: 'A POST route to add Chapter information',
+  tags: ['Chapter'],
   body:  {
     type: 'object',
-    required: ['name', 'certificate_id'],
+    required: ['name', 'course_name', 'chapter_no'],
     properties: {
-      ...courseProps
+      ...chapterProps('course_name')
     }
   },
   response: {
     201: {
-      description: 'Course added successfully.',
+      description: 'Chapter added successfully.',
       type: 'object',
       properties: {
         message: {
@@ -26,9 +26,59 @@ export const createCourseSchema = {
           properties:{
             id: {
               type: 'number',
-              description: 'Id of the course'
+              description: 'Id of the Chapter'
             },
-            ...courseProps,
+            ...chapterProps(),
+
+            created_by: {
+              type: 'number',
+              description: 'User whom added the Chapter'
+            },
+            created_at: {
+              type: 'string',
+              description: 'Date and time of adding the Chapter'
+            }
+          }
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
+export const addChaptersSchema = {
+  summary: 'Add Chapters',
+  description: 'A POST route to add and update multiple Chapters information',
+  tags: ['Chapter'],
+  body:  {
+    type: 'array',
+    maxItems: 5,
+    minItems: 1,
+    items: {
+      type: 'object',
+      required: ['name', 'course_name', 'chapter_no'],
+      properties: {
+        ...chapterProps('course_name')
+      }
+    }
+  },
+  response: {
+    201: {
+      description: 'Chapters  added successfully.',
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        },
+        data: {
+          type: 'object',
+          properties:{
+            id: {
+              type: 'number',
+              description: 'Id of the Chapter'
+            },
+
+            ...chapterProps(),
 
             created_by: {
               type: 'number',
@@ -46,64 +96,14 @@ export const createCourseSchema = {
   }
 };
 
-export const addCoursesSchema = {
-  summary: 'Add Courses',
-  description: 'A POST route to add and update multiple courses information',
-  tags: ['Course'],
-  body:  {
-    type: 'array',
-    maxItems: 5,
-    minItems: 1,
-    items: {
-      type: 'object',
-      required: ['name', 'certificate_id'],
-      properties: {
-        ...courseProps
-      }
-    }
-  },
-  response: {
-    201: {
-      description: 'Courses  added successfully.',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        },
-        data: {
-          type: 'object',
-          properties:{
-            id: {
-              type: 'number',
-              description: 'Id of the course'
-            },
-
-            ...courseProps,
-
-            created_by: {
-              type: 'number',
-              description: 'User whom created'
-            },
-            created_at: {
-              type: 'string',
-              description: 'Date and Time of adding the course'
-            }
-          }
-        }
-      }
-    },
-    400: BAD_REQUEST
-  }
-};
-
-export const getCourseSchema = {
-  summary: 'Get Course',
-  description: 'To get course information',
-  tags: ['Course'],
+export const getChapterSchema = {
+  summary: 'Get Chapter',
+  description: 'To get Chapter information',
+  tags: ['Chapter'],
   params: {
     type: 'object',
     properties: {
-      course_name: { type: 'string', description: 'Name of the course' }
+      chapterId: { type: 'number', description: 'Id of the Chapter' }
     }
   },
   response: {
@@ -118,13 +118,13 @@ export const getCourseSchema = {
           properties: {
             id: {
               type: 'number',
-              description: 'Id of the course'
+              description: 'Id of the Chapter'
             },
             created_by: {
               type: 'number',
-              description: 'UserId of whomever that adds the course'
+              description: 'UserId of whomever that adds the Chapter'
             },
-            ...courseProps
+            ...chapterProps()
           }
         }
       }
@@ -133,20 +133,27 @@ export const getCourseSchema = {
   }
 };
 
-export const updateCourseSchema = {
-  summary: 'Update Course',
-  description: 'A PUT route to update Course information',
-  tags: ['Course'],
+export const updateChapterSchema = {
+  summary: 'Update Chapter',
+  description: 'A PUT route to update Chapter information',
+  tags: ['Chapter'],
   params: {
     type: 'object',
     properties: {
-      courseId: { type: 'number', description: 'Id of the course' }
+      ChapterId: { type: 'number', description: 'Id of the Chapter' }
     }
   },
   body:  {
     type: 'object',
     properties: {
-      ...courseProps
+      name: {
+        type: 'string',
+        description: 'Name of the Chapter'
+      },
+      chapter_no: {
+        type: 'number',
+        description: 'Serial number of the Chapter'
+      }
     }
   },
   response: {
@@ -162,17 +169,17 @@ export const updateCourseSchema = {
           properties: {
             id: {
               type: 'number',
-              description: 'Id of the course'
+              description: 'Id of the Chapter'
             },
             updated_by: {
               type: 'number',
-              description: 'UserId of whomever that updates the course'
+              description: 'UserId of whomever that updates the Chapter'
             },
             updated_at: {
               type: 'string',
               description: 'Date and time of update'
             },
-            ...courseProps
+            ...chapterProps('course_id')
           }
         }
       }
@@ -181,14 +188,14 @@ export const updateCourseSchema = {
   }
 };
 
-export const deleteCourseSchema = {
-  summary: 'Delete Course',
-  description: 'To Delete Course information',
-  tags: ['Course'],
+export const deleteChapterSchema = {
+  summary: 'Delete Chapter',
+  description: 'To Delete Chapter information',
+  tags: ['Chapter'],
   params: {
     type: 'object',
     properties: {
-      courseId: { type: 'number', description: 'Id of Course' }
+      ChapterId: { type: 'number', description: 'Id of Chapter' }
     }
   },
   response: {
