@@ -37,7 +37,6 @@ export async function insertOne(
       text,
       values
     };
-    console.log(insertOneQuery, '000000');
 
     return await postgresClient.query(insertOneQuery);
   } catch (error) {
@@ -47,10 +46,17 @@ export async function insertOne(
 
 export async function insertMany(
   tableName: string,
-  payload: Array<{ [x: string]: any }>
+  payload: Array<{ [x: string]: any }>,
+  fields?: string[],
+  uniqueField = 'id'
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    let returningFields = '';
+    if (fields) {
+      returningFields = `, ${fields.map((item) => item).join(', ')}`;
+    }
 
     // Find out the unique keys from the array of objects
     const uniqueKeys: string[] = Object.keys(Object.assign({}, ...payload));
@@ -96,9 +102,21 @@ export async function insertMany(
 
     const valueRefs: string = valueRefArray.join(', ');
 
+    let updateStatement = 'SET';
+    uniqueKeys.forEach((key, index) => {
+      if (index !== uniqueKeys.length - 1) {
+        updateStatement = `${updateStatement} ${key} = EXCLUDED.${key},`;
+      } else {
+        updateStatement = `${updateStatement} ${key} = EXCLUDED.${key}`;
+      }
+    });
+
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) 
-                    VALUES ${valueRefs} RETURNING id;`;
+                  VALUES ${valueRefs}
+                  ON CONFLICT (${uniqueField}) DO UPDATE
+                  ${updateStatement}
+                  RETURNING id ${returningFields};`;
 
     const query: QueryConfig = {
       text,

@@ -48,12 +48,16 @@ export class DatabaseHandler {
    * @returns {Promise}
    */
   public async insertMany(
-    payload: [{ [x: string]: any }]
+    payload: any[],
+    fields?: string[],
+    uniqueField = 'id'
   ): Promise<QueryResult> {
     try {
       return (await commonActions.INSERT_MANY(
         this.tableName,
-        payload
+        payload,
+        fields,
+        uniqueField
       )) as QueryResult;
     } catch (error) {
       throw error;

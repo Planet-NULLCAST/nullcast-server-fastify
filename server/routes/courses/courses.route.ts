@@ -4,7 +4,8 @@ import * as controller from '../../controllers/index';
 import { Course, UpdateCourse } from 'interfaces/course.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createCourseSchema, deleteCourseSchema, getCourseSchema, updateCourseSchema
+  createCourseSchema, addCoursesSchema, deleteCourseSchema,
+  getCourseSchema, updateCourseSchema
 } from 'route-schemas/course/course.schema';
 
 
@@ -18,6 +19,27 @@ const createCourse: RouteOptions = {
       const courseData = await controller.createCourseController(request.body as Course, user);
       if (courseData) {
         reply.code(201).send({message: 'Course added', data: courseData});
+      } else {
+        reply.code(500).send({message:'Something Error happend'});
+      }
+
+    } catch (error) {
+      throw error;
+    }
+
+  }
+};
+
+const addCourses: RouteOptions = {
+  method: 'POST',
+  url: '/courses',
+  schema: addCoursesSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const courseData = await controller.addCoursesController(request.body as Course[], user);
+      if (courseData) {
+        reply.code(201).send({message: 'Courses added', data: courseData});
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }
@@ -82,6 +104,7 @@ const deleteCourse: RouteOptions = {
 
 function initCourses(server:FastifyInstance, _:any, done: () => void) {
   server.route(createCourse);
+  server.route(addCourses);
   server.route(getCourse);
   server.route(updateCourse);
   server.route(deleteCourse);
