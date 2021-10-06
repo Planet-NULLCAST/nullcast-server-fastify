@@ -47,7 +47,7 @@ export async function insertOne(
 
 export async function insertMany(
   tableName: string,
-  payload: [{ [x: string]: any }]
+  payload: Array<{ [x: string]: any }>
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
