@@ -186,7 +186,7 @@ async function createSeedData() {
   addExtraFields(courseChapters,
     { course_id: courseResponse.rows[0].id, created_by },
     ['course_id', 'created_by']);
-  const courseChaptersResponse = await insertMany(tableNames.COURSE_CHAPTERS, courseChapters);
+  const courseChaptersResponse = await insertMany(tableNames.CHAPTER_TABLE, courseChapters);
   console.log(courseChaptersResponse.rowCount);
 
 }
