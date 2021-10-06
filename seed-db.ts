@@ -165,6 +165,16 @@ async function createSeedData() {
   const badgeIds = badgesResponse.rows.map((row) => row.id);
   console.log(badgeIds);
 
+  //  Create userBadges
+  const userBadges = userIds
+    .flatMap(user_id => badgeIds
+      .map(badge_id => ({ user_id, badge_id })));
+  addExtraFields(userBadges);
+
+  const userBadgesResponse = await insertMany(tableNames.USER_BADGES_TABLE, userBadges);
+  const userBadgeIds = getIds(userBadgesResponse.rows);
+  console.log(userBadgeIds);
+
   // TODO: Create posts
 
   // Create certificates
@@ -180,6 +190,7 @@ async function createSeedData() {
     ['certificate_id', 'created_by']);
 
   const courseResponse = await insertMany(tableNames.COURSE_TABLE, courses);
+  const courseIds = getIds(courseResponse.rows);
   console.log(courseResponse.rowCount);
 
   // create course chapters
@@ -187,7 +198,40 @@ async function createSeedData() {
     { course_id: courseResponse.rows[0].id, created_by },
     ['course_id', 'created_by']);
   const courseChaptersResponse = await insertMany(tableNames.CHAPTER_TABLE, courseChapters);
+  const courseChaptersIds = getIds(courseChaptersResponse.rows);
   console.log(courseChaptersResponse.rowCount);
+
+  //  Create user courses
+  const userCourses = userIds
+    .flatMap(user_id =>
+      courseIds.map(course_id => ({
+        user_id,
+        course_id
+      }))
+    );
+  addExtraFields(userCourses);
+
+  const userCoursesResponse = await insertMany(tableNames.USER_COURSES_TABLE, userCourses);
+  const userCoursesIds = getIds(userCoursesResponse.rows);
+  console.log(userCoursesIds);
+
+    //  Create user chapters
+  const userChapters = userIds
+    .flatMap(user_id =>
+      courseChaptersIds.map(chapter_id => ({
+        user_id,
+        chapter_id,
+      }))
+    );
+  addExtraFields(
+    userChapters,
+    { course_id: courseResponse.rows[0].id, created_by },
+    ['course_id', 'created_by']
+  );
+
+  const userChaptersResponse = await insertMany(tableNames.USER_CHAPTERS_TABLE, userChapters);
+  const userChaptersIds = getIds(userChaptersResponse.rows);
+  console.log(userChaptersIds);
 
 }
 

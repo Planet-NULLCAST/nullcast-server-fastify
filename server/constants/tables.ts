@@ -6,3 +6,6 @@ export const TAGS_TABLE = 'tags';
 export const CERTIFICATES_TABLE = 'certificates';
 export const COURSE_TABLE = 'courses';
 export const CHAPTER_TABLE = 'course_chapters';
+export const USER_BADGES_TABLE = 'user_badges';
+export const USER_CHAPTERS_TABLE = 'user_chapters';
+export const USER_COURSES_TABLE = 'user_courses';
