@@ -4,5 +4,6 @@ export const NON_AUTH_ROUTES: {[x: string]: string} = {
   'signin': 'POST',
   'posts': 'GET',
   'users': 'GET',
-  'logout': 'POST'
+  'logout': 'POST',
+  'recovery': 'POST'
 };
