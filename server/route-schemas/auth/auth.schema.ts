@@ -55,3 +55,26 @@ export const signInSchema = {
     }
   }
 };
+
+export const logoutSchema = {
+  summary: 'Log out',
+  description: 'A POST route to log out the user and set cookie to empty',
+  tags: ['User'],
+  body: {
+    type: 'object',
+    required: [],
+    properties: {
+    }
+  },
+  response: {
+    200: {
+      description: 'Logout successfully',
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
+    }
+  }
+};

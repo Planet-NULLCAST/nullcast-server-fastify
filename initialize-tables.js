@@ -8,7 +8,7 @@ const client = new Client({
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
   host: process.env.PG_HOST,
-  database: process.env.PG_DATABSE,
+  database: process.env.PG_DATABASE,
   port: Number(process.env.PG_PORT),
 });
 
@@ -54,7 +54,7 @@ async function processSQLFile(fileName) {
  */
 async function execQueries(query, done) {
   if (query.indexOf("COPY") === 0) {
-      
+
     // COPY - needs special treatment
     const regexp = /COPY\ (.*)\ FROM\ (.*)\ DELIMITERS/gim;
     const matches = regexp.exec(query);
