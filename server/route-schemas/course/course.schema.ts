@@ -147,9 +147,9 @@ export const addCoursesWithChaptersSchema = {
     //             type: 'number',
     //             description: 'Id of the course'
     //           },
-  
+
     //           ...courseProps,
-  
+
     //           created_by: {
     //             type: 'number',
     //             description: 'User whom created'

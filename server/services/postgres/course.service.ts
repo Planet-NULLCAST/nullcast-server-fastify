@@ -106,7 +106,7 @@ export async function addCoursesWithChapters(payload:CourseChapter) {
         values
       };
 
-      courseData.chapters = (await postgresClient.query(chapterQuery)).rows[0]
+      courseData.chapters = (await postgresClient.query(chapterQuery)).rows[0];
     }
 
     return courseData;

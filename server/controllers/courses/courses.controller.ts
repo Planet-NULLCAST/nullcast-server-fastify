@@ -1,4 +1,6 @@
-import { Course, CourseChapter, UpdateCourse } from 'interfaces/course.type';
+import {
+  Course, CourseChapter, UpdateCourse
+} from 'interfaces/course.type';
 import { COURSE_TABLE } from 'constants/tables';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { TokenUser } from 'interfaces/user.type';
@@ -54,12 +56,12 @@ export async function addCoursesWithChaptersController(
 
   const payload: CourseChapter[] = courseData;
 
-let data:CourseChapter[] = [];
-for (let item of payload) {
-  data.push(await courseHandler.dbHandler('ADD_COURSE_CHAPTERS', item))
-};
+  const data:CourseChapter[] = [];
+  for (const item of payload) {
+    data.push(await courseHandler.dbHandler('ADD_COURSE_CHAPTERS', item));
+  }
 
-return data as CourseChapter[];
+  return data as CourseChapter[];
 }
 
 export async function getCourseController(course_name: string): Promise<Course> {
