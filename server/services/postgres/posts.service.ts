@@ -1,4 +1,5 @@
 import { Client, QueryConfig } from 'pg';
+
 import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
@@ -70,7 +71,7 @@ function constructJoinQuery({
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE };
 }
 
-function contsructQuery(
+function constructQuery(
   {
     limit_fields,
     with_table = ['users', 'tags'],
@@ -258,7 +259,7 @@ export async function getPostsBytag(
 
   const tag = payload.key;
 
-  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = contsructQuery(
+  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructQuery(
     {
       limit_fields,
       with_table,
@@ -332,7 +333,7 @@ export async function getPostsByUserId(
 
   const userId = payload.key;
 
-  const { SELECT_CLAUSE, GROUP_BY_CLAUSE } = contsructQuery(
+  const { SELECT_CLAUSE, GROUP_BY_CLAUSE } = constructQuery(
     {
       limit_fields,
       with_table,
@@ -340,7 +341,7 @@ export async function getPostsByUserId(
     }, currentUser?.id
   );
 
-  let { JOIN_CLAUSE } = contsructQuery(
+  let { JOIN_CLAUSE } = constructQuery(
     {
       limit_fields,
       with_table,

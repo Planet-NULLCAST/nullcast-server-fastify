@@ -1,4 +1,4 @@
-import { Course, UpdateCourse } from 'interfaces/course.type';
+import { Course, CourseChapter, UpdateCourse } from 'interfaces/course.type';
 import { COURSE_TABLE } from 'constants/tables';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { TokenUser } from 'interfaces/user.type';
@@ -34,6 +34,32 @@ export async function addCoursesController(courseData: Course[], user: TokenUser
   const data = await courseHandler.insertMany(payload, fields, uniqueField);
 
   return data.rows[0];
+}
+
+export async function addCoursesWithChaptersController(
+  courseData: CourseChapter[], user: TokenUser): Promise<CourseChapter[]> {
+  for (const course of courseData) {
+    course.name = course.name.toLowerCase();
+    course.created_by = user.id;
+    for (const chapter of course.chapters) {
+      const courseDetails = await courseHandler.findOneByField({ name: course.name },
+        ['id']);
+
+      chapter.name = chapter.name.toLowerCase();
+      chapter.created_by = user.id;
+      chapter.slug = chapter.name.toLowerCase();
+      chapter.course_id = courseDetails?.id;
+    }
+  }
+
+  const payload: CourseChapter[] = courseData;
+
+let data:CourseChapter[] = [];
+for (let item of payload) {
+  data.push(await courseHandler.dbHandler('ADD_COURSE_CHAPTERS', item))
+};
+
+return data as CourseChapter[];
 }
 
 export async function getCourseController(course_name: string): Promise<Course> {

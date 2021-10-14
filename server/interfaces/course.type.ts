@@ -1,3 +1,5 @@
+import { Chapter } from "./chapter.type";
+
 export interface Course {
     id?: number;
     name: string;
@@ -10,4 +12,8 @@ export interface UpdateCourse {
     certificate_id?: number;
     updated_at: string;
     updated_by: number;
+}
+
+export interface CourseChapter extends Course {
+    chapters: Chapter[]
 }

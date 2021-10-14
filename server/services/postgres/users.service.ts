@@ -1,4 +1,5 @@
 import { Client, QueryConfig } from 'pg';
+
 import { User, UserStatus } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 
@@ -8,9 +9,10 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 
   const getUserQuery: QueryConfig = {
     name: 'get-user',
-    text: `SELECT entity_id, id, user_name, full_name, email, created_at, updated_at,cover_image, bio, status, salt
-        FROM users
-        WHERE user_name = $1;`,
+    text: `SELECT entity_id, id, user_name, full_name,
+            email, created_at, updated_at, cover_image, bio, status
+            FROM users
+            WHERE user_name = $1;`,
     values: [payload.user_name]
   };
 
