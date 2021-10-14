@@ -1,4 +1,4 @@
-import { Chapter } from "./chapter.type";
+import { Chapter } from './chapter.type';
 
 export interface Course {
     id?: number;

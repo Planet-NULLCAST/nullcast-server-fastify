@@ -1,7 +1,9 @@
 import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 
-import { Course, CourseChapter, UpdateCourse } from 'interfaces/course.type';
+import {
+  Course, CourseChapter, UpdateCourse
+} from 'interfaces/course.type';
 import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import {
@@ -59,8 +61,7 @@ const addCoursesWithChapters: RouteOptions = {
   handler: async(request, reply) => {
     try {
       const user = request.user as TokenUser;
-      const courseData = await controller.addCoursesWithChaptersController
-      (request.body as CourseChapter[], user);
+      const courseData = await controller.addCoursesWithChaptersController(request.body as CourseChapter[], user);
       if (courseData) {
         reply.code(201).send({message: 'Courses and its chapters added', data: courseData});
       } else {
