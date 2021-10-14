@@ -96,6 +96,97 @@ export const addCoursesSchema = {
   }
 };
 
+export const addCoursesWithChaptersSchema = {
+  summary: 'Add Courses with chapters',
+  description: 'A POST route to add and update multiple courses along with their chapter information',
+  tags: ['Course'],
+  body:  {
+    type: 'array',
+    maxItems: 5,
+    minItems: 1,
+    items: {
+      type: 'object',
+      required: ['name', 'certificate_id'],
+      properties: {
+        ...courseProps,
+        chapters: {
+          type: 'array',
+          maxItems: 5,
+          minItems: 1,
+          items: {
+            type: 'object',
+            required: ['name', 'chapter_no'],
+            properties: {
+              name: {
+                type: 'string',
+                description: 'Name of the Chapter'
+              },
+              chapter_no: {
+                type: 'number',
+                description: 'Serial number of the Chapter'
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  response: {
+    // 201: {
+    //   description: 'Courses  added successfully.',
+    //   type: 'object',
+    //   properties: {
+    //     message: {
+    //       type: 'string'
+    //     },
+    //     data: {
+    //       type: 'array',
+    //       items: {
+    //         properties:{
+    //           id: {
+    //             type: 'number',
+    //             description: 'Id of the course'
+    //           },
+  
+    //           ...courseProps,
+  
+    //           created_by: {
+    //             type: 'number',
+    //             description: 'User whom created'
+    //           },
+    //           created_at: {
+    //             type: 'string',
+    //             description: 'Date and Time of adding the course'
+    //           },
+    //           chapters: {
+    //             type: 'array',
+    //             items: {
+    //               type: 'object',
+    //               properties: {
+    //                 name: {
+    //                   type: 'string',
+    //                   description: 'Name of the Chapter'
+    //                 },
+    //                 chapter_no: {
+    //                   type: 'number',
+    //                   description: 'Serial number of the Chapter'
+    //                 },
+    //                 slug: {
+    //                   type: 'string',
+    //                   description: "Slug of the chapter"
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
+    400: BAD_REQUEST
+  }
+};
+
 export const getCourseSchema = {
   summary: 'Get Course',
   description: 'To get course information',

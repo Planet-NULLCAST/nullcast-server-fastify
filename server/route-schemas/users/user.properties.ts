@@ -1,4 +1,8 @@
 export const userProps = {
+  id: {
+    type: 'number',
+    description: 'Id of the user'
+  },
   user_name: {
     type: 'string',
     description: 'user provided username'
@@ -13,6 +17,7 @@ export const userProps = {
   },
   cover_image: {
     type: 'string',
+    default: null,
     description: 'cover image s3 url'
   },
   bio: {
@@ -21,34 +26,42 @@ export const userProps = {
   },
   discord: {
     type: 'string',
+    default: null,
     description: 'discord of the user'
   },
   facebook: {
     type: 'string',
+    default: null,
     description: 'facebook of the user'
   },
   twitter: {
     type: 'string',
+    default: null,
     description: 'twitter of the user'
   },
   meta_description: {
     type: 'string',
+    default: null,
     description: 'meta_description of the user'
   },
   meta_title: {
     type: 'string',
+    default: null,
     description: 'meta_title of the user'
   },
   title: {
     type: 'string',
+    default: null,
     description: 'title of the user'
   },
   dob: {
     type: 'integer',
+    default: null,
     description: 'dob of the user'
   },
   avatar: {
     type: 'string',
+    default: null,
     description: 'avatar of the user'
   }
 };
