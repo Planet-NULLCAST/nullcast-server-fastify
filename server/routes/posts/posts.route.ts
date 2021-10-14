@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
+
 import * as controller from '../../controllers';
 import {Post} from 'interfaces/post.type';
+import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 import {
   createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema,
   getPostsByTagSchema, getPostsByUserIdSchema
 } from '../../route-schemas/post/post.schema';
-import { QueryParams } from 'interfaces/query-params.type';
-import { TokenUser } from 'interfaces/user.type';
 
 
 const createPost: RouteOptions = {
@@ -152,7 +153,7 @@ const deletePost: RouteOptions = {
 
 const getPostsByUserId: RouteOptions = {
   method: 'GET',
-  url: '/posts-user/:userId',
+  url: '/posts-by-user/:userId',
   schema: getPostsByUserIdSchema,
   handler: async(request, reply) => {
     const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;

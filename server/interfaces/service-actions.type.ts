@@ -10,6 +10,7 @@ export type Actions =
   | 'GET_TAGS'
 
   | 'GET_COURSE'
+  | 'ADD_COURSE_CHAPTERS'
 
   | 'GET_CHAPTER';
 
