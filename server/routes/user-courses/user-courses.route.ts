@@ -5,7 +5,7 @@ import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { UpdateUserCourse, UserCourse } from 'interfaces/user-course.type';
 import {
-  deleteUserCourseSchema, enrolUserCourseSchema, getUserCourseSchema, 
+  deleteUserCourseSchema, enrolUserCourseSchema, getUserCourseSchema,
   updateUserCourseSchema
 } from 'route-schemas/user-courses/user-courses.schema';
 
