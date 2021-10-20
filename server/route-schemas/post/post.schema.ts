@@ -204,7 +204,7 @@ export const getPostsByUserIdSchema = {
 };
 
 export const deletePostSchema = {
-  summary: 'Delete User',
+  summary: 'Delete Post',
   description: 'To Delete Post information',
   tags: ['Post'],
   params: {
