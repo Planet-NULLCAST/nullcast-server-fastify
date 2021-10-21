@@ -12,7 +12,9 @@ export type Actions =
   | 'GET_COURSE'
   | 'ADD_COURSE_CHAPTERS'
 
-  | 'GET_CHAPTER';
+  | 'GET_CHAPTER'
+
+  | 'GET_USER_CHAPTER_PROGRESS';
 
 export type CommonActions =
   | 'INSERT_ONE'
