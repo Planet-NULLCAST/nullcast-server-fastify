@@ -5,3 +5,5 @@ export const POST_TABLE = 'posts';
 export const TAGS_TABLE = 'tags';
 export const COURSE_TABLE = 'courses';
 export const CHAPTER_TABLE = 'course_chapters';
+export const USER_COURSE_TABLE = 'user_courses';
+export const USER_CHAPTER_TABLE = 'user_chapters';

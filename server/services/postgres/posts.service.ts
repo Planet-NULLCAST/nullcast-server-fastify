@@ -140,9 +140,9 @@ function constructQuery(
 
 
   JOIN_CLAUSE = `LEFT join post_tags on post_tags.tag_id = tags.id
-  LEFT join posts on posts.id = post_tags.post_id
-  LEFT JOIN post_votes as votes on votes.id = posts.id
-  JOIN users AS u ON u.id = posts.created_by`;
+                  LEFT join posts on posts.id = post_tags.post_id
+                  LEFT JOIN post_votes as votes on votes.id = posts.id
+                  JOIN users AS u ON u.id = posts.created_by`;
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE};
 }
@@ -371,6 +371,7 @@ export async function getPostsByUserId(
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
+  //Only posts having atleast one tag is fetched
   const getPostsQuery: QueryConfig = {
     text: ` ${SELECT_CLAUSE}
             from tags
@@ -388,11 +389,9 @@ export async function getPostsByUserId(
     text: ` SELECT COUNT(posts.id)
             from posts
             LEFT JOIN users AS u on u.id = posts.created_by
-            ${tag ?
-    `LEFT JOIN post_tags on posts.id = post_tags.post_id 
-            LEFT JOIN tags on tags.id = post_tags.tag_id`
-    : ''}
-            ${WHERE_CLAUSE}
+            LEFT JOIN post_tags on posts.id = post_tags.post_id 
+            LEFT JOIN tags on tags.id = post_tags.tag_id
+            ${WHERE_CLAUSE} AND tags.id IS NOT NULL
             LIMIT $3
             OFFSET $4;`,
     values: queryValues

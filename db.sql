@@ -168,7 +168,8 @@ CREATE TABLE IF NOT EXISTS course_chapters (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
-    updated_by INTEGER
+    updated_by INTEGER,
+    CONSTRAINT course_chapter UNIQUE(course_id, name)
 );
 CREATE TABLE IF NOT EXISTS user_chapters(
     course_id INTEGER NOT NULL REFERENCES courses (id) ON DELETE CASCADE ON UPDATE CASCADE,

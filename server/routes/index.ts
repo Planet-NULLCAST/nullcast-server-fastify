@@ -9,6 +9,8 @@ import initTokensRoutes from './auth/auth.route';
 import initPostsRoutes from './posts/posts.route';
 import initCoursesRoutes from './courses/courses.route';
 import initChaptersRoutes from './chapters/chapters.route';
+import initUserCourses from './user-courses/user-courses.route';
+import initUserChapters from './user-chapters/user-chapters.route';
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(oembedRoutes);
@@ -19,6 +21,8 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initPostsRoutes);
   server.register(initCoursesRoutes);
   server.register(initChaptersRoutes);
+  server.register(initUserCourses);
+  server.register(initUserChapters);
   server.register(mailerPath);
 
   done();
