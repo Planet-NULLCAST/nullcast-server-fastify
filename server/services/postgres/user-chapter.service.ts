@@ -2,7 +2,7 @@ import { Client, QueryConfig } from 'pg';
 
 import { UserChapterProgress, UserChapterProgressCount } from 'interfaces/user-chapter.type';
 
-export async function get_user_chapter_progress(payload: UserChapterProgress):
+export async function getUserChapterProgress(payload: UserChapterProgress):
 Promise<UserChapterProgressCount> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 

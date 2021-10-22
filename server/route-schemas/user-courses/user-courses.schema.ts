@@ -8,9 +8,12 @@ export const enrolUserCourseSchema = {
   tags: ['User_course'],
   body:  {
     type: 'object',
-    required: ['user_id', 'course_id'],
+    required: ['course_id'],
     properties: {
-      ...userCourseProps(),
+      course_id: {
+        type: 'number',
+        description: 'Id of the Course'
+      },
       status: {
         type: 'string',
         description: 'Progress of the course by the user',
