@@ -5,8 +5,10 @@ import { FastifyInstance } from 'fastify/types/instance';
 import * as controller from '../../controllers';
 import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
-import { createEventSchema, deleteEventSchema, getEventsByUserIdSchema, getEventSchema, updateEventSchema } 
-from 'route-schemas/events/events.schema';
+import {
+  createEventSchema, deleteEventSchema, getEventsByUserIdSchema, getEventSchema, updateEventSchema
+}
+  from 'route-schemas/events/events.schema';
 import { QueryParams } from 'interfaces/query-params.type';
 
 
@@ -53,24 +55,24 @@ const getEvent: RouteOptions = {
 };
 
 const getEventsByUserId: RouteOptions = {
-    method: 'GET',
-    url: '/events/:userId',
-    schema: getEventsByUserIdSchema,
-    handler: async(request, reply) => {
-      try {
-        const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
-        const params = request.params as { userId: number };
-        const eventData = await controller.getEventsByUserIdController(queryParams, params.userId);
-  
-        if (!eventData) {
-          reply.code(400).send({message: 'User not Found'});
-        }
-        reply.code(200).send({ data: eventData });
-      } catch (error) {
-        throw error;
+  method: 'GET',
+  url: '/events/:userId',
+  schema: getEventsByUserIdSchema,
+  handler: async(request, reply) => {
+    try {
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const params = request.params as { userId: number };
+      const eventData = await controller.getEventsByUserIdController(queryParams, params.userId);
+
+      if (!eventData) {
+        reply.code(400).send({message: 'User not Found'});
       }
+      reply.code(200).send({ data: eventData });
+    } catch (error) {
+      throw error;
     }
-  };
+  }
+};
 
 const updateEvent: RouteOptions = {
   method: 'PUT',
@@ -112,7 +114,7 @@ function initEvents(server: FastifyInstance, _: any, done: () => void) {
   server.route(getEventsByUserId);
   server.route(updateEvent);
   server.route(deleteEvent);
-  
+
   done();
 }
 

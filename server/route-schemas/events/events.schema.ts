@@ -44,7 +44,7 @@ export const getEventsByUserIdSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-        'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
+          'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
         example: `['id', 'created_at', 'created_by', 'status']`
       },
       ...queryStringProps('events')
@@ -79,13 +79,13 @@ export const updateEventSchema = {
     properties: {
       ...eventProps,
       updated_by: {
-          type: 'number',
-          description: 'user whom have updated it'
+        type: 'number',
+        description: 'user whom have updated it'
       },
       updated_at: {
         type: 'string',
         description: 'Date and time of the updation'
-    }
+      }
     }
   },
   response: {

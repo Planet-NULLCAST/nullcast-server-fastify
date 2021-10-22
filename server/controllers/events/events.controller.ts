@@ -19,7 +19,7 @@ export async function createEventController(eventData:Event, userId:number): Pro
     };
 
     const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-    'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     const data = await eventHandler.insertOne(payload, fields);
     return data.rows[0] as Event;
@@ -32,7 +32,7 @@ export async function createEventController(eventData:Event, userId:number): Pro
 export async function getEventController(eventId:number):Promise<Event> {
   try {
     const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-    'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     return await eventHandler.findOneById(eventId, fields);
 
@@ -43,7 +43,7 @@ export async function getEventController(eventId:number):Promise<Event> {
 
 export async function getEventsByUserIdController(queryParams:QueryParams, userId:number):Promise<Event> {
   try {
-    const payload: {userId: number} = {userId: userId}
+    const payload: {userId: number} = {userId};
 
     return await eventHandler.dbHandler('GET_EVENTS', payload, queryParams);
 
@@ -64,7 +64,7 @@ export async function updateEventController(eventData:Event, userId:number, even
     };
 
     const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-    'updated_at', 'updated_by', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+      'updated_at', 'updated_by', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     const data = await eventHandler.updateOneById(eventId, payload, fields);
     return data.rows[0] as Event;
