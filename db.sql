@@ -202,6 +202,36 @@ CREATE TABLE IF NOT EXISTS followers(
     updated_by INTEGER,
     PRIMARY KEY(follower_id, following_id)
 );
+CREATE TABLE IF NOT EXISTS events (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER,
+    published_at TIMESTAMP WITH TIME ZONE,
+    published_by INTEGER,
+    event_time TIMESTAMP WITH TIME ZONE,
+    location TEXT,
+    status VARCHAR(10) DEFAULT 'drafted',
+    visibility VARCHAR(10) DEFAULT 'public',
+    featured boolean DEFAULT FALSE,
+    locale VARCHAR(10),
+    canonical_url VARCHAR(255),
+    primary_tag INTEGER,
+    preview_url VARCHAR(255),
+    banner_image VARCHAR(255),
+    meta_title VARCHAR(255),
+    meta_description VARCHAR(1234),
+    og_image VARCHAR(255),
+    og_title VARCHAR(255),
+    og_description VARCHAR(1234),
+    description TEXT,
+    type VARCHAR(255),
+    custom_excerpt VARCHAR(2000),
+    slug VARCHAR(255),
+    viewers jsonb
+);
 
 -- Add initial data
 INSERT INTO entity (name, description)

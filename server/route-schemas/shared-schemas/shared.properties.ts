@@ -1,7 +1,7 @@
 export function queryStringProps(routeName: string) {
 
   const key = routeName;
-  return ({
+  const queryParams: any = {
     search: {
       type: 'string',
       default: '',
@@ -19,7 +19,7 @@ export function queryStringProps(routeName: string) {
     },
     status: {
       type: 'string',
-      default: key == 'post' ? 'published' : 'active',
+      default: key == 'post' || key == 'events' ? 'published' : 'active',
       description: `Status of the ${key} data`
     },
     order: {
@@ -29,13 +29,16 @@ export function queryStringProps(routeName: string) {
     },
     sort_field: {
       type: 'string',
-      default: key == 'post' ? 'published_at' : 'created_at',
+      default: key == 'post' || key == 'events' ? 'published_at' : 'created_at',
       description: 'The field name according to which data would be arranged'
-    },
-    with_table: {
+    }
+  }
+  if (key != 'events') {
+    queryParams.with_table = {
       type: 'array',
       default: key == 'post' ? ['users', 'tags'] : ['entity', 'primary_badge'],
       description: 'The tables which should be included'
     }
-  });
+  }
+  return queryParams;
 }
