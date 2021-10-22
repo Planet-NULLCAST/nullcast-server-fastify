@@ -60,4 +60,3 @@ export const eventProps = {
     description: 'Time of the event'
   }
 };
-  

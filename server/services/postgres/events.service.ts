@@ -8,27 +8,27 @@ export async function getEvents(payload: {userId: number}, queryParams: QueryPar
     'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
-      limit_fields = DEFAULT_FIELDS,
-      search = '',
-      page = 1,
-      limit = 10,
-      status = 'published',
-      order = 'ASC',
-      sort_field = 'published_at',
-    } = queryParams;
+    limit_fields = DEFAULT_FIELDS,
+    search = '',
+    page = 1,
+    limit = 10,
+    status = 'published',
+    order = 'ASC',
+    sort_field = 'published_at'
+  } = queryParams;
 
-    let WHERE_CLAUSE = 'WHERE events.status = $1 AND events.user_id = $2';
+  let WHERE_CLAUSE = 'WHERE events.status = $1 AND events.user_id = $2';
 
-    const queryValues = [status, payload.userId, +limit, (page - 1) * +limit];
-  
-    if (search) {
-      queryValues.push(`%${search}%`);
-      WHERE_CLAUSE = `${WHERE_CLAUSE} 
+  const queryValues = [status, payload.userId, +limit, (page - 1) * +limit];
+
+  if (search) {
+    queryValues.push(`%${search}%`);
+    WHERE_CLAUSE = `${WHERE_CLAUSE} 
         AND (events.meta_title LIKE $${queryValues.length} 
         OR events.meta_description LIKE $${queryValues.length} 
         OR events.custom_excerpt LIKE $${queryValues.length})`;
-    }
-    const limitFields = limit_fields.map((item) => `events.${item}`);
+  }
+  const limitFields = limit_fields.map((item) => `events.${item}`);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 

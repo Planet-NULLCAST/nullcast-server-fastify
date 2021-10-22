@@ -32,13 +32,13 @@ export function queryStringProps(routeName: string) {
       default: key == 'post' || key == 'events' ? 'published_at' : 'created_at',
       description: 'The field name according to which data would be arranged'
     }
-  }
+  };
   if (key != 'events') {
     queryParams.with_table = {
       type: 'array',
       default: key == 'post' ? ['users', 'tags'] : ['entity', 'primary_badge'],
       description: 'The tables which should be included'
-    }
+    };
   }
   return queryParams;
 }
