@@ -135,8 +135,8 @@ export const getPostsSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
-          'published_at', 'banner_image', 'title', 'meta_title'],
+        default: ['id', 'slug', 'created_by', 'html', 'status', 'mobiledoc',
+          'created_at', 'published_at', 'banner_image', 'title', 'meta_title'],
         example: `['id', 'slug', 'created_by']`
       },
       ...queryStringProps('post')
@@ -157,8 +157,8 @@ export const getPostsByTagSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at',
-          'banner_image', 'title', 'meta_title'],
+        default: ['slug', 'created_by', 'status', 'mobiledoc', 'created_at',
+          'published_at', 'banner_image', 'title', 'meta_title'],
         example: `['slug', 'created_by', 'mobiledoc']`
       },
       ...queryStringProps('post')
@@ -185,8 +185,8 @@ export const getPostsByUserIdSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['slug', 'created_by', 'mobiledoc', 'created_at', 'published_at',
-          'banner_image', 'title', 'meta_title'],
+        default: ['slug', 'created_by', 'status', 'mobiledoc', 'created_at',
+          'published_at', 'banner_image', 'title', 'meta_title'],
         example: `['slug', 'created_by', 'mobiledoc']`
       },
       ...queryStringProps('post')

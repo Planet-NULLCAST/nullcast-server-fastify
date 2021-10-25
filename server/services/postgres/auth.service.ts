@@ -1,5 +1,6 @@
 import { Client, QueryConfig } from 'pg';
 import { ValidateUser } from 'interfaces/user.type';
+import { USER_TABLE } from 'constants/tables';
 
 export async function signInUser(payload: ValidateUser) {
   try {
@@ -7,7 +8,7 @@ export async function signInUser(payload: ValidateUser) {
 
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
-      text: `SELECT id, email, user_name, password, salt, full_name FROM users 
+      text: `SELECT id, email, user_name, password, salt, full_name FROM ${USER_TABLE} 
         WHERE (user_name = $1)
         OR (email = $1)`,
       values: [payload.email || payload.user_name]

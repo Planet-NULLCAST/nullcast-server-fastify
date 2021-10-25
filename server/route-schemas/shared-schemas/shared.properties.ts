@@ -19,7 +19,7 @@ export function queryStringProps(routeName: string) {
     },
     status: {
       type: 'string',
-      default: key == 'post' || key == 'events' ? 'published' : 'active',
+      default: key == 'post' ? '': key == 'events' ? 'published' : 'active',
       description: `Status of the ${key} data`
     },
     order: {
