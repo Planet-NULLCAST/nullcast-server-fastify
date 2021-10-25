@@ -1,3 +1,4 @@
+import { EVENT_TABLE } from 'constants/tables';
 import { Event } from 'interfaces/event.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { Client, QueryConfig } from 'pg';
@@ -35,7 +36,7 @@ export async function getEvents(payload: {userId: number}, queryParams: QueryPar
   const getEventsByUserIdQuery: QueryConfig = {
     name: 'get-events- by-user-id',
     text: `SELECT ${limitFields}
-            FROM events
+            FROM ${EVENT_TABLE}
             ${WHERE_CLAUSE}
             ORDER BY 
             events.${sort_field} ${order}

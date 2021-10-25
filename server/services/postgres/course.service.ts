@@ -1,6 +1,7 @@
 import { Client, QueryConfig } from 'pg';
 
 import { Course, CourseChapter } from 'interfaces/course.type';
+import { CHAPTER_TABLE, COURSE_TABLE } from 'constants/tables';
 
 export async function getCourse(payload: { course_name: string }): Promise<Course> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -8,7 +9,7 @@ export async function getCourse(payload: { course_name: string }): Promise<Cours
   const getCourseQuery: QueryConfig = {
     name: 'get-course',
     text: `SELECT id, name, certificate_id, created_by
-        FROM courses
+        FROM ${COURSE_TABLE}
         WHERE name = $1;`,
     values: [payload.course_name]
   };
@@ -35,7 +36,7 @@ export async function addCoursesWithChapters(payload:CourseChapter) {
       .join(', ');
 
     // Build the query text for prepared statement
-    const text = `INSERT INTO courses (${columns}) 
+    const text = `INSERT INTO ${COURSE_TABLE} (${columns}) 
                   VALUES (${valueRefs})
                   ON CONFLICT (name) DO UPDATE
                   set certificate_id = EXCLUDED.certificate_Id
@@ -95,7 +96,7 @@ export async function addCoursesWithChapters(payload:CourseChapter) {
 
       const valueRefs: string = valueRefArray.join(', ');
 
-      const text = `INSERT INTO course_chapters (${columns}) 
+      const text = `INSERT INTO ${CHAPTER_TABLE} (${columns}) 
                     VALUES ${valueRefs}
                     ON CONFLICT ON CONSTRAINT course_chapter 
                     DO UPDATE

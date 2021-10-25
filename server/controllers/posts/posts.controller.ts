@@ -51,7 +51,7 @@ export async function getPostController(postId:number, queryParams: QueryParams,
     return await postHandler.dbHandler('GET_POST', payload, queryParams, user);
 
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -64,7 +64,7 @@ export async function getPostBySlugController(slug:string, queryParams: QueryPar
     return await postHandler.dbHandler('GET_POST', payload, queryParams, user);
 
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -77,7 +77,7 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
     return await postHandler.dbHandler('GET_POSTS_BY_TAG', payload, queryParams, user);
 
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -130,6 +130,6 @@ export async function getPostsByUserIdController(
     return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams, currentUser);
 
   } catch (error) {
-    return error;
+    throw error;
   }
 }

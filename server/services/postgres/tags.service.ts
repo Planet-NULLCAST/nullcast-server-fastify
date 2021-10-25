@@ -1,3 +1,4 @@
+import { TAG_TABLE } from 'constants/tables';
 import { QueryParams } from 'interfaces/query-params.type';
 import { Tag } from 'interfaces/tags.type';
 import { QueryConfig, Client } from 'pg';
@@ -32,7 +33,7 @@ export async function getTags(queryParams: QueryParams) {
 
   const getTagsQuery: QueryConfig = {
     text: `${SELECT_CLAUSE} 
-          FROM tags
+          FROM ${TAG_TABLE} AS tags
           ${WHERE_CLAUSE}
           ${EXTRA_CLAUSES}`,
     values: queryValues

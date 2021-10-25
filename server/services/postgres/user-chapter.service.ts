@@ -1,6 +1,7 @@
 import { Client, QueryConfig } from 'pg';
 
 import { UserChapterProgress, UserChapterProgressCount } from 'interfaces/user-chapter.type';
+import { CHAPTER_TABLE, USER_CHAPTER_TABLE } from 'constants/tables';
 
 export async function getUserChapterProgress(payload: UserChapterProgress):
 Promise<UserChapterProgressCount> {
@@ -8,13 +9,15 @@ Promise<UserChapterProgressCount> {
 
   const getTotalChaptersCountQuery: QueryConfig = {
     name: 'get-total-user-chapter',
-    text: `select count(id) from course_chapters where course_id = $1;`,
+    text: `SELECT COUNT(id) FROM ${CHAPTER_TABLE} 
+            WHERE course_id = $1;`,
     values: [payload.course_id]
   };
 
   const getCompletedChaptersCountQuery: QueryConfig = {
     name: 'get-completed-user-chapter',
-    text: `select count(chapter_id) from user_chapters where course_id= $1 AND user_id = $2;`,
+    text: `SELECT COUNT(chapter_id) FROM ${USER_CHAPTER_TABLE} 
+            WHERE course_id = $1 AND user_id = $2;`,
     values: [payload.course_id, payload.user_id]
   };
 
