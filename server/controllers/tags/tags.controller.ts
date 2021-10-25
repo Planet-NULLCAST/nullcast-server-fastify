@@ -1,4 +1,4 @@
-import { TAGS_TABLE } from 'constants/tables';
+import { TAG_TABLE } from 'constants/tables';
 
 import { Tag } from 'interfaces/tags.type';
 import { UserData } from 'interfaces/auth-token.type';
@@ -6,7 +6,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 
-const tagsHandler = new DatabaseHandler(TAGS_TABLE);
+const tagsHandler = new DatabaseHandler(TAG_TABLE);
 
 
 export async function createTagController(payload: Tag, userData: UserData) {

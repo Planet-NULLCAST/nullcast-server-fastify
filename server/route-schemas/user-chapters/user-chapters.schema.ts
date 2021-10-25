@@ -8,7 +8,7 @@ export const createUserChapterSchema = {
   tags: ['User_chapter'],
   body:  {
     type: 'object',
-    required: ['user_id', 'course_id', 'chapter_id'],
+    required: ['course_id', 'chapter_id'],
     properties: {
       ...userChapterProps()
     }

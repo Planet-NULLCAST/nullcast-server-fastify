@@ -11,6 +11,7 @@ import initCoursesRoutes from './courses/courses.route';
 import initChaptersRoutes from './chapters/chapters.route';
 import initUserCourses from './user-courses/user-courses.route';
 import initUserChapters from './user-chapters/user-chapters.route';
+import initEvents from './events/events.route';
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(oembedRoutes);
@@ -24,6 +25,7 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initUserCourses);
   server.register(initUserChapters);
   server.register(mailerPath);
+  server.register(initEvents);
 
   done();
 }

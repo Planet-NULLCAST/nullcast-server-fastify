@@ -2,6 +2,9 @@ import { Client, QueryConfig } from 'pg';
 
 import { User, UserStatus } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
+import {
+  BADGE_TABLE, ENTITY_TABLE, USER_TABLE
+} from 'constants/tables';
 
 
 export async function getUser(payload: { user_name: string }): Promise<User> {
@@ -11,7 +14,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
     name: 'get-user',
     text: `SELECT entity_id, id, user_name, full_name,
             email, created_at, updated_at, cover_image, bio, status
-            FROM users
+            FROM ${USER_TABLE}
             WHERE user_name = $1;`,
     values: [payload.user_name]
   };
@@ -74,7 +77,7 @@ export async function getUsers(queryParams: QueryParams) {
     const buildEntityObj = `'id', entity.id, 'name', entity.name, 'description', entity.description`;
     SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                       JSON_BUILD_OBJECT(${buildEntityObj}) AS entity`;
-    JOIN_CLAUSE = `${JOIN_CLAUSE} LEFT JOIN entity on u.entity_id = entity.id`;
+    JOIN_CLAUSE = `${JOIN_CLAUSE} LEFT JOIN ${ENTITY_TABLE} AS entity on u.entity_id = entity.id`;
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND u.entity_id = entity.id`;
     GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, entity.id`;
   }
@@ -84,7 +87,7 @@ export async function getUsers(queryParams: QueryParams) {
     SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                       JSON_BUILD_OBJECT(${buildBadgeObj}) AS primary_badge`;
     JOIN_CLAUSE = `${JOIN_CLAUSE} 
-                    LEFT JOIN badges as badge on u.primary_badge = badge.id`;
+                    LEFT JOIN ${BADGE_TABLE} as badge on u.primary_badge = badge.id`;
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND u.primary_badge = badge.id`;
     GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, badge.id`;
   }
@@ -93,7 +96,7 @@ export async function getUsers(queryParams: QueryParams) {
 
   const getUsersQuery: QueryConfig = {
     text: `${SELECT_CLAUSE}
-            FROM users AS u
+            FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
             ${WHERE_CLAUSE}
             ${GROUP_BY_CLAUSE}
@@ -106,7 +109,7 @@ export async function getUsers(queryParams: QueryParams) {
 
   const getUsersCountQuery: QueryConfig = {
     text: `SELECT COUNT(u.id)
-            FROM users AS u
+            FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
             ${WHERE_CLAUSE}
             LIMIT $2
