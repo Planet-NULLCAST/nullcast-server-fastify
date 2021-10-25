@@ -14,7 +14,9 @@ export type Actions =
 
   | 'GET_CHAPTER'
 
-  | 'GET_USER_CHAPTER_PROGRESS';
+  | 'GET_USER_CHAPTER_PROGRESS'
+
+  |'GET_EVENTS';
 
 export type CommonActions =
   | 'INSERT_ONE'

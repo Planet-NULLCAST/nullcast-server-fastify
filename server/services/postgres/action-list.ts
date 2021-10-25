@@ -8,7 +8,8 @@ import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 import { addCoursesWithChapters, getCourse } from './course.service';
 import { getChapter } from './chapter.service';
-import { get_user_chapter_progress } from './user-chapter.service';
+import { getUserChapterProgress } from './user-chapter.service';
+import { getEvents } from './events.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
@@ -26,7 +27,9 @@ export const serviceActions: { [x in Actions]: any } = {
 
   GET_CHAPTER: getChapter,
 
-  GET_USER_CHAPTER_PROGRESS: get_user_chapter_progress
+  GET_USER_CHAPTER_PROGRESS: getUserChapterProgress,
+
+  GET_EVENTS: getEvents
 };
 
 export const commonActions = {

@@ -1,3 +1,4 @@
+import { CHAPTER_TABLE } from 'constants/tables';
 import { Chapter } from 'interfaces/chapter.type';
 import { Client, QueryConfig } from 'pg';
 
@@ -7,7 +8,7 @@ export async function getChapter(payload: { chapterId: number }): Promise<Chapte
   const getChapterQuery: QueryConfig = {
     name: 'get-chapter',
     text: `SELECT id, name, course_id, slug, chapter_no, created_by
-        FROM course_chapters
+        FROM ${CHAPTER_TABLE}
         WHERE id = $1;`,
     values: [payload.chapterId]
   };
