@@ -1,11 +1,12 @@
 import { Client, QueryConfig } from 'pg';
 
-import { Post } from 'interfaces/post.type';
-import { QueryParams } from 'interfaces/query-params.type';
-import { TokenUser } from 'interfaces/user.type';
 import {
   POST_TABLE, POST_TAG_TABLE, POST_VOTE_TABLE, TAG_TABLE, USER_TABLE
 } from 'constants/tables';
+
+import { Post } from 'interfaces/post.type';
+import { QueryParams } from 'interfaces/query-params.type';
+import { TokenUser } from 'interfaces/user.type';
 
 
 function constructJoinQuery({
@@ -87,7 +88,7 @@ function constructQuery(
 
   limitFields = limitFields.map((item) => `posts.${item}`);
 
-  let SELECT_CLAUSE = `SELECT ${limitFields}, posts.id as post_id, posts.html as html`,
+  let SELECT_CLAUSE = `SELECT posts.id as post_id, posts.html as html, ${limitFields}`,
     GROUP_BY_CLAUSE = '',
     JOIN_CLAUSE = '';
 
@@ -148,6 +149,40 @@ function constructQuery(
                   JOIN ${USER_TABLE} AS u ON u.id = posts.created_by`;
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE};
+}
+
+export async function getSinglePost(
+  payload: { key: string | number; field: string },
+  queryParams: QueryParams,
+  user: TokenUser
+) {
+  const { key, field = 'id' } = payload;
+  // Set default values for query params
+  const { limit_fields, with_table } = queryParams;
+
+  const WHERE_CLAUSE = `WHERE post.${field} = $1`;
+
+  const queryValues = [key];
+
+  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
+    limit_fields,
+    with_table
+  }, user?.id);
+
+  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+  const getPostsQuery: QueryConfig = {
+    text: `${SELECT_CLAUSE}
+            FROM ${POST_TABLE} AS post
+            ${JOIN_CLAUSE}
+            ${WHERE_CLAUSE}
+            ${GROUP_BY_CLAUSE};`,
+    values: queryValues
+  };
+
+  const data = await postgresClient.query<Post>(getPostsQuery);
+
+  return data.rows[0];
 }
 
 export async function getPosts(queryParams: QueryParams, user: TokenUser) {
@@ -218,40 +253,6 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
   const countData = await postgresClient.query<Post>(getPostsCountQuery);
 
   return {posts: postData.rows, ...countData?.rows[0], limit, page};
-}
-
-export async function getSinglePost(
-  payload: { key: string | number; field: string },
-  queryParams: QueryParams,
-  user: TokenUser
-) {
-  const { key, field = 'id' } = payload;
-  // Set default values for query params
-  const { limit_fields, with_table } = queryParams;
-
-  const WHERE_CLAUSE = `WHERE post.${field} = $1`;
-
-  const queryValues = [key];
-
-  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
-    limit_fields,
-    with_table
-  }, user?.id);
-
-  const postgresClient: Client = (globalThis as any).postgresClient as Client;
-
-  const getPostsQuery: QueryConfig = {
-    text: `${SELECT_CLAUSE}
-            FROM ${POST_TABLE} AS post
-            ${JOIN_CLAUSE}
-            ${WHERE_CLAUSE}
-            ${GROUP_BY_CLAUSE};`,
-    values: queryValues
-  };
-
-  const data = await postgresClient.query<Post>(getPostsQuery);
-
-  return data.rows[0];
 }
 
 export async function getPostsBytag(

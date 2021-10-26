@@ -16,7 +16,7 @@ export async function createUserChapterController(
     created_by: user.id as number
   };
 
-  const fields = ['id', 'user_id', 'course_id', 'chapter_id', 'completed_at', 'created_by', 'created_at'];
+  const fields = ['user_id', 'course_id', 'chapter_id', 'completed_at', 'created_by', 'created_at'];
 
   const data = await UserChapterHandler.insertOne(payload, fields);
 
@@ -24,11 +24,14 @@ export async function createUserChapterController(
 }
 
 export async function getUserChapterController(
-  user_course_id: number): Promise<UserChapter> {
+  chapterId: number, userId: number): Promise<UserChapter> {
   try {
-    const fields = ['id', 'user_id', 'course_id', 'chapter_id', 'completed_at', 'created_by', 'created_at'];
+    const payload = {
+      'chapterId': chapterId,
+      'userId': userId
+    };
 
-    return await UserChapterHandler.findOneById(user_course_id, fields) as UserChapter;
+    return await UserChapterHandler.dbHandler('GET_USER_CHAPTER', payload) as UserChapter;
   } catch (error) {
     throw error;
   }
@@ -45,10 +48,10 @@ export async function getUserChapterProgressController(
 }
 
 export async function updateUserChapterController(
-  userCourseData:UpdateUserChapter, userChapterId:number, user: TokenUser)
+  userCourseData:UpdateUserChapter, chapterId:number, user: TokenUser)
 :Promise<UserChapter | boolean> {
   try {
-    if (!userChapterId) {
+    if (!chapterId) {
       return false;
     }
     const payload : UpdateUserChapter = {
@@ -56,24 +59,26 @@ export async function updateUserChapterController(
       updated_at: new Date().toISOString(),
       updated_by: user.id as number
     };
-
-    const fields = ['id', 'user_id', 'course_id', 'chapter_id', 'completed_at', 'updated_by', 'updated_at'];
-
-    const data = await UserChapterHandler.updateOneById(userChapterId, payload, fields);
-    return data.rows[0] as UserChapter;
+    return await UserChapterHandler.dbHandler(
+      'UPDATE_USER_CHAPTER', payload, {}, user, {'chapterId': chapterId}) as UserChapter;
 
   } catch (error) {
     throw error;
   }
 }
 
-export async function deleteUserChapterController(userChapterId: number) : Promise<boolean> {
+export async function deleteUserChapterController(chapterId: number, userId: number) : Promise<boolean> {
   try {
-    if (!userChapterId) {
+    if (!chapterId) {
       return false;
     }
 
-    await UserChapterHandler.deleteOneById(userChapterId);
+    const payload = {
+      'chapterId': chapterId,
+      'userId': userId
+    };
+
+    await UserChapterHandler.dbHandler('DELETE_USER_CHAPTER', payload);
     return true;
   } catch (error) {
     throw error;

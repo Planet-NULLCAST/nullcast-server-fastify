@@ -13,27 +13,30 @@ export async function enrolCourseController(userCourseData: UserCourse, user:Tok
     created_by: user.id as number
   };
 
-  const fields = ['id', 'user_id', 'course_id', 'status', 'created_by', 'created_at'];
+  const fields = ['user_id', 'course_id', 'status', 'created_by', 'created_at'];
 
   const data = await userCourseHandler.insertOne(payload, fields);
 
   return data.rows[0] as UserCourse;
 }
 
-export async function getUserCourseController(user_course_id: number): Promise<UserCourse> {
+export async function getUserCourseController(courseId: number, userId: number): Promise<UserCourse> {
   try {
-    const fields = ['id', 'user_id', 'course_id', 'status', 'created_by', 'created_at'];
+    const payload = {
+      'courseId': courseId,
+      'userId': userId
+    };
 
-    return await userCourseHandler.findOneById(user_course_id, fields) as UserCourse;
+    return await userCourseHandler.dbHandler('GET_USER_COURSE', payload) as UserCourse;
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateUserCourseController(userCourseData:UpdateUserCourse, userCourseId:number, user: TokenUser)
+export async function updateUserCourseController(userCourseData:UpdateUserCourse, courseId:number, user: TokenUser)
 :Promise<UserCourse | boolean> {
   try {
-    if (!userCourseId) {
+    if (!courseId) {
       return false;
     }
     const payload : UpdateUserCourse = {
@@ -42,23 +45,26 @@ export async function updateUserCourseController(userCourseData:UpdateUserCourse
       updated_by: user.id as number
     };
 
-    const fields = ['id', 'user_id', 'course_id', 'status', 'updated_by', 'updated_at'];
-
-    const data = await userCourseHandler.updateOneById(userCourseId, payload, fields);
-    return data.rows[0] as UserCourse;
+    return await userCourseHandler.dbHandler(
+      'UPDATE_USER_COURSE', payload, {}, user, {'courseId': courseId}) as UserCourse;
 
   } catch (error) {
     throw error;
   }
 }
 
-export async function deleteUserCourseController(userCourseId: number) : Promise<boolean> {
+export async function deleteUserCourseController(courseId: number, userId: number) : Promise<boolean> {
   try {
-    if (!userCourseId) {
+    if (!courseId) {
       return false;
     }
 
-    await userCourseHandler.deleteOneById(userCourseId);
+    const payload = {
+      'courseId': courseId,
+      'userId': userId
+    };
+
+    await userCourseHandler.dbHandler('DELETE_USER_COURSE', payload);
     return true;
   } catch (error) {
     throw error;

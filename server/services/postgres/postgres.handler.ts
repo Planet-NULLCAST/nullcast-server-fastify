@@ -15,10 +15,11 @@ export class DatabaseHandler {
     action: Actions,
     payload: PayLoadType,
     queryParams?: QueryParams,
-    user?: TokenUser
+    user?: TokenUser,
+    otherContsraints?: {[x: string]: any}
   ): Promise<ResponseType> {
     try {
-      return (await serviceActions[action](payload, queryParams, user)) as ResponseType;
+      return (await serviceActions[action](payload, queryParams, user, otherContsraints)) as ResponseType;
     } catch (error) {
       throw error;
     }

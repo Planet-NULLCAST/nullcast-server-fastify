@@ -3,10 +3,11 @@ export type Actions =
   | 'SIGN_IN_USER'
   | 'GET_USERS'
 
-  | 'GET_POSTS'
   | 'GET_POST'
+  | 'GET_POSTS'
   | 'GET_POSTS_BY_TAG'
   | 'GET_POSTS_BY_USER_ID'
+
   | 'GET_TAGS'
 
   | 'GET_COURSE'
@@ -14,7 +15,14 @@ export type Actions =
 
   | 'GET_CHAPTER'
 
+  | 'GET_USER_COURSE'
+  | 'UPDATE_USER_COURSE'
+  | 'DELETE_USER_COURSE'
+
+  | 'GET_USER_CHAPTER'
   | 'GET_USER_CHAPTER_PROGRESS'
+  | 'UPDATE_USER_CHAPTER'
+  | 'DELETE_USER_CHAPTER'
 
   |'GET_EVENTS';
 

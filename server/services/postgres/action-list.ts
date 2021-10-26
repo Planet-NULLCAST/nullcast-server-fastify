@@ -8,7 +8,14 @@ import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
 import { addCoursesWithChapters, getCourse } from './course.service';
 import { getChapter } from './chapter.service';
-import { getUserChapterProgress } from './user-chapter.service';
+import {
+  deleteUserChapter, getUserChapter,
+  getUserChapterProgress, updateUserChapter
+}
+  from './user-chapter.service';
+import {
+  deleteUserCourse, getUserCourse, updateUserCourse
+} from 'services/postgres/user-course.service';
 import { getEvents } from './events.service';
 
 export const serviceActions: { [x in Actions]: any } = {
@@ -16,10 +23,11 @@ export const serviceActions: { [x in Actions]: any } = {
   SIGN_IN_USER: signInUser,
   GET_USERS: getUsers,
 
-  GET_POSTS: getPosts,
   GET_POST: getSinglePost,
+  GET_POSTS: getPosts,
   GET_POSTS_BY_TAG: getPostsBytag,
   GET_POSTS_BY_USER_ID: getPostsByUserId,
+
   GET_TAGS: getTags,
 
   GET_COURSE: getCourse,
@@ -27,7 +35,14 @@ export const serviceActions: { [x in Actions]: any } = {
 
   GET_CHAPTER: getChapter,
 
+  GET_USER_COURSE: getUserCourse,
+  UPDATE_USER_COURSE: updateUserCourse,
+  DELETE_USER_COURSE: deleteUserCourse,
+
+  GET_USER_CHAPTER: getUserChapter,
   GET_USER_CHAPTER_PROGRESS: getUserChapterProgress,
+  UPDATE_USER_CHAPTER: updateUserChapter,
+  DELETE_USER_CHAPTER: deleteUserChapter,
 
   GET_EVENTS: getEvents
 };
