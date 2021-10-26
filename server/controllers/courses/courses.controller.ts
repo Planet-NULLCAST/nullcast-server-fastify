@@ -30,7 +30,7 @@ export async function addCoursesController(courseData: Course[], user: TokenUser
 
   const payload: Course[] = courseData;
 
-  const fields = ['name', 'certificate_id', 'created_by', 'created_at'];
+  const fields = ['id', 'name', 'certificate_id', 'created_by', 'created_at'];
   const uniqueField = 'name';
 
   const data = await courseHandler.insertMany(payload, fields, uniqueField);

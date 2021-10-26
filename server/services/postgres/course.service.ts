@@ -48,10 +48,10 @@ export async function addCoursesWithChapters(payload:CourseChapter) {
     };
     const courseData = (await postgresClient.query(courseQuery)).rows[0];
 
-    if (courseData && payload.chapters[0]) {
+    if (courseData && chapters[0]) {
 
       const uniqueKeys: string[] = Object.keys(
-        Object.assign({}, ...payload.chapters, {'course_id': courseData.id}));
+        Object.assign({}, ...chapters, {'course_id': courseData.id}));
 
       // Create an object with all the unique keys and keep their values as null
       const dummyValue = uniqueKeys.reduce((result: any, key) => {
@@ -61,7 +61,7 @@ export async function addCoursesWithChapters(payload:CourseChapter) {
 
 
       // store null as value to keys in object if there is inconsistency
-      const data: any[] = payload.chapters.map((item) => (
+      const data: any[] = chapters.map((item) => (
         { ...dummyValue, ...item, 'course_id': courseData.id }));
 
       // Construct columns for the prepared statement from the payload

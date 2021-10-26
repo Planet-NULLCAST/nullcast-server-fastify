@@ -24,7 +24,7 @@ export async function createChapterController(chapterData: Chapter, user:TokenUs
     slug: chapterData.name.toLowerCase() as string
   };
 
-  const fields = ['name', 'chapter_no', 'course_id', 'slug', 'created_by', 'created_at'];
+  const fields = ['id', 'name', 'chapter_no', 'course_id', 'slug', 'created_by', 'created_at'];
 
   const data = await chapterHandler.insertOne(payload, fields);
 
@@ -49,7 +49,7 @@ export async function addChaptersController(chapterData: Chapter[], user: TokenU
 
   const payload: Chapter[] = chapterData;
 
-  const fields = ['name', 'chapter_no', 'course_id', 'slug', 'created_by', 'created_at'];
+  const fields = ['id', 'name', 'chapter_no', 'course_id', 'slug', 'created_by', 'created_at'];
   const uniqueField = 'id';
 
   const data = await chapterHandler.insertMany(payload, fields, uniqueField);
