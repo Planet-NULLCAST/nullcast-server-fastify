@@ -25,13 +25,14 @@ export async function insertOne(
       .map((_, index) => `$${index + 1}`)
       .join(', ');
 
-    let returningFields = '';
+    let returnStatement = '';
     if (fields) {
-      returningFields = `, ${fields.map((item) => item).join(', ')}`;
+      returnStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
     }
 
     // Build the query text for prepared statement
-    const text = `INSERT INTO ${tableName} (${columns}) VALUES (${valueRefs}) RETURNING id ${returningFields};`;
+    const text = `INSERT INTO ${tableName} (${columns}) 
+                  VALUES (${valueRefs}) ${returnStatement};`;
 
     const insertOneQuery: QueryConfig = {
       text,
@@ -53,9 +54,9 @@ export async function insertMany(
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-    let returningFields = '';
+    let returnStatement = '';
     if (fields) {
-      returningFields = `, ${fields.map((item) => item).join(', ')}`;
+      returnStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
     }
 
     // Find out the unique keys from the array of objects
@@ -116,7 +117,7 @@ export async function insertMany(
                   VALUES ${valueRefs}
                   ON CONFLICT (${uniqueField}) DO UPDATE
                   ${updateStatement}
-                  RETURNING id ${returningFields};`;
+                  ${returnStatement};`;
 
     const query: QueryConfig = {
       text,
@@ -205,16 +206,16 @@ export async function updateOneById(
       }
     });
 
-    let returningValues = '';
+    let returnStatement = '';
     if (fields) {
-      returningValues = `, ${fields.map((item) => item).join(', ')}`;
+      returnStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
     }
 
     // Build the query text for prepared statement
     const text = `UPDATE ${tableName} 
                   ${updateStatement} 
                   WHERE id = $1 
-                  RETURNING id ${returningValues};`;
+                  ${returnStatement};`;
 
     const query: QueryConfig = {
       text,

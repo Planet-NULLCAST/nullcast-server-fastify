@@ -18,7 +18,9 @@ export async function createTagController(payload: Tag, userData: UserData) {
       slug: payload.name.trim().replace(' ', '_').toLowerCase(),
       created_by: userData.id
     };
-    const tag = await tagsHandler.insertOne<Tag, Tag>(tagData, ['name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility']);
+    const fields = ['id', 'name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug',
+      'status', 'created_at', 'updated_at', 'created_by', 'visibility'];
+    const tag = await tagsHandler.insertOne<Tag, Tag>(tagData, fields);
     return tag.rows[0];
   } catch (error) {
     if (error.code) {
@@ -56,7 +58,9 @@ export async function updateTagController(tagName: string, payload: Tag, userDat
         created_by: tagData.created_by,
         updated_at: new Date().toISOString()
       };
-      const updatedData = await tagsHandler.updateOneById(tagData.id, updatedTagData, ['id', 'name', 'description', 'meta_title', 'meta_description', 'feature_image', 'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility', 'updated_by']);
+      const fields = ['id', 'name', 'description', 'meta_title', 'meta_description', 'feature_image',
+        'slug', 'status', 'created_at', 'updated_at', 'created_by', 'visibility', 'updated_by'];
+      const updatedData = await tagsHandler.updateOneById(tagData.id, updatedTagData, fields);
       if (updatedData) {
         return updatedData.rows[0];
       }

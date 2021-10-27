@@ -1,9 +1,11 @@
-import {Post, mobiledoc} from 'interfaces/post.type';
-import {DatabaseHandler} from 'services/postgres/postgres.handler';
-import {POST_TABLE} from 'constants/tables';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
+import {POST_TABLE} from 'constants/tables';
+
+import {Post, mobiledoc} from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
+
+import {DatabaseHandler} from 'services/postgres/postgres.handler';
 
 const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
 
@@ -24,19 +26,11 @@ export async function createPostController(postData:Post, userId:number): Promis
       created_by: userId
     };
 
-    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
+    const fields = ['id', 'html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
     const data = await postHandler.insertOne(payload, fields);
     return data.rows[0] as Post;
 
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function getPostsController(qParam:QueryParams): Promise<Post> {
-  try {
-    return await postHandler.dbHandler<QueryParams, Post>('GET_POSTS', qParam);
   } catch (error) {
     throw error;
   }
@@ -68,6 +62,14 @@ export async function getPostBySlugController(slug:string, queryParams: QueryPar
   }
 }
 
+export async function getPostsController(qParam:QueryParams): Promise<Post> {
+  try {
+    return await postHandler.dbHandler<QueryParams, Post>('GET_POSTS', qParam);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getPostsByTagController(tag: string, queryParams: QueryParams, user: TokenUser):Promise<Post> {
   try {
     const payload = {
@@ -75,6 +77,20 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
       field: 'tag'
     };
     return await postHandler.dbHandler('GET_POSTS_BY_TAG', payload, queryParams, user);
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPostsByUserIdController(
+  queryParams: QueryParams, currentUser: TokenUser, userId: number):Promise<Post> {
+  try {
+    const payload = {
+      key: userId,
+      field: 'id'
+    };
+    return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams, currentUser);
 
   } catch (error) {
     throw error;
@@ -96,7 +112,8 @@ export async function updatePostController(postData:Post, userId:number, postId:
       updated_by: userId
     };
 
-    const fields = ['html', 'created_at', 'created_by', 'mobiledoc', 'status', 'published_at', 'updated_at', 'meta_title', 'title'];
+    const fields = ['id', 'html', 'created_at', 'created_by', 'mobiledoc',
+      'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
     const data = await postHandler.updateOneById(postId, payload, fields);
     return data.rows[0] as Post;
@@ -114,21 +131,6 @@ export async function deletePostController(postId: number) : Promise<boolean> {
 
     await postHandler.deleteOneById(postId);
     return true;
-  } catch (error) {
-    throw error;
-  }
-}
-
-
-export async function getPostsByUserIdController(
-  queryParams: QueryParams, currentUser: TokenUser, userId: number):Promise<Post> {
-  try {
-    const payload = {
-      key: userId,
-      field: 'id'
-    };
-    return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams, currentUser);
-
   } catch (error) {
     throw error;
   }

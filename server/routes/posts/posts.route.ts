@@ -34,22 +34,6 @@ const createPost: RouteOptions = {
   }
 };
 
-const getPosts: RouteOptions = {
-  method: 'GET',
-  url: '/posts',
-  schema: getPostsSchema,
-  handler: async(request, reply) => {
-    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
-    // const user = request.user as TokenUser;
-    if (queryParams) {
-      const posts = await controller.getPostsController(queryParams);
-      reply.code(200).send({ data: posts });
-    } else {
-      reply.code(500).send({ message: 'some error' });
-    }
-  }
-};
-
 const getPost: RouteOptions = {
   method: 'GET',
   url: '/post/:postId',
@@ -94,6 +78,22 @@ const getPostBySlug: RouteOptions = {
   }
 };
 
+const getPosts: RouteOptions = {
+  method: 'GET',
+  url: '/posts',
+  schema: getPostsSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    // const user = request.user as TokenUser;
+    if (queryParams) {
+      const posts = await controller.getPostsController(queryParams);
+      reply.code(200).send({ data: posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
+
 const getPostsByTag: RouteOptions = {
   method: 'GET',
   url: '/posts/:tagName',
@@ -112,6 +112,23 @@ const getPostsByTag: RouteOptions = {
       reply.code(200).send({ data: postData });
     } catch (error) {
       throw error;
+    }
+  }
+};
+
+const getPostsByUserId: RouteOptions = {
+  method: 'GET',
+  url: '/posts-by-user/:userId',
+  schema: getPostsByUserIdSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    const params = request.params as { userId: number };
+    const currentUser = request.user as TokenUser;
+    if (queryParams) {
+      const posts = await controller.getPostsByUserIdController(queryParams, currentUser,  params.userId);
+      reply.code(200).send({ data: posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
     }
   }
 };
@@ -151,32 +168,15 @@ const deletePost: RouteOptions = {
   }
 };
 
-const getPostsByUserId: RouteOptions = {
-  method: 'GET',
-  url: '/posts-by-user/:userId',
-  schema: getPostsByUserIdSchema,
-  handler: async(request, reply) => {
-    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
-    const params = request.params as { userId: number };
-    const currentUser = request.user as TokenUser;
-    if (queryParams) {
-      const posts = await controller.getPostsByUserIdController(queryParams, currentUser,  params.userId);
-      reply.code(200).send({ data: posts });
-    } else {
-      reply.code(500).send({ message: 'some error' });
-    }
-  }
-};
-
 function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(createPost);
   server.route(getPost);
-  server.route(updatePost);
-  server.route(deletePost);
-  server.route(getPosts);
   server.route(getPostBySlug);
+  server.route(getPosts);
   server.route(getPostsByTag);
   server.route(getPostsByUserId);
+  server.route(updatePost);
+  server.route(deletePost);
   //getPublishedPostsCountByUserId
   //getPublishedPosts <-
   //changePostStatus <- PATCH

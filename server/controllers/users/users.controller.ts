@@ -47,7 +47,8 @@ export async function createUserController(userData: User): Promise<cookieData> 
     };
 
     await userHandler.insertOne(payload);
-    const user = await userHandler.findOneByField({user_name: payload.user_name}, ['id', 'user_name', 'full_name', 'avatar']);
+    const fields = ['id', 'user_name', 'full_name', 'avatar'];
+    const user = await userHandler.findOneByField({user_name: payload.user_name}, fields);
     // if create success.
     const token = issueToken({user_name: user.user_name, id: user.id});
 
