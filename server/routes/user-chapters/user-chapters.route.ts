@@ -36,15 +36,16 @@ const createUserChapter: RouteOptions = {
 
 const getUserChapter: RouteOptions = {
   method: 'GET',
-  url: '/user-chapter/:user_chapter_id',
+  url: '/user-chapter/:chapter_id',
   schema: getUserChapterSchema,
   handler: async(request, reply) => {
-    const params = request.params as {user_chapter_id: number};
-    const userChapterData =  await controller.getUserChapterController(params.user_chapter_id);
+    const params = request.params as {chapter_id: number};
+    const user = request.user as TokenUser;
+    const userChapterData =  await controller.getUserChapterController(params.chapter_id, user.id);
     if (userChapterData) {
       reply.code(200).send({message: 'User Chapter Found', data: userChapterData});
     }
-    reply.code(400).send({message: 'USer CHapter not Found'});
+    reply.code(400).send({message: 'User Chapter not Found'});
 
   }
 };
@@ -66,14 +67,14 @@ const getUserChapterProgress: RouteOptions = {
 
 const updateUserChapter: RouteOptions = {
   method: 'PUT',
-  url: '/user-chapter/:user_chapter_id',
+  url: '/user-chapter/:chapter_id',
   schema: updateUserChapterSchema,
   handler: async(request, reply) => {
     try {
-      const params = request.params as {user_chapter_id: number};
+      const params = request.params as {chapter_id: number};
       const user = request.user as TokenUser;
       const userChapterData = await controller.updateUserChapterController(
-        request.body as UpdateUserChapter, params.user_chapter_id, user);
+        request.body as UpdateUserChapter, params.chapter_id, user);
       if (userChapterData) {
         reply.code(200).send({message: 'User Chapter updated', data:userChapterData});
       } else {
@@ -87,12 +88,13 @@ const updateUserChapter: RouteOptions = {
 
 const deleteUserChapter: RouteOptions = {
   method: 'DELETE',
-  url: '/user-chapter/:user_chapter_id',
+  url: '/user-chapter/:chapter_id',
   schema: deleteUserChapterSchema,
   handler: async(request, reply) => {
-    const params = request.params as {user_chapter_id: number};
+    const params = request.params as {chapter_id: number};
+    const user = request.user as TokenUser;
 
-    if (await controller.deleteUserChapterController(params.user_chapter_id)) {
+    if (await controller.deleteUserChapterController(params.chapter_id, user.id)) {
       reply.code(200).send({message: 'User Chapter deleted'});
     } else {
       reply.code(500).send({message: 'User Chapter not deleted'});

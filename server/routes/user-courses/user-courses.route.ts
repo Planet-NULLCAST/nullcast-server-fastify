@@ -33,11 +33,12 @@ const enrolUserCourse: RouteOptions = {
 
 const getUserCourse: RouteOptions = {
   method: 'GET',
-  url: '/user-course/:user_course_id',
+  url: '/user-course/:course_id',
   schema: getUserCourseSchema,
   handler: async(request, reply) => {
-    const params = request.params as {user_course_id: number};
-    const userCourseData =  await controller.getUserCourseController(params.user_course_id);
+    const user = request.user as TokenUser;
+    const params = request.params as {course_id: number};
+    const userCourseData =  await controller.getUserCourseController(params.course_id, user.id);
     if (userCourseData) {
       reply.code(200).send({message: 'User Course Found', data: userCourseData});
     }
@@ -48,14 +49,14 @@ const getUserCourse: RouteOptions = {
 
 const updateUserCourse: RouteOptions = {
   method: 'PUT',
-  url: '/user-course/:user_course_id',
+  url: '/user-course/:course_id',
   schema: updateUserCourseSchema,
   handler: async(request, reply) => {
     try {
-      const params = request.params as {user_course_id: number};
       const user = request.user as TokenUser;
+      const params = request.params as {course_id: number};
       const userCourseData = await controller.updateUserCourseController(
-        request.body as UpdateUserCourse, params.user_course_id, user);
+        request.body as UpdateUserCourse, params.course_id, user);
       if (userCourseData) {
         reply.code(200).send({message: 'User Course updated', data:userCourseData});
       } else {
@@ -69,12 +70,12 @@ const updateUserCourse: RouteOptions = {
 
 const deleteUserCourse: RouteOptions = {
   method: 'DELETE',
-  url: '/user-course/:user_course_id',
+  url: '/user-course/:course_id',
   schema: deleteUserCourseSchema,
   handler: async(request, reply) => {
-    const params = request.params as {user_course_id: number};
-
-    if (await controller.deleteUserCourseController(params.user_course_id)) {
+    const user = request.user as TokenUser;
+    const params = request.params as {course_id: number};
+    if (await controller.deleteUserCourseController(params.course_id, user.id)) {
       reply.code(200).send({message: 'User Course deleted'});
     } else {
       reply.code(500).send({message: 'User Course not deleted'});

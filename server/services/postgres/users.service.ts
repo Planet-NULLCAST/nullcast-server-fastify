@@ -43,7 +43,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
 export async function getUsers(queryParams: QueryParams) {
   // Set default values for query params
 
-  const DEFAULT_FIELDS = ['id', 'user_name', 'full_name', 'avatar'];
+  const DEFAULT_FIELDS = ['user_name', 'full_name', 'avatar'];
   const {
     limit_fields,
     search = '',

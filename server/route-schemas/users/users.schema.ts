@@ -182,7 +182,7 @@ export const getUsersSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['id', 'user_name', 'full_name', 'avatar'],
+        default: ['user_name', 'full_name', 'avatar'],
         example: `['id', 'user_name', 'full_name', 'avatar']`
       },
       ...queryStringProps('user')
