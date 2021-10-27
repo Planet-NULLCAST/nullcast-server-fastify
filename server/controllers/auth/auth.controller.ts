@@ -1,7 +1,7 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { USER_TABLE } from '../../constants/tables';
 import { ValidateUser, ValidateResponse } from 'interfaces/user.type';
-import { createHash } from '../../utils/hash-utils';
+import { verifyHash } from '../../utils/hash-utils';
 import { issueToken } from 'utils/jwt.utils';
 
 const userHandler = new DatabaseHandler(USER_TABLE);
@@ -17,9 +17,8 @@ export async function signInUserController(userData: ValidateUser) {
       return;
     }
 
-    const hashData = createHash(userData.password, dbData.salt);
+    if (verifyHash(userData.password, dbData.password)) {
 
-    if (dbData.password === hashData.password) {
       const user = {
         id: dbData.id,
         user_name: dbData.user_name,
