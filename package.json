@@ -37,6 +37,7 @@
     "@tryghost/kg-default-atoms": "^3.0.0",
     "@tryghost/kg-default-cards": "^5.0.5",
     "@tryghost/kg-mobiledoc-html-renderer": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "cheerio": "^1.0.0-rc.10",
     "fastify": "^3.18.0",
     "fastify-auth": "^1.1.0",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/lodash": "^4.14.172",
     "@types/node": "^15.12.5",
