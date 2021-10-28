@@ -26,7 +26,6 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
       id: data.rows[0]?.id as number,
       user_name: data.rows[0]?.user_name as string,
       password: '',
-      salt: data.rows[0]?.salt as string,
       full_name: data.rows[0]?.full_name as string,
       email: data.rows[0]?.email as string,
       created_at: data.rows[0]?.created_at as string,
