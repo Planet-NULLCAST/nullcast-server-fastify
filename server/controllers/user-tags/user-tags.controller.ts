@@ -44,7 +44,7 @@ export async function updateUserTagController(userTagData:UpdateUserTag, tagId:n
       ...userTagData
     };
     if (Object.keys(payload)) {
-      throw new Error("Nothing updated");
+      throw new Error('Nothing updated');
     }
 
     return await userTagHandler.dbHandler(

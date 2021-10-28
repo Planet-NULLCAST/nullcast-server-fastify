@@ -17,7 +17,8 @@ import {
   deleteUserCourse, getUserCourse, updateUserCourse
 } from 'services/postgres/user-course.service';
 import { getEvents } from './events.service';
-import { deleteUserTag, getUserTagsByUserId, updateUserTag 
+import {
+  deleteUserTag, getUserTagsByUserId, updateUserTag
 } from './user-tag.service';
 
 export const serviceActions: { [x in Actions]: any } = {
