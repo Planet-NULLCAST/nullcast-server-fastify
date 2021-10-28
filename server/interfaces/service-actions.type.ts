@@ -2,6 +2,10 @@ export type Actions =
   | 'GET_USER'
   | 'SIGN_IN_USER'
   | 'GET_USERS'
+  
+  | 'GET_USER_TAGS_BY_USER_ID'
+  | 'UPDATE_USER_TAG'
+  | 'DELETE_USER_TAG'
 
   | 'GET_POST'
   | 'GET_POSTS'

@@ -10,3 +10,4 @@ export const CHAPTER_TABLE = 'course_chapters';
 export const USER_COURSE_TABLE = 'user_courses';
 export const USER_CHAPTER_TABLE = 'user_chapters';
 export const EVENT_TABLE = 'events';
+export const USER_TAG_TABLE = 'user_tags';
