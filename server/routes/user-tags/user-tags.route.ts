@@ -6,7 +6,8 @@ import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { UpdateUserTag, UserTag } from 'interfaces/user-tag.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { createUserTagSchema, deleteUserTagSchema, getUserTagsSchema, updateUserTagSchema 
+import {
+  createUserTagSchema, deleteUserTagSchema, getUserTagsSchema, updateUserTagSchema
 } from 'route-schemas/user-tags/user-tags.schema';
 
 

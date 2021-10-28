@@ -40,7 +40,7 @@ export function queryStringProps(routeName: string) {
       type: 'string',
       default: key == 'post' ? '': key == 'events' ? 'published' : 'active',
       description: `Status of the ${key} data`
-    }
+    };
   }
   return queryParams;
 }
