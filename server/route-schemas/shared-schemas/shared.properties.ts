@@ -17,11 +17,6 @@ export function queryStringProps(routeName: string) {
       default: 10,
       description: 'Number of datas to be fetched'
     },
-    status: {
-      type: 'string',
-      default: key == 'post' ? '': key == 'events' ? 'published' : 'active',
-      description: `Status of the ${key} data`
-    },
     order: {
       type: 'string',
       default: 'ASC',
@@ -38,6 +33,13 @@ export function queryStringProps(routeName: string) {
       type: 'array',
       default: key == 'post' ? ['users', 'tags'] : ['entity', 'primary_badge'],
       description: 'The tables which should be included'
+    };
+  }
+  if (key != 'tags') {
+    queryParams.status= {
+      type: 'string',
+      default: key == 'post' ? '': key == 'events' ? 'published' : 'active',
+      description: `Status of the ${key} data`
     };
   }
   return queryParams;
