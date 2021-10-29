@@ -32,6 +32,7 @@ const signIn: RouteOptions = {
       reply.setCookie('token', userData.token,
         { signed: false, domain: '', path: '/', secure: false, httpOnly: true, maxAge: 86400, sameSite: 'none' });
       reply.code(200).send({ message: 'User logged in successfully', user: userData.user });
+      return;
     }
     reply.code(401).send({ message: 'Invalid username or password' });
   }
