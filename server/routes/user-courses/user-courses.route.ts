@@ -17,7 +17,7 @@ const enrolUserCourse: RouteOptions = {
   handler: async(request, reply) => {
     try {
       const user = request.user as TokenUser;
-      const userCourseData = await controller.enrolCourseController(request.body as UserCourse, user);
+      const userCourseData = await controller.enrolUserCourseController(request.body as UserCourse, user);
       if (userCourseData) {
         reply.code(201).send({message: 'User enrolled to course', data: userCourseData});
       } else {
@@ -42,7 +42,7 @@ const getUserCourse: RouteOptions = {
     if (userCourseData) {
       reply.code(200).send({message: 'User Course Found', data: userCourseData});
     }
-    reply.code(400).send({message: 'USer Course not Found'});
+    reply.code(400).send({message: 'User Course not Found'});
 
   }
 };
