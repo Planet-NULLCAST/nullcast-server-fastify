@@ -1,8 +1,8 @@
 import { Client, QueryConfig } from 'pg';
 
-import { 
-  POST_TABLE, POST_TAG_TABLE, 
-  POST_VOTE_TABLE, TAG_TABLE, USER_TABLE 
+import {
+  POST_TABLE, POST_TAG_TABLE,
+  POST_VOTE_TABLE, TAG_TABLE, USER_TABLE
 } from 'constants/tables';
 
 import { QueryParams } from 'interfaces/query-params.type';
@@ -11,8 +11,8 @@ import { PostTag } from 'interfaces/post-tag.type';
 
 export async function getPostsByTagId(payload: {[x: string]: any}, queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'html', 'slug', 'created_by', 'status', 
-  'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'];
+  const DEFAULT_FIELDS = ['id', 'html', 'slug', 'created_by', 'status',
+    'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'];
 
   const {
     limit_fields = DEFAULT_FIELDS,
@@ -31,7 +31,7 @@ export async function getPostsByTagId(payload: {[x: string]: any}, queryParams: 
 
   let SELECT_CLAUSE = `SELECT ${limitFields}`,
     GROUP_BY_CLAUSE = '',
-    JOIN_CLAUSE = `LEFT join ${POST_TABLE} AS posts on posts.id = pt.post_id`
+    JOIN_CLAUSE = `LEFT join ${POST_TABLE} AS posts on posts.id = pt.post_id`;
 
   if (with_table) {
     GROUP_BY_CLAUSE = 'GROUP BY posts.id';
@@ -61,7 +61,7 @@ export async function getPostsByTagId(payload: {[x: string]: any}, queryParams: 
                         COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE} LEFT JOIN ${POST_VOTE_TABLE} AS votes on votes.post_id = posts.id`;
     }
-  }                  
+  }
 
   let WHERE_CLAUSE = 'WHERE pt.tag_id = $1';
 

@@ -39,17 +39,17 @@ export async function getPostsByTagIdController(queryParams:QueryParams, tagId:n
 }
 
 export async function getTagsByPostIdController(queryParams:QueryParams, postId:number):Promise<Tag> {
-    try {
-      const payload = {
-        'postId': postId
-      };
-  
-      return await postTagHandler.dbHandler('GET_TAGS_BY_POST_ID', payload, queryParams);
-  
-    } catch (error) {
-      throw error;
-    }
+  try {
+    const payload = {
+      'postId': postId
+    };
+
+    return await postTagHandler.dbHandler('GET_TAGS_BY_POST_ID', payload, queryParams);
+
+  } catch (error) {
+    throw error;
   }
+}
 
 export async function deletePostTagController(tagId: number, postId: number) : Promise<boolean> {
   try {
