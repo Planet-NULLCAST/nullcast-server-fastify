@@ -10,6 +10,10 @@ export type Actions =
 
   | 'GET_TAGS'
 
+  | 'GET_POSTS_BY_TAG_ID'
+  | 'GET_TAGS_BY_POST_ID'
+  | 'DELETE_POST_TAG'
+
   | 'GET_COURSE'
   | 'ADD_COURSE_CHAPTERS'
 
