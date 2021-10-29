@@ -52,7 +52,7 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
   FROM ${USER_TAG_TABLE} AS ut
   ${WHERE_CLAUSE}
   LIMIT $2
-  OFFSET $3`)
+  OFFSET $3`);
 
   const getUserTagsCountQuery: QueryConfig = {
     text: `SELECT COUNT(t.id)
@@ -68,7 +68,7 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
   const userTagCountData = await postgresClient.query(getUserTagsCountQuery);
 
   if (userTagData.rows && userTagData.rows.length) {
-    return  {data:userTagData.rows, ...userTagCountData.rows[0], limit, page}
+    return  {data:userTagData.rows, ...userTagCountData.rows[0], limit, page};
   }
   throw new Error('Tags not found for the user');
 }
