@@ -5,7 +5,7 @@ import {
   cookieData
 } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { createHash, createRandomBytes } from '../../utils/hash-utils';
+import { createHash } from '../../utils/hash-utils';
 
 import {
   USER_TABLE, ENTITY_TABLE, BADGE_TABLE
@@ -18,9 +18,7 @@ const badgeHandler = new DatabaseHandler(BADGE_TABLE);
 
 export async function createUserController(userData: User): Promise<cookieData> {
   try {
-    // const password = crypto.scryptSync(userData.password as string, process.env.SALT as string,64).toString('hex');
-    const salt = createRandomBytes();
-    const hashData = createHash(userData.password as string, salt);
+    const hashedPassword = createHash(userData.password as string);
 
     // Get entity_id and badge_id
     const ENTITY_NAME = 'nullcast';
@@ -36,8 +34,7 @@ export async function createUserController(userData: User): Promise<cookieData> 
 
     const payload: User = {
       entity_id: entity.id,
-      salt: hashData.salt,
-      password: hashData.password,
+      password: hashedPassword,
       avatar: `/images/dummy${randInt}.png`,
       primary_badge: badge.id,
       slug: userData.user_name.toLowerCase(),

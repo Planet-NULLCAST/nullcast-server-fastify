@@ -9,7 +9,6 @@ export interface User {
   avatar?:string;
   banner_image?: string;
   email: string;
-  salt?: string;
   created_at?: string;
   updated_at?: string;
   bio?: string;
@@ -30,7 +29,6 @@ export interface ValidateUser  {
 export interface ValidateResponse {
     user_name: string,
     password: string,
-    salt: string,
     email: string,
     id: string,
     full_name: string,
