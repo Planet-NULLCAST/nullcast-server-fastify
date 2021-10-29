@@ -46,7 +46,7 @@ Promise<UserCourse> {
   const returningStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
 
   const updateUserCourseQuery: QueryConfig = {
-    name: 'update-user-chapter',
+    name: 'update-user-course',
     text: `UPDATE ${USER_COURSE_TABLE}
           ${updateStatement}
           WHERE course_id = $1 AND user_id = $2
@@ -65,7 +65,7 @@ export async function deleteUserCourse(payload: {[x: string]: any}) {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const deleteUserCourseQuery: QueryConfig = {
-      name: 'delete-user-chapter',
+      name: 'delete-user-course',
       text: `DELETE FROM ${USER_COURSE_TABLE}
               WHERE course_id = $1 AND user_id = $2;`,
       values: [payload.courseId, payload.userId]
