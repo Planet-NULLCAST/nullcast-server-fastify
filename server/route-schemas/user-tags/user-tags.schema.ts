@@ -4,7 +4,7 @@ import { queryStringProps } from 'route-schemas/shared-schemas/shared.properties
 
 export const createUserTagSchema = {
   summary: 'Add Tag for a user',
-  description: 'A POST route to add user-course information',
+  description: 'A POST route to add userTag information',
   tags: ['User_tag'],
   body:  {
     type: 'object',
@@ -31,8 +31,8 @@ export const getUserTagsSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['user_id', 'tag_id', 'created_by', 'created_at'],
-        example: `['id', 'created_at', 'created_by', 'status']`
+        default: ['id', 'name', 'status', 'created_by', 'created_at'],
+        example: `['id', 'name', 'status', 'created_by', 'created_at']`
       },
       ...queryStringProps('user_tags')
     }

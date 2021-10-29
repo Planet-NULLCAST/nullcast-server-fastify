@@ -1,6 +1,6 @@
 import { Client, QueryConfig } from 'pg';
 
-import { USER_TAG_TABLE } from 'constants/tables';
+import { TAG_TABLE, USER_TAG_TABLE } from 'constants/tables';
 
 import { QueryParams } from 'interfaces/query-params.type';
 import { UpdateUserTag, UserTag } from 'interfaces/user-tag.type';
@@ -9,7 +9,7 @@ import { TokenUser } from 'interfaces/user.type';
 
 export async function getUserTagsByUserId(payload: {[x: string]: any}, queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['tag_id', 'user_id', 'created_by', 'created_at'];
+  const DEFAULT_FIELDS = ['id', 'name', 'status', 'created_by', 'created_at'];
 
   const {
     limit_fields = DEFAULT_FIELDS,
@@ -17,40 +17,58 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
     page = 1,
     limit = 10,
     order = 'ASC',
-    sort_field = 'published_at'
+    sort_field = 'created_at'
   } = queryParams;
 
-  let WHERE_CLAUSE = 'WHERE user_tags.user_id = $1';
+  let WHERE_CLAUSE = 'WHERE ut.user_id = $1';
 
   const queryValues = [payload.userId, +limit, (page - 1) * +limit];
 
   if (search) {
     queryValues.push(`%${search}%`);
     WHERE_CLAUSE = `${WHERE_CLAUSE} 
-        AND (user_tags.meta_title LIKE $${queryValues.length} 
-        OR user_tags.meta_description LIKE $${queryValues.length} 
-        OR user_tags.custom_excerpt LIKE $${queryValues.length})`;
+        AND (ut.meta_title LIKE $${queryValues.length} 
+        OR ut.meta_description LIKE $${queryValues.length} 
+        OR ut.custom_excerpt LIKE $${queryValues.length})`;
   }
-  const limitFields = limit_fields.map((item) => `user_tags.${item}`);
+  const limitFields = limit_fields.map((item) => `t.${item}`);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserTagsQuery: QueryConfig = {
-    name: 'get-user-tags',
     text: `SELECT ${limitFields}
-            FROM ${USER_TAG_TABLE}
+            FROM ${USER_TAG_TABLE} AS ut
+            JOIN ${TAG_TABLE} AS t ON ut.tag_id = t.id
             ${WHERE_CLAUSE}
+            GROUP BY t.id, ut.${sort_field}
             ORDER BY 
-            user_tags.${sort_field} ${order}
+            ut.${sort_field} ${order}
+            LIMIT $2
+            OFFSET $3;`,
+    values: queryValues
+  };
+
+  console.log(`SELECT ${limitFields}
+  FROM ${USER_TAG_TABLE} AS ut
+  ${WHERE_CLAUSE}
+  LIMIT $2
+  OFFSET $3`)
+
+  const getUserTagsCountQuery: QueryConfig = {
+    text: `SELECT COUNT(t.id)
+            FROM ${USER_TAG_TABLE} AS ut
+            JOIN ${TAG_TABLE} AS t ON ut.tag_id = t.id
+            ${WHERE_CLAUSE}
             LIMIT $2
             OFFSET $3;`,
     values: queryValues
   };
 
   const userTagData = await postgresClient.query<UserTag>(getUserTagsQuery);
+  const userTagCountData = await postgresClient.query(getUserTagsCountQuery);
 
   if (userTagData.rows && userTagData.rows.length) {
-    return  userTagData.rows;
+    return  {data:userTagData.rows, ...userTagCountData.rows[0], limit, page}
   }
   throw new Error('Tags not found for the user');
 }
