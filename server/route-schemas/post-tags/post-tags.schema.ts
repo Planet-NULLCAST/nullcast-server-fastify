@@ -35,8 +35,8 @@ export const getPostsByTagIdSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['id', 'html', 'slug', 'created_by', 'status', 
-        'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'],
+        default: ['id', 'html', 'slug', 'created_by', 'status',
+          'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'],
         example: `['id', 'created_at', 'created_by', 'status']`
       },
       ...queryStringProps('post')

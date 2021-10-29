@@ -4,9 +4,9 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 
 import { QueryParams } from 'interfaces/query-params.type';
-import { 
-    createPostTagSchema, deletePostTagSchema, 
-    getPostsByTagIdSchema, gettagsByPostIdSchema 
+import {
+  createPostTagSchema, deletePostTagSchema,
+  getPostsByTagIdSchema, gettagsByPostIdSchema
 } from 'route-schemas/post-tags/post-tags.schema';
 import { TokenUser } from 'interfaces/user.type';
 import { PostTag } from 'interfaces/post-tag.type';
@@ -54,24 +54,24 @@ const getPostsByTagId: RouteOptions = {
 };
 
 const getTagsByPostId: RouteOptions = {
-    method: 'GET',
-    url: '/post-tags/:post_id',
-    schema: gettagsByPostIdSchema,
-    handler: async(request, reply) => {
-      try {
-        const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
-        const params = request.params as { post_id: number };
-        const tagData = await controller.getTagsByPostIdController(queryParams, params.post_id);
-  
-        if (!tagData) {
-          reply.code(400).send({message: 'No tags found for this post'});
-        }
-        reply.code(200).send({ data: tagData });
-      } catch (error) {
-        throw error;
+  method: 'GET',
+  url: '/post-tags/:post_id',
+  schema: gettagsByPostIdSchema,
+  handler: async(request, reply) => {
+    try {
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const params = request.params as { post_id: number };
+      const tagData = await controller.getTagsByPostIdController(queryParams, params.post_id);
+
+      if (!tagData) {
+        reply.code(400).send({message: 'No tags found for this post'});
       }
+      reply.code(200).send({ data: tagData });
+    } catch (error) {
+      throw error;
     }
-  };
+  }
+};
 
 const deletePostTag: RouteOptions = {
   method: 'DELETE',
