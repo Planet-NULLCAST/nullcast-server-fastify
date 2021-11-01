@@ -33,7 +33,7 @@ export const getUserCourseSchema = {
   params: {
     type: 'object',
     properties: {
-      user_course_id: { type: 'number', description: 'Id of the userCourse' }
+      course_id: { type: 'number', description: 'Id of the course' }
     }
   },
   response: {
@@ -79,7 +79,7 @@ export const updateUserCourseSchema = {
   params: {
     type: 'object',
     properties: {
-      user_course_id: { type: 'number', description: 'Id of the userCourse' }
+      course_id: { type: 'number', description: 'Id of the course' }
     }
   },
   body:  {
@@ -103,10 +103,6 @@ export const updateUserCourseSchema = {
         data: {
           type: 'object',
           properties: {
-            id: {
-              type: 'number',
-              description: 'Id of the course'
-            },
             updated_by: {
               type: 'number',
               description: 'UserId of whomever that adds the course'
@@ -136,7 +132,7 @@ export const deleteUserCourseSchema = {
   params: {
     type: 'object',
     properties: {
-      user_course_id: { type: 'number', description: 'Id of userCourse' }
+      course_id: { type: 'number', description: 'Id of course' }
     }
   },
   response: {

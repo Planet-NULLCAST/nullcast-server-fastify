@@ -32,7 +32,8 @@ export async function insertOne(
 
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) 
-                  VALUES (${valueRefs}) ${returnStatement};`;
+                  VALUES (${valueRefs}) 
+                  ${returnStatement};`;
 
     const insertOneQuery: QueryConfig = {
       text,

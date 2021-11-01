@@ -6,7 +6,7 @@ import { UpdateUserCourse, UserCourse } from 'interfaces/user-course.type';
 
 const userCourseHandler = new DatabaseHandler(USER_COURSE_TABLE);
 
-export async function enrolCourseController(userCourseData: UserCourse, user:TokenUser): Promise<UserCourse> {
+export async function enrolUserCourseController(userCourseData: UserCourse, user:TokenUser): Promise<UserCourse> {
   const payload: UserCourse = {
     ...userCourseData,
     user_id: user.id as number,

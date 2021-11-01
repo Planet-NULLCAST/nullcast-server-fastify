@@ -25,7 +25,7 @@ export const getUserChapterSchema = {
   params: {
     type: 'object',
     properties: {
-      user_chapter_id: { type: 'number', description: 'Id of the userChapter' }
+      chapter_id: { type: 'number', description: 'Id of the chapter' }
     }
   },
   response: {
@@ -111,7 +111,7 @@ export const updateUserChapterSchema = {
   params: {
     type: 'object',
     properties: {
-      user_chapter_id: { type: 'number', description: 'Id of the userChapter' }
+      chapter_id: { type: 'number', description: 'Id of the chapter' }
     }
   },
   body:  {
@@ -119,7 +119,7 @@ export const updateUserChapterSchema = {
     properties: {
       chapter_id: {
         type: 'number',
-        description: 'Id of the userChapter'
+        description: 'Id of the chapter'
       }
     }
   },
@@ -134,10 +134,6 @@ export const updateUserChapterSchema = {
         data: {
           type: 'object',
           properties: {
-            id: {
-              type: 'number',
-              description: 'Id of the course'
-            },
             updated_by: {
               type: 'number',
               description: 'UserId of whomever that adds the course'
@@ -162,7 +158,7 @@ export const deleteUserChapterSchema = {
   params: {
     type: 'object',
     properties: {
-      user_chapter_id: { type: 'number', description: 'Id of userChapter' }
+      chapter_id: { type: 'number', description: 'Id of chapter' }
     }
   },
   response: {
