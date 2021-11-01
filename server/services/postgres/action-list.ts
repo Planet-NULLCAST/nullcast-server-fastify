@@ -21,11 +21,18 @@ import { getEvents } from './events.service';
 import {
   deletePostTag, getPostsByTagId, getTagsByPostId
 } from './post-tag.service';
+import {
+  deleteUserTag, getUserTagsByUserId, updateUserTag
+} from './user-tag.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
   SIGN_IN_USER: signInUser,
   GET_USERS: getUsers,
+
+  GET_USER_TAGS_BY_USER_ID: getUserTagsByUserId,
+  UPDATE_USER_TAG: updateUserTag,
+  DELETE_USER_TAG: deleteUserTag,
 
   GET_POST: getSinglePost,
   GET_POSTS: getPosts,
