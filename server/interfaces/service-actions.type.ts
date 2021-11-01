@@ -32,8 +32,8 @@ export type Actions =
   | 'UPDATE_USER_CHAPTER'
   | 'DELETE_USER_CHAPTER'
 
-  |'GET_EVENTS_BY_USER_ID'
-  |'GET_EVENTS';
+  |'GET_EVENTS'
+  |'GET_EVENTS_BY_USER_ID';
 
 export type CommonActions =
   | 'INSERT_ONE'
