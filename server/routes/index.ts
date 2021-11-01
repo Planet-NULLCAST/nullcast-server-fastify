@@ -12,6 +12,7 @@ import initChaptersRoutes from './chapters/chapters.route';
 import initUserCourses from './user-courses/user-courses.route';
 import initUserChapters from './user-chapters/user-chapters.route';
 import initEvents from './events/events.route';
+import initPostTags from './post-tags/post-tags.route';
 import initUserTags from './user-tags/user-tags.route';
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
@@ -27,6 +28,7 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initUserChapters);
   server.register(mailerPath);
   server.register(initEvents);
+  server.register(initPostTags);
   server.register(initUserTags);
 
   done();
