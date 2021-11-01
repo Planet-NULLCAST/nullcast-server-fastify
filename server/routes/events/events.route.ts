@@ -6,7 +6,7 @@ import * as controller from '../../controllers';
 import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createEventSchema, deleteEventSchema, getEventsByUserIdSchema, getEventSchema, updateEventSchema
+  createEventSchema, deleteEventSchema, getEventsByUserIdSchema, getEventSchema, getEventsSchema, updateEventSchema
 }
   from 'route-schemas/events/events.schema';
 import { QueryParams } from 'interfaces/query-params.type';
@@ -57,7 +57,7 @@ const getEvent: RouteOptions = {
 const getEvents: RouteOptions = {
   method: 'GET',
   url: '/events',
-  schema: getEventsByUserIdSchema,
+  schema: getEventsSchema,
   handler: async(request, reply) => {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
