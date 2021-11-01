@@ -24,7 +24,7 @@ export function queryStringProps(routeName: string) {
     },
     sort_field: {
       type: 'string',
-      default: key === 'post' || key === 'events' ? 'published_at' : 'created_at',
+      default: key === 'post' ? 'published_at' : 'created_at',
       description: 'The field name according to which data would be arranged'
     }
   };
