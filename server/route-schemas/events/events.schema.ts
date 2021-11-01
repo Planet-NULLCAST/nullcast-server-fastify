@@ -33,9 +33,31 @@ export const getEventSchema = {
   }
 };
 
-export const getEventsByUserIdSchema = {
+export const getEventsSchema = {
   summary: 'Get Events',
-  description: 'To get Event information by id',
+  description: 'To get All published Event information',
+  tags: ['Event'],
+  querystring: {
+    type: 'object',
+    properties: {
+      limit_fields: {
+        type: 'array',
+        description: 'The fields that are needed to be returned',
+        default: ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
+          'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
+        example: `['id', 'created_at', 'created_by', 'status']`
+      },
+      ...queryStringProps('events')
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getEventsByUserIdSchema = {
+  summary: 'Get Events By UserId',
+  description: 'To get published Events information by userId',
   tags: ['Event'],
   querystring: {
     type: 'object',

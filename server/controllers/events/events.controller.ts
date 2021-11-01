@@ -41,11 +41,21 @@ export async function getEventController(eventId:number):Promise<Event> {
   }
 }
 
+export async function getEventsController(queryParams:QueryParams):Promise<Event> {
+  try {
+
+    return await eventHandler.dbHandler('GET_EVENTS', queryParams);
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getEventsByUserIdController(queryParams:QueryParams, userId:number):Promise<Event> {
   try {
     const payload: {userId: number} = {userId};
 
-    return await eventHandler.dbHandler('GET_EVENTS', payload, queryParams);
+    return await eventHandler.dbHandler('GET_EVENTS_BY_USER_ID', payload, queryParams);
 
   } catch (error) {
     throw error;
