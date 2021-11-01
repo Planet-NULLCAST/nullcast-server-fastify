@@ -1,4 +1,8 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import {
+  FastifyInstance,
+  FastifyRequest,
+  FastifyReply
+} from 'fastify';
 import { NON_AUTH_ROUTES } from 'constants/non-auth-routes';
 import { verifyToken } from 'utils/jwt.utils';
 
@@ -71,7 +75,7 @@ async function verifyRoute(request: FastifyRequest) {
 //   throw new Error('Auth failed');
 // }
 
-async function jwtAuth(request: FastifyRequest) {
+async function jwtAuth(request: FastifyRequest, reply: FastifyReply) {
   if (request.cookies && request.cookies.token) {
     const token = request.cookies.token as string;
 
@@ -84,6 +88,7 @@ async function jwtAuth(request: FastifyRequest) {
       return;
     }
   }
+  reply.setCookie('token', '', { domain: '', maxAge: 0, httpOnly: true, secure: true, sameSite: 'none', path: '/', signed: false });
 
   throw new Error('Auth Failed');
 }
