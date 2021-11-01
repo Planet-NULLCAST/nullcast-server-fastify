@@ -1,4 +1,5 @@
 import { Actions } from 'interfaces/service-actions.type';
+
 import { signInUser } from './auth.service';
 import { getUser, getUsers } from './users.service';
 import {
@@ -18,6 +19,9 @@ import {
 } from 'services/postgres/user-course.service';
 import { getEvents } from './events.service';
 import {
+  deletePostTag, getPostsByTagId, getTagsByPostId
+} from './post-tag.service';
+import {
   deleteUserTag, getUserTagsByUserId, updateUserTag
 } from './user-tag.service';
 
@@ -36,6 +40,10 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_POSTS_BY_USER_ID: getPostsByUserId,
 
   GET_TAGS: getTags,
+
+  GET_POSTS_BY_TAG_ID: getPostsByTagId,
+  GET_TAGS_BY_POST_ID: getTagsByPostId,
+  DELETE_POST_TAG: deletePostTag,
 
   GET_COURSE: getCourse,
   ADD_COURSE_CHAPTERS: addCoursesWithChapters,
