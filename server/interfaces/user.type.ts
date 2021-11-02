@@ -64,3 +64,13 @@ export interface cookieData {
     token: string;
     user: any
 }
+
+export interface ValidateResetPassword {
+  token: string;
+  password: string;
+}
+
+export interface ResetPasswordPayload {
+  hashData: string;
+  email: { key: string, value: string };
+}

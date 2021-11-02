@@ -1,8 +1,8 @@
 import * as controller from '../../controllers/index';
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
-import { ValidateUser } from 'interfaces/user.type';
-import { logoutSchema, signInSchema } from '../../route-schemas/auth/auth.schema';
+import { ValidateUser, ValidateResetPassword } from 'interfaces/user.type';
+import { logoutSchema, signInSchema, resetPasswordSchema } from '../../route-schemas/auth/auth.schema';
 
 const getNewToken: RouteOptions = {
   method: 'GET',
@@ -48,10 +48,29 @@ const logOut: RouteOptions = {
   }
 };
 
+const resetPassword: RouteOptions = {
+  method: 'POST',
+  url: '/reset-password',
+  schema: resetPasswordSchema,
+  handler: async(request, reply) => {
+    // within controller
+    // token password will be recieved body
+    // from token extract email getTokenData if failed return 400
+    // hash password- first generate salt(hashUtility createRandomBytes), use createHash returns object
+    // give hashed password and salt to service
+    const userData = await controller.resetPasswordController(request.body as ValidateResetPassword);
+    if (userData) {
+      reply.code(200).send({ message: 'Password reset successfully' });
+    }
+    reply.code(400).send({ message: 'Reset Password failed' });
+  }
+};
+
 function initTokensRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.route(getNewToken);
   server.route(signIn);
   server.route(logOut);
+  server.route(resetPassword);
 
   done();
 }

@@ -78,3 +78,22 @@ export const logoutSchema = {
     }
   }
 };
+
+export const resetPasswordSchema = {
+  summary: 'Reset Password',
+  description: 'A POST route to reset password',
+  tags: ['User'],
+  body: {
+    type: 'object',
+    required: ['token', 'password'],
+    properties: {
+      token: {
+        type: 'string'
+      },
+      password: {
+        type: 'string'
+      }
+    }
+  }
+};
+
