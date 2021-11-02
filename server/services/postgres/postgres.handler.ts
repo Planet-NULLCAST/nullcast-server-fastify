@@ -124,6 +124,28 @@ export class DatabaseHandler {
   }
 
   /**
+   * A function to update records by one field
+   *
+   * @param field {{ key: string, value: string  }}
+   * @param payload {PayLoadType}
+   * @returns {Promise}
+   */
+  public async updateBySingleField<PayLoadType>(
+    payload: PayLoadType,
+    field: { key: string, value: string  }
+  ): Promise<QueryResult> {
+    try {
+      return (await commonActions.UPDATE_BY_SINGLE_FIELD(
+        this.tableName,
+        payload,
+        field
+      )) as QueryResult;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * A function to find one record by id
    *
    * @param id {Number}
