@@ -6,7 +6,7 @@ import * as controller from '../../controllers/index';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
   createPostTagSchema, deletePostTagSchema,
-  getPostsByTagIdSchema, gettagsByPostIdSchema
+  getPostsByTagIdSchema, getTagsByPostIdSchema
 } from 'route-schemas/post-tags/post-tags.schema';
 import { TokenUser } from 'interfaces/user.type';
 import { PostTag } from 'interfaces/post-tag.type';
@@ -56,7 +56,7 @@ const getPostsByTagId: RouteOptions = {
 const getTagsByPostId: RouteOptions = {
   method: 'GET',
   url: '/post-tags/:post_id',
-  schema: gettagsByPostIdSchema,
+  schema: getTagsByPostIdSchema,
   handler: async(request, reply) => {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
