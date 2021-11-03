@@ -1,6 +1,8 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { USER_TABLE } from '../../constants/tables';
-import { ValidateUser, ValidateResponse, ValidateResetPassword, ResetPasswordPayload } from 'interfaces/user.type';
+import {
+  ValidateUser, ValidateResponse, ValidateResetPassword, ResetPasswordPayload
+} from 'interfaces/user.type';
 import { verifyHash } from '../../utils/hash-utils';
 import { issueToken, getTokenData } from 'utils/jwt.utils';
 import { createHash } from 'utils/hash-utils';
