@@ -109,14 +109,14 @@ export async function updatePostController(postData:Post, userId:number, postId:
 
     if (isAdmin) {
       if (postData.status && !(adminStatus.concat(status).includes(postData.status))) {
-        throw { statusCode: 404, message: "Status of the post is not valid" }
+        throw { statusCode: 404, message: 'Status of the post is not valid' };
       }
     } else {
       if (postData.status && !(status.includes(postData.status))) {
         if (adminStatus.includes(postData.status)) {
-          throw { statusCode: 404, message: "You should have admin access" }
+          throw { statusCode: 404, message: 'You should have admin access' };
         }
-        throw { statusCode: 404, message: "Status of the post is not valid" }
+        throw { statusCode: 404, message: 'Status of the post is not valid' };
       }
     }
 
