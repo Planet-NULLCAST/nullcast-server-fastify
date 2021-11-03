@@ -53,7 +53,7 @@ export const getPostsByTagIdSchema = {
   }
 };
 
-export const gettagsByPostIdSchema = {
+export const getTagsByPostIdSchema = {
   summary: 'Get Tags by postId',
   description: 'To get postTag information',
   tags: ['Post_tag'],
