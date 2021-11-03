@@ -6,6 +6,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
+import { checkAdminController } from 'controllers';
 
 const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
 
@@ -102,15 +103,34 @@ export async function updatePostController(postData:Post, userId:number, postId:
     if (!postId) {
       return false;
     }
+    const isAdmin = await checkAdminController(userId);
+    const status = ['drafted', 'pending'];
+    const adminStatus = ['published', 'rejected'];
 
-    const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
+    if (isAdmin) {
+      if (postData.status && !(adminStatus.concat(status).includes(postData.status))) {
+        throw { statusCode: 404, message: "Status of the post is not valid" }
+      }
+    } else {
+      if (postData.status && !(status.includes(postData.status))) {
+        if (adminStatus.includes(postData.status)) {
+          throw { statusCode: 404, message: "You should have admin access" }
+        }
+        throw { statusCode: 404, message: "Status of the post is not valid" }
+      }
+    }
+
     const payload : Post = {
       ...postData,
-      html,
-      mobiledoc: postData.mobiledoc as mobiledoc,
       updated_at: new Date().toISOString(),
       updated_by: userId
     };
+
+    if (postData.mobiledoc) {
+      const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
+      payload.html = html;
+      payload.mobiledoc = postData.mobiledoc as mobiledoc;
+    }
 
     const fields = ['id', 'html', 'created_at', 'created_by', 'mobiledoc',
       'status', 'published_at', 'updated_at', 'meta_title', 'title'];
