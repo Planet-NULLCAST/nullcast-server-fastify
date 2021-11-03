@@ -1,6 +1,7 @@
 import {FastifyInstance} from 'fastify';
 
 import oembedRoutes from './embed/embed.route';
+import initAdminRoutes from './admin/admin.route';
 import initUsersRoutes from './users/users.route';
 import docPath from './doc.route';
 import mailerPath from './mailer.route';
@@ -17,6 +18,7 @@ import initUserTags from './user-tags/user-tags.route';
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(oembedRoutes);
+  server.register(initAdminRoutes);
   server.register(initUsersRoutes);
   server.register(initTagsRoutes);
   server.register(docPath);

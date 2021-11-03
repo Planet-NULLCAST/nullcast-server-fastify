@@ -24,11 +24,14 @@ import {
 import {
   deleteUserTag, getUserTagsByUserId, updateUserTag
 } from './user-tag.service';
+import { checkAdmin } from './admin.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
   SIGN_IN_USER: signInUser,
   GET_USERS: getUsers,
+
+  CHECK_ADMIN: checkAdmin,
 
   GET_USER_TAGS_BY_USER_ID: getUserTagsByUserId,
   UPDATE_USER_TAG: updateUserTag,
