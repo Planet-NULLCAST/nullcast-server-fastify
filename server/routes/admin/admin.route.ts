@@ -6,8 +6,7 @@ import * as controller from '../../controllers';
 import { Post } from 'interfaces/post.type';
 import { TokenUser } from 'interfaces/user.type';
 
-import { adminReviewPostSchema, checkAdminSchema 
-} from 'route-schemas/admin/admin.schema';
+import { adminReviewPostSchema, checkAdminSchema} from 'route-schemas/admin/admin.schema';
 
 
 const checkAdmin: RouteOptions = {
