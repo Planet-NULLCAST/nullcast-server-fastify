@@ -1,8 +1,8 @@
-import { Client, QueryConfig } from "pg";
+import { Client, QueryConfig } from 'pg';
 
-import { SUBSCRIBER_TABLE } from "constants/tables";
+import { SUBSCRIBER_TABLE } from 'constants/tables';
 
-import { QueryParams } from "interfaces/query-params.type";
+import { QueryParams } from 'interfaces/query-params.type';
 
 
 export async function getSubscribers(queryParams: QueryParams) {
@@ -15,7 +15,7 @@ export async function getSubscribers(queryParams: QueryParams) {
     page = 1,
     limit = 10,
     order = 'ASC',
-    sort_field = 'created_at',
+    sort_field = 'created_at'
   } = queryParams;
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
@@ -36,15 +36,15 @@ export async function getSubscribers(queryParams: QueryParams) {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getSubscribersQuery: QueryConfig = {
-      text: `SELECT ${limitFields}
+    text: `SELECT ${limitFields}
               FROM ${SUBSCRIBER_TABLE} AS sub
               ${WHERE_CLAUSE}
               ORDER BY 
               sub.${sort_field} ${order}
               LIMIT $1
               OFFSET $2;`,
-      values: queryValues
-    };
+    values: queryValues
+  };
 
   const getSubscribersCountQuery: QueryConfig = {
     text: `SELECT COUNT(sub.id)

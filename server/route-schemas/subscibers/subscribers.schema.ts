@@ -1,5 +1,5 @@
-import { BAD_REQUEST } from "route-schemas/response";
-import { queryStringProps } from "route-schemas/shared-schemas/shared.properties";
+import { BAD_REQUEST } from 'route-schemas/response';
+import { queryStringProps } from 'route-schemas/shared-schemas/shared.properties';
 
 export const addSubscriberSchema = {
   summary: 'Add user Subscribtion',
@@ -47,7 +47,7 @@ export const addSubscriberSchema = {
     },
     400: BAD_REQUEST
   }
-}
+};
 
 export const getSubscribersSchema = {
   summary: 'Get subscribers',

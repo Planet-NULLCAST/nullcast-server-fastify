@@ -1,13 +1,14 @@
-import { RouteOptions } from "fastify";
+import { RouteOptions } from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 
 import * as controller from '../../controllers/index';
 
-import { QueryParams } from "interfaces/query-params.type";
-import { Subscriber } from "interfaces/subscriber";
+import { QueryParams } from 'interfaces/query-params.type';
+import { Subscriber } from 'interfaces/subscriber';
 
-import { addSubscriberSchema, deleteSubscriberSchema, getSubscribersSchema 
-} from "route-schemas/subscibers/subscribers.schema";
+import {
+  addSubscriberSchema, deleteSubscriberSchema, getSubscribersSchema
+} from 'route-schemas/subscibers/subscribers.schema';
 
 
 const addSubscriber: RouteOptions = {
@@ -18,9 +19,9 @@ const addSubscriber: RouteOptions = {
     try {
       const data = await controller.addSubscriberController(request.body as Subscriber);
       if (data) {
-        reply.code(201).send({message: 'User is now subscribed', data: data})
-      } else{
-        reply.code(500).send({message: 'User has not been subscribed'})
+        reply.code(201).send({message: 'User is now subscribed', data});
+      } else {
+        reply.code(500).send({message: 'User has not been subscribed'});
       }
 
     } catch (error: any) {
@@ -32,7 +33,7 @@ const addSubscriber: RouteOptions = {
     }
 
   }
-}
+};
 
 const getSubscribers: RouteOptions = {
   method: 'GET',
@@ -43,18 +44,18 @@ const getSubscribers: RouteOptions = {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
       if (queryParams) {
         const data = await controller.getSubscribersController(queryParams);
-        if(!data) {
-          reply.code(404).send({message: "No data found"})
+        if (!data) {
+          reply.code(404).send({message: 'No data found'});
         }
-        reply.code(200).send({ data: data });
+        reply.code(200).send({ data });
       } else {
         reply.code(404).send({ message: 'Missing query constraints' });
       }
-    } catch(error) {
+    } catch (error) {
       throw error;
     }
   }
-}
+};
 
 const deleteSubscriber: RouteOptions = {
   method: 'DELETE',
@@ -69,7 +70,7 @@ const deleteSubscriber: RouteOptions = {
       reply.code(500).send({message: 'User not unsubscibed'});
     }
   }
-}
+};
 
 function initSubscribers(server:FastifyInstance, _:any, done: () => void) {
   server.route(addSubscriber);
