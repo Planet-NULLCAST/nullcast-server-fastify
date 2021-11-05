@@ -11,4 +11,4 @@ export * from './user-tags/user-tags.controller';
 export * from './user-chapters/user-chapters.controller';
 export * from './events/events.controller';
 export * from './post-tags/post-tags.controller';
-export * from './subscribers/subscribers.controller'
+export * from './subscribers/subscribers.controller';

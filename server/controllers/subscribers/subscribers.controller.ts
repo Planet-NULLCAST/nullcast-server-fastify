@@ -1,19 +1,19 @@
-import { SUBSCRIBER_TABLE } from "constants/tables";
+import { SUBSCRIBER_TABLE } from 'constants/tables';
 
-import { QueryParams } from "interfaces/query-params.type";
-import { Subscriber } from "interfaces/subscriber";
+import { QueryParams } from 'interfaces/query-params.type';
+import { Subscriber } from 'interfaces/subscriber';
 
-import { DatabaseHandler } from "services/postgres/postgres.handler"
+import { DatabaseHandler } from 'services/postgres/postgres.handler';
 
 
-const subscriberHandler = new DatabaseHandler(SUBSCRIBER_TABLE)
+const subscriberHandler = new DatabaseHandler(SUBSCRIBER_TABLE);
 
 export async function addSubscriberController(subscriptionData: Subscriber): Promise<Subscriber> {
   const payload : Subscriber = {
     email: subscriptionData.email as string
-  }
-  const fields = ['id', 'email', 'created_at', 'last_notified']
-  const data = await subscriberHandler.insertOne(payload, fields)
+  };
+  const fields = ['id', 'email', 'created_at', 'last_notified'];
+  const data = await subscriberHandler.insertOne(payload, fields);
   return data.rows[0] as Subscriber;
 }
 
