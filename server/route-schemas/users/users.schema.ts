@@ -151,7 +151,6 @@ export const deleteUserSchema = {
   tags: ['User'],
   params: {
     type: 'object',
-    required: ['id'],
     properties: {
       userId: { type: 'number', description: 'UserId of user' }
     }
@@ -165,15 +164,7 @@ export const deleteUserSchema = {
         }
       }
     },
-    400: {
-      description: 'Bad request',
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string'
-        }
-      }
-    }
+    400: BAD_REQUEST
   }
 };
 

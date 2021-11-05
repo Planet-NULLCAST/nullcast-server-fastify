@@ -25,6 +25,7 @@ import {
   deleteUserTag, getUserTagsByUserId, updateUserTag
 } from './user-tag.service';
 import { checkAdmin } from './admin.service';
+import { getSubscribers } from './subscribers.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
@@ -63,7 +64,9 @@ export const serviceActions: { [x in Actions]: any } = {
   DELETE_USER_CHAPTER: deleteUserChapter,
 
   GET_EVENTS: getEvents,
-  GET_EVENTS_BY_USER_ID: getEventsByUserId
+  GET_EVENTS_BY_USER_ID: getEventsByUserId,
+
+  GET_SUBSCRIBERS: getSubscribers
 };
 
 export const commonActions = {
