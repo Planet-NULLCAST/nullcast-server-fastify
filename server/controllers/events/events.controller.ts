@@ -18,8 +18,8 @@ export async function createEventController(eventData:Event, userId:number): Pro
       user_id: userId
     };
 
-    const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+    const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+      'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     const data = await eventHandler.insertOne(payload, fields);
     return data.rows[0] as Event;
@@ -31,8 +31,8 @@ export async function createEventController(eventData:Event, userId:number): Pro
 
 export async function getEventController(eventId:number):Promise<Event> {
   try {
-    const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+    const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+      'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     return await eventHandler.findOneById(eventId, fields);
 
