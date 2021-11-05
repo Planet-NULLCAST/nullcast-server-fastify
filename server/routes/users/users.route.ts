@@ -26,8 +26,12 @@ const createUser: RouteOptions = {
         reply.code(500).send({message:'Something Error happend'});
       }
 
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      if (error.detail.includes('email')) {
+        throw ({ statusCode: 404, message:'Email already exists' });
+      } else if (error.detail.includes('user_name')) {
+        throw ({ statusCode: 404, message:'Username already exists' });
+      }
     }
 
   }

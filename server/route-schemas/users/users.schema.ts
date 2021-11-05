@@ -81,7 +81,12 @@ export const getUserSchema = {
         },
         data: {
           type: 'object',
-          properties: userProps
+          properties: {
+            ...userProps,
+            roles: {
+              type: 'array'
+            }
+          }
         }
       }
     },

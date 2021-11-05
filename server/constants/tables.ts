@@ -1,4 +1,6 @@
 export const USER_TABLE = 'users';
+export const USER_ROLE_TABLE = 'user_roles';
+export const ROLE_TABLE = 'roles';
 export const ENTITY_TABLE = 'entity';
 export const BADGE_TABLE = 'badges';
 export const POST_TABLE = 'posts';
