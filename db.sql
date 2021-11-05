@@ -238,6 +238,12 @@ CREATE TABLE IF NOT EXISTS events (
     slug VARCHAR(255),
     viewers jsonb
 );
+CREATE TABLE IF NOT EXISTS subscribers(
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    email VARCHAR(64) NOT NULL UNIQUE,
+    last_notified TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
 
 -- Add initial data
 INSERT INTO entity (name, description)
