@@ -3,6 +3,8 @@ export type Actions =
   | 'SIGN_IN_USER'
   | 'GET_USERS'
 
+  | 'CHECK_ADMIN'
+
   | 'GET_USER_TAGS_BY_USER_ID'
   | 'UPDATE_USER_TAG'
   | 'DELETE_USER_TAG'
