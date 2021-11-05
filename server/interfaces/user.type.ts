@@ -16,6 +16,7 @@ export interface User {
   slug: string;
   primary_badge: number;
   cover_image?: string;
+  roles?: Record<string, unknown>;
 }
 
 export type CreateUserQuery = User;
