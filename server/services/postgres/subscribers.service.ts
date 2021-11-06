@@ -23,7 +23,7 @@ export async function getSubscribers(queryParams: QueryParams) {
   limitFields = limitFields.map((item) => `sub.${item}`);
 
   let WHERE_CLAUSE = '';
-  const queryValues: any = [+limit, (page - 1) * +limit];
+  const queryValues: any = [];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -33,6 +33,9 @@ export async function getSubscribers(queryParams: QueryParams) {
                     OR sub.custom_excerpt LIKE $${queryValues.length}`;
   }
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getSubscribersQuery: QueryConfig = {
@@ -41,18 +44,16 @@ export async function getSubscribers(queryParams: QueryParams) {
               ${WHERE_CLAUSE}
               ORDER BY 
               sub.${sort_field} ${order}
-              LIMIT $1
-              OFFSET $2;`,
+              LIMIT $${queryValues.length-1}
+              OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
   const getSubscribersCountQuery: QueryConfig = {
     text: `SELECT COUNT(sub.id)
             FROM ${SUBSCRIBER_TABLE} AS sub
-            ${WHERE_CLAUSE}
-            LIMIT $1
-            OFFSET $2;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0,-2)
   };
 
   const subscriptionData = await postgresClient.query(getSubscribersQuery);

@@ -16,7 +16,7 @@ export async function getTags(queryParams: QueryParams) {
     sort_field = 'name'
   } = queryParams;
 
-  const queryValues = [+limit, (page - 1) * +limit, `${sort_field} ${order}`];
+  const queryValues: any[] = [];
   const limitFields: any[] = typeof limit_fields === 'string' ? [limit_fields] : limit_fields;
 
   const SELECT_CLAUSE = `SELECT ${limitFields.join(',')}`;
@@ -26,10 +26,13 @@ export async function getTags(queryParams: QueryParams) {
     queryValues.push(`%${search}%`);
     WHERE_CLAUSE = `WHERE name LIKE $${queryValues.length}`;
   }
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+  queryValues.push(`${sort_field} ${order}`);
 
-  const EXTRA_CLAUSES = `ORDER BY $3
-  LIMIT $1
-  OFFSET $2`;
+  const EXTRA_CLAUSES = `ORDER BY $${queryValues.length}
+  LIMIT $${queryValues.length-2}
+  OFFSET $${queryValues.length-1}`;
 
   const getTagsQuery: QueryConfig = {
     text: `${SELECT_CLAUSE} 
@@ -39,7 +42,14 @@ export async function getTags(queryParams: QueryParams) {
     values: queryValues
   };
 
-  const data = await postgresClient.query<Tag>(getTagsQuery);
+  const getTagsCountQuery: QueryConfig = {
+    text: `SELECT COUNT(tags.id)
+          FROM ${TAG_TABLE} AS tags`,
+    values: queryValues.slice(0,-3)
+  };
 
-  return data.rows;
+  const data = await postgresClient.query<Tag>(getTagsQuery);
+  const countData = await postgresClient.query(getTagsCountQuery);
+
+  return {data: data.rows, ...countData.rows[0], limit, page};
 }

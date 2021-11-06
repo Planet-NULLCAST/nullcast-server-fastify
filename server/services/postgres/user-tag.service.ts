@@ -22,7 +22,7 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
 
   let WHERE_CLAUSE = 'WHERE ut.user_id = $1';
 
-  const queryValues = [payload.userId, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [payload.userId];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -32,6 +32,9 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
         OR ut.custom_excerpt LIKE $${queryValues.length})`;
   }
   const limitFields = limit_fields.map((item) => `t.${item}`);
+
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -43,25 +46,17 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
             GROUP BY t.id, ut.${sort_field}
             ORDER BY 
             ut.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
-
-  console.log(`SELECT ${limitFields}
-  FROM ${USER_TAG_TABLE} AS ut
-  ${WHERE_CLAUSE}
-  LIMIT $2
-  OFFSET $3`);
 
   const getUserTagsCountQuery: QueryConfig = {
     text: `SELECT COUNT(t.id)
             FROM ${USER_TAG_TABLE} AS ut
             JOIN ${TAG_TABLE} AS t ON ut.tag_id = t.id
-            ${WHERE_CLAUSE}
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0,-2)
   };
 
   const userTagData = await postgresClient.query<UserTag>(getUserTagsQuery);
@@ -97,7 +92,6 @@ Promise<UserTag> {
   const returningStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
 
   const updateUserTagQuery: QueryConfig = {
-    name: 'update-user-tag',
     text: `UPDATE ${USER_TAG_TABLE}
           ${updateStatement}
           WHERE tag_id = $1 AND user_id = $2
@@ -116,7 +110,6 @@ export async function deleteUserTag(payload: {[x: string]: any}) {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const deleteUserTagQuery: QueryConfig = {
-      name: 'delete-user-tag',
       text: `DELETE FROM ${USER_TAG_TABLE}
               WHERE tag_id = $1 AND user_id = $2;`,
       values: [payload.tagId, payload.userId]

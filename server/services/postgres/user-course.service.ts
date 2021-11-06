@@ -9,17 +9,17 @@ Promise<UserCourse> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserCourseQuery: QueryConfig = {
-    name: 'get-user-course',
     text: `SELECT user_id, course_id, status, created_by, created_at
             FROM ${USER_COURSE_TABLE}
             WHERE course_id = $1 AND user_id = $2;`,
     values: [payload.courseId, payload.userId]
   };
+  
   const data = await postgresClient.query(getUserCourseQuery);
   if (data.rows && data.rows.length) {
     return data.rows[0] as UserCourse;
   }
-  throw new Error('Something error occurred');
+  throw {statusCode: 404, message: "User not enrolled to this course"};
 }
 
 export async function updateUserCourse(
@@ -46,7 +46,6 @@ Promise<UserCourse> {
   const returningStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
 
   const updateUserCourseQuery: QueryConfig = {
-    name: 'update-user-course',
     text: `UPDATE ${USER_COURSE_TABLE}
           ${updateStatement}
           WHERE course_id = $1 AND user_id = $2
@@ -65,7 +64,6 @@ export async function deleteUserCourse(payload: {[x: string]: any}) {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const deleteUserCourseQuery: QueryConfig = {
-      name: 'delete-user-course',
       text: `DELETE FROM ${USER_COURSE_TABLE}
               WHERE course_id = $1 AND user_id = $2;`,
       values: [payload.courseId, payload.userId]

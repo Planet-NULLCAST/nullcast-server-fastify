@@ -199,7 +199,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
   } = queryParams;
 
   let WHERE_CLAUSE = '';
-  const queryValues: any[] = [+limit, (page - 1) * +limit];
+  const queryValues: any[] = [];
 
   if (status) {
     queryValues.push(status);
@@ -220,6 +220,9 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
       OR post.custom_excerpt LIKE $${queryValues.length})`;
     }
   }
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
@@ -235,18 +238,16 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
             ${GROUP_BY_CLAUSE}
             ORDER BY 
               post.${sort_field} ${order}
-            LIMIT $1
-            OFFSET $2;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
   const getPostsCountQuery: QueryConfig = {
     text: `SELECT COUNT(id)
             FROM ${POST_TABLE} AS post
-            ${WHERE_CLAUSE}
-            LIMIT $1
-            OFFSET $2;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0,-2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
@@ -284,7 +285,7 @@ export async function getPostsBytag(
 
   let WHERE_CLAUSE = 'WHERE tags.name = $1';
 
-  const queryValues = [tag, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [tag];
 
   if (status) {
     queryValues.push(status);
@@ -299,6 +300,9 @@ export async function getPostsBytag(
       OR posts.custom_excerpt LIKE $${queryValues.length})`;
   }
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getPostsQuery: QueryConfig = {
@@ -311,8 +315,8 @@ export async function getPostsBytag(
             ${GROUP_BY_CLAUSE}
             ORDER BY 
             posts.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
@@ -321,10 +325,8 @@ export async function getPostsBytag(
             from ${POST_TABLE}
             LEFT JOIN ${POST_TAG_TABLE} AS post_tags on posts.id = post_tags.post_id
             LEFT JOIN ${TAG_TABLE} AS tags on tags.id = post_tags.tag_id
-            ${WHERE_CLAUSE}
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0,-2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
@@ -371,7 +373,7 @@ export async function getPostsByUserId(
 
   let WHERE_CLAUSE = 'WHERE u.id = $1';
 
-  const queryValues = [userId, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [userId];
 
   if (status) {
     queryValues.push(status);
@@ -395,6 +397,9 @@ export async function getPostsByUserId(
       OR posts.custom_excerpt LIKE $${queryValues.length})`;
   }
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   //Only posts having atleast one tag is fetched
@@ -406,21 +411,19 @@ export async function getPostsByUserId(
             ${GROUP_BY_CLAUSE}
             ORDER BY 
             posts.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
   const getPostsCountQuery: QueryConfig = {
-    text: ` SELECT COUNT(posts.id)
-            from ${POST_TABLE} AS posts
+    text: ` SELECT COUNT(DISTINCT posts.id)
+            from ${POST_TAG_TABLE} AS pt
+            LEFT JOIN ${TAG_TABLE} AS tags on tags.id = pt.tag_id
+            LEFT JOIN ${POST_TABLE} AS posts on posts.id = pt.post_id
             LEFT JOIN ${USER_TABLE} AS u on u.id = posts.created_by
-            LEFT JOIN ${POST_TAG_TABLE} AS post_tags on posts.id = post_tags.post_id 
-            LEFT JOIN ${TAG_TABLE} AS tags on tags.id = post_tags.tag_id
-            ${WHERE_CLAUSE} AND tags.id IS NOT NULL
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0,-2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
