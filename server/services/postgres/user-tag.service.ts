@@ -56,7 +56,7 @@ export async function getUserTagsByUserId(payload: {[x: string]: any}, queryPara
             FROM ${USER_TAG_TABLE} AS ut
             JOIN ${TAG_TABLE} AS t ON ut.tag_id = t.id
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const userTagData = await postgresClient.query<UserTag>(getUserTagsQuery);

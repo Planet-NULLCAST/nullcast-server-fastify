@@ -51,7 +51,7 @@ export async function getEvents(queryParams: QueryParams) {
     text: `SELECT COUNT(events.id)
             FROM ${EVENT_TABLE} AS events
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const eventData = await postgresClient.query<Event>(getEventsQuery);
@@ -111,7 +111,7 @@ export async function getEventsByUserId(payload: {userId: number}, queryParams: 
     text: `SELECT COUNT(events.id)
             FROM ${EVENT_TABLE} AS events
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const eventData = await postgresClient.query<Event>(getEventsByUserIdQuery);

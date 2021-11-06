@@ -123,7 +123,7 @@ export async function getUsers(queryParams: QueryParams) {
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const userData = await postgresClient.query(getUsersQuery);

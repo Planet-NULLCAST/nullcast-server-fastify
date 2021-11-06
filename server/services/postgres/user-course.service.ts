@@ -14,12 +14,12 @@ Promise<UserCourse> {
             WHERE course_id = $1 AND user_id = $2;`,
     values: [payload.courseId, payload.userId]
   };
-  
+
   const data = await postgresClient.query(getUserCourseQuery);
   if (data.rows && data.rows.length) {
     return data.rows[0] as UserCourse;
   }
-  throw {statusCode: 404, message: "User not enrolled to this course"};
+  throw {statusCode: 404, message: 'User not enrolled to this course'};
 }
 
 export async function updateUserCourse(

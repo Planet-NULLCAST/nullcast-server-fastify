@@ -53,7 +53,7 @@ export async function getSubscribers(queryParams: QueryParams) {
     text: `SELECT COUNT(sub.id)
             FROM ${SUBSCRIBER_TABLE} AS sub
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const subscriptionData = await postgresClient.query(getSubscribersQuery);
