@@ -68,7 +68,7 @@ export async function getUsers(queryParams: QueryParams) {
     WHERE_CLAUSE = 'WHERE u.status = $1',
     GROUP_BY_CLAUSE = 'GROUP BY user_id';
 
-  const queryValues = [status, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [status];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -96,6 +96,9 @@ export async function getUsers(queryParams: QueryParams) {
     GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, badge.id`;
   }
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUsersQuery: QueryConfig = {
@@ -110,8 +113,8 @@ export async function getUsers(queryParams: QueryParams) {
             ${GROUP_BY_CLAUSE}, u.entity_id, u.id
             ORDER BY 
             u.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
@@ -119,10 +122,8 @@ export async function getUsers(queryParams: QueryParams) {
     text: `SELECT COUNT(u.id)
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
-            ${WHERE_CLAUSE}
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0, -2)
   };
 
   const userData = await postgresClient.query(getUsersQuery);
