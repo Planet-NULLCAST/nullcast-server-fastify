@@ -45,7 +45,7 @@ export async function getTags(queryParams: QueryParams) {
   const getTagsCountQuery: QueryConfig = {
     text: `SELECT COUNT(tags.id)
           FROM ${TAG_TABLE} AS tags`,
-    values: queryValues.slice(0,-3)
+    values: queryValues.slice(0, -3)
   };
 
   const data = await postgresClient.query<Tag>(getTagsQuery);

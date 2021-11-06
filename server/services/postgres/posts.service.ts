@@ -247,7 +247,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
     text: `SELECT COUNT(id)
             FROM ${POST_TABLE} AS post
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
@@ -326,7 +326,7 @@ export async function getPostsBytag(
             LEFT JOIN ${POST_TAG_TABLE} AS post_tags on posts.id = post_tags.post_id
             LEFT JOIN ${TAG_TABLE} AS tags on tags.id = post_tags.tag_id
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
@@ -423,7 +423,7 @@ export async function getPostsByUserId(
             LEFT JOIN ${POST_TABLE} AS posts on posts.id = pt.post_id
             LEFT JOIN ${USER_TABLE} AS u on u.id = posts.created_by
             ${WHERE_CLAUSE};`,
-    values: queryValues.slice(0,-2)
+    values: queryValues.slice(0, -2)
   };
 
   const postData = await postgresClient.query<Post>(getPostsQuery);
