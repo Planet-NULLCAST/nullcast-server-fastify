@@ -6,7 +6,6 @@ export async function getChapter(payload: { chapterId: number }): Promise<Chapte
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getChapterQuery: QueryConfig = {
-    name: 'get-chapter',
     text: `SELECT id, name, course_id, slug, chapter_no, created_by
         FROM ${CHAPTER_TABLE}
         WHERE id = $1;`,
