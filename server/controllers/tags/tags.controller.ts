@@ -5,12 +5,18 @@ import { UserData } from 'interfaces/auth-token.type';
 import { QueryParams } from 'interfaces/query-params.type';
 
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
+import { checkAdminController } from 'controllers';
 
 const tagsHandler = new DatabaseHandler(TAG_TABLE);
 
 
 export async function createTagController(payload: Tag, userData: UserData) {
   try {
+    const isAdmin = await checkAdminController(userData.id);
+    const adminTags = ['whatsnew', 'fix', 'announcement', 'improvement'];
+    if (!isAdmin && adminTags.includes(payload.name.trim().toLowerCase())) {
+      throw ({statusCode: 404, message: 'You should have admin access'});
+    }
 
     const tagData: Tag = {
       ...payload,
@@ -23,7 +29,9 @@ export async function createTagController(payload: Tag, userData: UserData) {
     const tag = await tagsHandler.insertOne<Tag, Tag>(tagData, fields);
     return tag.rows[0];
   } catch (error) {
-    if (error.code) {
+    if (error.detail.includes('name')) {
+      throw ({statuscode: 404, message: 'Tag with same name exists'});
+    } else if (error.code) {
       switch (error.code) {
         case '23505':
           throw { statsCode: 400, message: error.message };
