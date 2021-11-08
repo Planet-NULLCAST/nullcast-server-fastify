@@ -25,6 +25,23 @@ export async function createPostTagController(postTagData: PostTag, user:TokenUs
   return data.rows[0] as PostTag;
 }
 
+export async function createPostTagsController(postTagData: PostTag[], user:TokenUser): Promise<PostTag[]> {
+
+  for (const postTag of postTagData) {
+    postTag.created_by = user.id as number;
+  }
+
+  const payload: PostTag[] = postTagData;
+
+  const fields = ['tag_id', 'post_id', 'created_by', 'created_at'];
+  const uniqueField = 'post_id, tag_id';
+  const needUpdate = false;
+
+  const data = await postTagHandler.insertMany(payload, fields, uniqueField, needUpdate);
+
+  return data.rows as PostTag[];
+}
+
 export async function getPostsByTagIdController(queryParams:QueryParams, tagId:number):Promise<Post> {
   try {
     const payload = {

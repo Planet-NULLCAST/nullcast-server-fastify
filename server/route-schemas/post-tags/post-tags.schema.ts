@@ -25,6 +25,34 @@ export const createPostTagSchema = {
   }
 };
 
+export const createPostTagsSchema = {
+  summary: 'Add post tags',
+  description: 'A POST route to add multiple postTag information',
+  tags: ['Post_tag'],
+  body:  {
+    type: 'array',
+    maxItems: 15,
+    minItems: 1,
+    items: {
+      type: 'object',
+      required: ['tag_id', 'post_id'],
+      properties: {
+        tag_id: {
+          type: 'number',
+          description: 'Id of the Tag'
+        },
+        post_id: {
+          type: 'number',
+          description: 'Id of the Post'
+        }
+      }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
 export const getPostsByTagIdSchema = {
   summary: 'Get Posts by tagId',
   description: 'To get postTag information',

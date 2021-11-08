@@ -5,7 +5,7 @@ import * as controller from '../../controllers/index';
 
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  createPostTagSchema, deletePostTagSchema,
+  createPostTagSchema, createPostTagsSchema, deletePostTagSchema,
   getPostsByTagIdSchema, getTagsByPostIdSchema
 } from 'route-schemas/post-tags/post-tags.schema';
 import { TokenUser } from 'interfaces/user.type';
@@ -28,6 +28,33 @@ const createPostTag: RouteOptions = {
 
     } catch (error) {
       throw error;
+    }
+
+  }
+};
+
+const createPostTags: RouteOptions = {
+  method: 'POST',
+  url: '/post-tags',
+  schema: createPostTagsSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const postTagData = await controller.createPostTagsController(request.body as PostTag[], user);
+      if (postTagData[0]) {
+        reply.code(201).send({message: 'Added all post tags', data: postTagData});
+      } else {
+        reply.code(404).send({statusCode: 404, message:'No post tags added'});
+      }
+    } catch (error: any) {
+      const regExp = error.detail.match(/(\d+)/i)[1];
+      if (error.detail.includes('tag_id')) {
+        throw ({statusCode: 404, message: `Tag with id = ${regExp} doesn't exists`});
+      } else if (error.detail.includes('post_id')) {
+        throw ({statusCode: 404, message: `Post with id = ${regExp} doesn't exists`});
+      } else {
+        throw error;
+      }
     }
 
   }
@@ -90,6 +117,7 @@ const deletePostTag: RouteOptions = {
 
 function initPostTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(createPostTag);
+  server.route(createPostTags);
   server.route(getPostsByTagId);
   server.route(getTagsByPostId);
   server.route(deletePostTag);

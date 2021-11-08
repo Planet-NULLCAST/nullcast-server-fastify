@@ -27,11 +27,13 @@ const createUser: RouteOptions = {
       }
 
     } catch (error: any) {
-      if (error.detail.includes('email')) {
-        throw ({ statusCode: 404, message:'Email already exists' });
-      } else if (error.detail.includes('user_name')) {
-        throw ({ statusCode: 404, message:'Username already exists' });
-      }
+      const keys = ['email', 'user_name'];
+      keys.map((key: string) => {
+        if (error.detail.includes(key)) {
+          throw ({statusCode: 404, message: `${key} already exists.`});
+        }
+      });
+      throw error;
     }
 
   }

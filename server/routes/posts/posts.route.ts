@@ -47,7 +47,7 @@ const getPost: RouteOptions = {
       const postData = await controller.getPostController(params.postId, queryParams, user);
 
       if (!postData) {
-        reply.code(400).send({message: 'User not Found'});
+        reply.code(400).send({message: 'Post not Found'});
       }
       reply.code(200).send({ data: postData });
     } catch (error) {
