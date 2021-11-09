@@ -19,7 +19,7 @@ export async function createEventController(eventData:Event, userId:number): Pro
         guest_designation: eventData.guest_designation,
         guest_image: eventData.guest_image,
         registration_link: eventData.registration_link,
-        slug: slug,
+        slug,
         location: eventData.location,
         banner_image: eventData.banner_image,
         created_by: userId,
