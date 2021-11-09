@@ -50,7 +50,7 @@ export async function resetPasswordController(userData: ValidateResetPassword) {
     const tokenData = getTokenData(token);
     if (tokenData && tokenData.email) {
       const hashData = createHash(password);
-      const email = { key: 'enail', value: tokenData.email as string };
+      const email = { key: 'email', value: tokenData.email as string };
       const dbData = await userHandler.dbHandler<ResetPasswordPayload, boolean>(
         'RESET_PASSWORD',
         { hashData, email }

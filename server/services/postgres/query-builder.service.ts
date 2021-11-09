@@ -192,6 +192,7 @@ export async function updateBySingleField(
   returningFields?: string[]
 ): Promise<QueryResult> {
   try {
+
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     let updateStatement = 'SET';
@@ -223,7 +224,6 @@ export async function updateBySingleField(
       text,
       values: queryValues
     };
-
 
     return await postgresClient.query(query);
   } catch (error) {
