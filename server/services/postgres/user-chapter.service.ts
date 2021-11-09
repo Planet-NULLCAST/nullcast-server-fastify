@@ -15,14 +15,12 @@ Promise<UserChapterProgressCount> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getTotalChaptersCountQuery: QueryConfig = {
-    name: 'get-total-user-chapter',
     text: `SELECT COUNT(id) FROM ${CHAPTER_TABLE} 
             WHERE course_id = $1;`,
     values: [payload.course_id]
   };
 
   const getCompletedChaptersCountQuery: QueryConfig = {
-    name: 'get-completed-user-chapter',
     text: `SELECT COUNT(chapter_id) FROM ${USER_CHAPTER_TABLE} 
             WHERE course_id = $1 AND user_id = $2;`,
     values: [payload.course_id, payload.user_id]
@@ -42,7 +40,6 @@ Promise<UserChapter> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserChapterQuery: QueryConfig = {
-    name: 'get-user-chapter',
     text: `SELECT user_id, course_id, chapter_id, completed_at, created_by, created_at
             FROM user_chapters WHERE chapter_id = $1 AND user_id = $2;`,
     values: [payload.chapterId, payload.userId]
@@ -79,7 +76,6 @@ Promise<UserChapter> {
   const returningStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
 
   const updateUserChapterQuery: QueryConfig = {
-    name: 'update-user-chapter',
     text: `UPDATE user_chapters
             ${updateStatement}
             WHERE chapter_id = $1 AND user_id = $2
@@ -98,7 +94,6 @@ export async function deleteUserChapter(payload: {[x: string]: any}) {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const deleteUserChapterQuery: QueryConfig = {
-      name: 'delete-user-chapter',
       text: `DELETE FROM user_chapters
               WHERE chapter_id = $1 AND user_id = $2;`,
       values: [payload.chapterId, payload.userId]

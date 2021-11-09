@@ -50,7 +50,8 @@ export async function insertMany(
   tableName: string,
   payload: any[],
   fields?: string[],
-  uniqueField = 'id'
+  uniqueField = 'id',
+  needUpdate = true
 ): Promise<QueryResult> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -104,20 +105,26 @@ export async function insertMany(
 
     const valueRefs: string = valueRefArray.join(', ');
 
-    let updateStatement = 'SET';
-    uniqueKeys.forEach((key, index) => {
-      if (index !== uniqueKeys.length - 1) {
-        updateStatement = `${updateStatement} ${key} = EXCLUDED.${key},`;
-      } else {
-        updateStatement = `${updateStatement} ${key} = EXCLUDED.${key}`;
-      }
-    });
+    let conflictStatement = '';
+
+    if (needUpdate) {
+      conflictStatement = 'DO UPDATE SET';
+      uniqueKeys.forEach((key, index) => {
+        if (index !== uniqueKeys.length - 1) {
+          conflictStatement = `${conflictStatement} ${key} = EXCLUDED.${key},`;
+        } else {
+          conflictStatement = `${conflictStatement} ${key} = EXCLUDED.${key}`;
+        }
+      });
+    } else {
+      conflictStatement = 'DO NOTHING';
+    }
 
     // Build the query text for prepared statement
     const text = `INSERT INTO ${tableName} (${columns}) 
                   VALUES ${valueRefs}
-                  ON CONFLICT (${uniqueField}) DO UPDATE
-                  ${updateStatement}
+                  ON CONFLICT (${uniqueField}) 
+                  ${conflictStatement}
                   ${returnStatement};`;
 
     const query: QueryConfig = {

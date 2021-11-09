@@ -3,7 +3,7 @@ import { Client, QueryConfig } from 'pg';
 import { User, UserStatus } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  BADGE_TABLE, ENTITY_TABLE, USER_TABLE
+  BADGE_TABLE, ENTITY_TABLE, ROLE_TABLE, USER_ROLE_TABLE, USER_TABLE
 } from 'constants/tables';
 
 
@@ -11,11 +11,15 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserQuery: QueryConfig = {
-    name: 'get-user',
-    text: `SELECT entity_id, id, user_name, full_name,
-            email, created_at, updated_at, cover_image, bio, status
-            FROM ${USER_TABLE}
-            WHERE user_name = $1;`,
+    text: `SELECT u.entity_id, u.id, u.user_name, u.full_name, 
+            u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
+            COALESCE(JSON_AGG(r.name) 
+              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles
+            FROM ${USER_TABLE} AS u
+            LEFT JOIN ${USER_ROLE_TABLE} AS ur ON ur.user_id = u.id
+			      LEFT JOIN ${ROLE_TABLE} AS r ON ur.role_id = r.id
+            WHERE u.user_name = $1
+            GROUP BY u.entity_id, u.id;`,
     values: [payload.user_name]
   };
 
@@ -33,7 +37,8 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
       bio: data.rows[0]?.bio as string,
       status: data.rows[0]?.status as UserStatus,
       slug: data.rows[0]?.slug as string,
-      primary_badge: data.rows[0]?.primary_badge as number
+      primary_badge: data.rows[0]?.primary_badge as number,
+      roles: data.rows[0]?.roles as Record<string, unknown>
     };
   }
   throw new Error('User not found');
@@ -63,7 +68,7 @@ export async function getUsers(queryParams: QueryParams) {
     WHERE_CLAUSE = 'WHERE u.status = $1',
     GROUP_BY_CLAUSE = 'GROUP BY user_id';
 
-  const queryValues = [status, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [status];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -91,18 +96,25 @@ export async function getUsers(queryParams: QueryParams) {
     GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, badge.id`;
   }
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUsersQuery: QueryConfig = {
-    text: `${SELECT_CLAUSE}
+    text: `${SELECT_CLAUSE},
+            COALESCE(JSON_AGG(r.name) 
+              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
+            LEFT JOIN ${USER_ROLE_TABLE} AS ur ON ur.user_id = u.id
+			      LEFT JOIN ${ROLE_TABLE} AS r ON ur.role_id = r.id
             ${WHERE_CLAUSE}
-            ${GROUP_BY_CLAUSE}
+            ${GROUP_BY_CLAUSE}, u.entity_id, u.id
             ORDER BY 
             u.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
@@ -110,10 +122,8 @@ export async function getUsers(queryParams: QueryParams) {
     text: `SELECT COUNT(u.id)
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
-            ${WHERE_CLAUSE}
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0, -2)
   };
 
   const userData = await postgresClient.query(getUsersQuery);

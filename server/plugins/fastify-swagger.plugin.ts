@@ -37,7 +37,9 @@ export function fastifySwaggerPlugin(server: FastifyInstance) {
         url: 'https://github.com/Planet-NULLCAST/nullcast-server-fastify/tree/feature/adding-routes-types#readme',
         description: 'Find more on Planet-Nullcast repo here'
       },
-      host: 'localhost:8080/api/v1',
+      // eslint-disable-next-line no-constant-condition
+      host: `${process.env.HOST = 'development' ?
+        `${process.env.HOST}:${process.env.PORT}` : `${process.env.HOST}`}`,
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json']
