@@ -11,16 +11,22 @@ export async function createEventController(eventData:Event, userId:number): Pro
   try {
     const isAdmin = await checkAdminController(userId);
     if (isAdmin) {
+      const slug = eventData.title.toLowerCase().split(' ').join('-');
       const payload : Event = {
-        meta_title: eventData.meta_title,
+        title: eventData.title,
         description: eventData.description,
-        slug: eventData.slug,
+        guest_name: eventData.guest_name,
+        guest_designation: eventData.guest_designation,
+        guest_image: eventData.guest_image,
+        registration_link: eventData.registration_link,
+        slug: slug,
+        location: eventData.location,
         banner_image: eventData.banner_image,
         created_by: userId,
         user_id: userId
       };
 
-      const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+      const fields = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
         'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
       const data = await eventHandler.insertOne(payload, fields);
@@ -38,7 +44,7 @@ export async function getEventController(eventId:number):Promise<Event> {
     const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
       'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
-    return await eventHandler.findOneById(eventId, fields);
+    return await eventHandler.findOneById(eventId, fields) as Event;
 
   } catch (error) {
     throw error;

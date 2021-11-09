@@ -2,6 +2,11 @@ export interface Event {
     id?: number;
     primary_tag?: number;
     meta_title?: string;
+    title: string;
+    guest_name: string;
+    guest_designation: string;
+    guest_image: string;
+    registration_link: string;
     slug?: string;
     created_by?: number;
     published_by?: string;
