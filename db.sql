@@ -211,6 +211,7 @@ CREATE TABLE IF NOT EXISTS followers(
 CREATE TABLE IF NOT EXISTS events (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    title VARCHAR(255),
     guest_name VARCHAR(255),
     guest_designation VARCHAR(255),
     guest_image TEXT,
@@ -257,3 +258,5 @@ INSERT INTO tags (name, description, meta_title, slug, created_by)
 VALUES ('primary', 'some description', 'primary', 'primary', 12343);
 INSERT INTO badges (name, description)
 VALUES ('noob', 'Just getting started!');
+INSERT INTO roles (name, description)
+VALUES ('admin', 'Admin access'), ('user', 'No admin access');

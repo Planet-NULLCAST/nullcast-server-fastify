@@ -1,7 +1,27 @@
 export const eventProps = {
-  slug: {
+  title: {
     type: 'string',
-    description: 'user should provide slug'
+    description: 'user should provide title'
+  },
+  guest_name: {
+    type: 'string',
+    description: 'user should provide name of the guest'
+  },
+  guest_designation: {
+    type: 'string',
+    description: 'user should provide designation of the guest'
+  },
+  guest_image: {
+    type: 'string',
+    description: 'user should provide image of the guest'
+  },
+  guest_bio: {
+    type: 'string',
+    description: 'user should provide bio of the guest'
+  },
+  registration_link: {
+    type: 'string',
+    description: 'user should provide link of registration of the event'
   },
   type: {
     type: 'string',
@@ -10,18 +30,6 @@ export const eventProps = {
   description: {
     type: 'string',
     description: 'user should provide description'
-  },
-  og_description: {
-    type: 'string',
-    description: 'user should provide og_description'
-  },
-  og_title: {
-    type: 'string',
-    description: 'user should provide og_title'
-  },
-  og_image: {
-    type: 'string',
-    description: 'user should provide og_image'
   },
   meta_description: {
     type: 'string',
