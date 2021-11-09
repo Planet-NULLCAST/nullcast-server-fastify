@@ -5,7 +5,7 @@ import { Client, QueryConfig } from 'pg';
 
 export async function getEvents(queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+  const DEFAULT_FIELDS = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
     'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
@@ -65,7 +65,7 @@ export async function getEvents(queryParams: QueryParams) {
 
 export async function getEventsByUserId(payload: {userId: number}, queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+  const DEFAULT_FIELDS = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
     'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
