@@ -3,8 +3,6 @@ import { ValidateUser, ResetPasswordPayload } from 'interfaces/user.type';
 import { USER_TABLE } from 'constants/tables';
 import { DatabaseHandler } from './postgres.handler';
 
-const userHandler = new DatabaseHandler(USER_TABLE);
-
 export async function signInUser(payload: ValidateUser) {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -33,8 +31,9 @@ export async function signInUser(payload: ValidateUser) {
 
 export async function resetPasswordService(payload: ResetPasswordPayload) {
   try {
+    const userHandler = new DatabaseHandler(USER_TABLE);
     const { hashData, email } = payload as ResetPasswordPayload;
-    const data = await userHandler.updateBySingleField(hashData, email);
+    const data = await userHandler.updateBySingleField({password: hashData}, email);
     if (data) {
       return true;
     }
