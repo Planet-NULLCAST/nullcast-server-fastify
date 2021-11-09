@@ -26,7 +26,13 @@ const createUser: RouteOptions = {
         reply.code(500).send({message:'Something Error happend'});
       }
 
-    } catch (error) {
+    } catch (error: any) {
+      const keys = ['email', 'user_name'];
+      keys.map((key: string) => {
+        if (error.detail.includes(key)) {
+          throw ({statusCode: 404, message: `${key} already exists.`});
+        }
+      });
       throw error;
     }
 

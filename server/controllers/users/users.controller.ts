@@ -8,13 +8,15 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { createHash } from '../../utils/hash-utils';
 
 import {
-  USER_TABLE, ENTITY_TABLE, BADGE_TABLE
+  USER_TABLE, ENTITY_TABLE, BADGE_TABLE, ROLE_TABLE, USER_ROLE_TABLE
 } from '../../constants/tables';
 import { issueToken } from 'utils/jwt.utils';
 
 const userHandler = new DatabaseHandler(USER_TABLE);
 const entityHandler = new DatabaseHandler(ENTITY_TABLE);
 const badgeHandler = new DatabaseHandler(BADGE_TABLE);
+const roleHandler = new DatabaseHandler(ROLE_TABLE);
+const userRoleHandler = new DatabaseHandler(USER_ROLE_TABLE);
 
 export async function createUserController(userData: User): Promise<cookieData> {
   try {
@@ -23,6 +25,7 @@ export async function createUserController(userData: User): Promise<cookieData> 
     // Get entity_id and badge_id
     const ENTITY_NAME = 'nullcast';
     const BADGE_NAME = 'noob';
+    const USER_ROLE_NAME = 'user';
 
     const entity = await entityHandler.findOneByField({ name: ENTITY_NAME }, [
       'id'
@@ -47,6 +50,16 @@ export async function createUserController(userData: User): Promise<cookieData> 
     const fields = ['id', 'user_name', 'full_name', 'avatar'];
     const user = await userHandler.findOneByField({user_name: payload.user_name}, fields);
     // if create success.
+    const userRole = await roleHandler.findOneByField({ name: USER_ROLE_NAME }, [
+      'id'
+    ]);
+    const userRoleData = {
+      role_id: userRole.id,
+      user_id: user.id,
+      created_at: new Date().toISOString(),
+      created_by: user.id
+    };
+    await userRoleHandler.insertOne(userRoleData);
     const token = issueToken({user_name: user.user_name, id: user.id});
 
     const loginData: cookieData = {

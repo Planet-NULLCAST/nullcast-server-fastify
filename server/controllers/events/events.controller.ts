@@ -2,27 +2,31 @@ import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import { EVENT_TABLE } from 'constants/tables';
 import { Event } from 'interfaces/event.type';
 import { QueryParams } from 'interfaces/query-params.type';
+import { checkAdminController } from 'controllers';
 
 
 const eventHandler = new DatabaseHandler(EVENT_TABLE);
 
 export async function createEventController(eventData:Event, userId:number): Promise<Event> {
   try {
+    const isAdmin = await checkAdminController(userId);
+    if (isAdmin) {
+      const payload : Event = {
+        meta_title: eventData.meta_title,
+        description: eventData.description,
+        slug: eventData.slug,
+        banner_image: eventData.banner_image,
+        created_by: userId,
+        user_id: userId
+      };
 
-    const payload : Event = {
-      meta_title: eventData.meta_title,
-      description: eventData.description,
-      slug: eventData.slug,
-      banner_image: eventData.banner_image,
-      created_by: userId,
-      user_id: userId
-    };
+      const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+        'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
-    const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
-
-    const data = await eventHandler.insertOne(payload, fields);
-    return data.rows[0] as Event;
+      const data = await eventHandler.insertOne(payload, fields);
+      return data.rows[0] as Event;
+    }
+    throw {statusCode: 404, message: 'User has no admin access'};
 
   } catch (error) {
     throw error;
@@ -31,8 +35,8 @@ export async function createEventController(eventData:Event, userId:number): Pro
 
 export async function getEventController(eventId:number):Promise<Event> {
   try {
-    const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-      'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+    const fields = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+      'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     return await eventHandler.findOneById(eventId, fields);
 
@@ -67,31 +71,40 @@ export async function updateEventController(eventData:Event, userId:number, even
     if (!eventId) {
       return false;
     }
-    const payload : Event = {
-      ...eventData,
-      updated_at: new Date().toISOString(),
-      updated_by: userId
-    };
 
-    const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-      'updated_at', 'updated_by', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+    const isAdmin = await checkAdminController(userId);
+    if (isAdmin) {
+      const payload : Event = {
+        ...eventData,
+        updated_at: new Date().toISOString(),
+        updated_by: userId
+      };
 
-    const data = await eventHandler.updateOneById(eventId, payload, fields);
-    return data.rows[0] as Event;
+      const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
+        'updated_at', 'updated_by', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+
+      const data = await eventHandler.updateOneById(eventId, payload, fields);
+      return data.rows[0] as Event;
+    }
+    throw {statusCode: 404, message: 'User has no admin access'};
 
   } catch (error) {
     throw error;
   }
 }
 
-export async function deleteEventController(eventId: number) : Promise<boolean> {
+export async function deleteEventController(eventId: number, userId: number) : Promise<boolean> {
   try {
     if (!eventId) {
       return false;
     }
+    const isAdmin = await checkAdminController(userId);
+    if (isAdmin) {
+      await eventHandler.deleteOneById(eventId);
+      return true;
+    }
+    throw {statusCode: 404, message: 'User has no admin access'};
 
-    await eventHandler.deleteOneById(eventId);
-    return true;
   } catch (error) {
     throw error;
   }

@@ -5,8 +5,8 @@ import { Client, QueryConfig } from 'pg';
 
 export async function getEvents(queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-    'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+  const DEFAULT_FIELDS = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+    'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
     limit_fields = DEFAULT_FIELDS,
@@ -20,7 +20,7 @@ export async function getEvents(queryParams: QueryParams) {
 
   let WHERE_CLAUSE = 'WHERE events.status = $1';
 
-  const queryValues = [status, +limit, (page - 1) * +limit];
+  const queryValues: any[] = [status];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -31,6 +31,9 @@ export async function getEvents(queryParams: QueryParams) {
   }
   const limitFields = limit_fields.map((item) => `events.${item}`);
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getEventsQuery: QueryConfig = {
@@ -39,18 +42,16 @@ export async function getEvents(queryParams: QueryParams) {
             ${WHERE_CLAUSE}
             ORDER BY 
             events.${sort_field} ${order}
-            LIMIT $2
-            OFFSET $3;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
   const getEventsCountQuery: QueryConfig = {
     text: `SELECT COUNT(events.id)
             FROM ${EVENT_TABLE} AS events
-            ${WHERE_CLAUSE}
-            LIMIT $2
-            OFFSET $3;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0, -2)
   };
 
   const eventData = await postgresClient.query<Event>(getEventsQuery);
@@ -64,8 +65,8 @@ export async function getEvents(queryParams: QueryParams) {
 
 export async function getEventsByUserId(payload: {userId: number}, queryParams: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-    'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+  const DEFAULT_FIELDS = ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+    'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
     limit_fields = DEFAULT_FIELDS,
@@ -79,7 +80,7 @@ export async function getEventsByUserId(payload: {userId: number}, queryParams: 
 
   let WHERE_CLAUSE = 'WHERE events.status = $1 AND events.user_id = $2';
 
-  const queryValues = [status, payload.userId, +limit, (page - 1) * +limit];
+  const queryValues = [status, payload.userId];
 
   if (search) {
     queryValues.push(`%${search}%`);
@@ -90,6 +91,9 @@ export async function getEventsByUserId(payload: {userId: number}, queryParams: 
   }
   const limitFields = limit_fields.map((item) => `events.${item}`);
 
+  queryValues.push(+limit);
+  queryValues.push((page - 1) * +limit);
+
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getEventsByUserIdQuery: QueryConfig = {
@@ -98,18 +102,16 @@ export async function getEventsByUserId(payload: {userId: number}, queryParams: 
             ${WHERE_CLAUSE}
             ORDER BY 
             events.${sort_field} ${order}
-            LIMIT $3
-            OFFSET $4;`,
+            LIMIT $${queryValues.length-1}
+            OFFSET $${queryValues.length};`,
     values: queryValues
   };
 
   const getEventsByUserIdCountQuery: QueryConfig = {
     text: `SELECT COUNT(events.id)
             FROM ${EVENT_TABLE} AS events
-            ${WHERE_CLAUSE}
-            LIMIT $3
-            OFFSET $4;`,
-    values: queryValues
+            ${WHERE_CLAUSE};`,
+    values: queryValues.slice(0, -2)
   };
 
   const eventData = await postgresClient.query<Event>(getEventsByUserIdQuery);

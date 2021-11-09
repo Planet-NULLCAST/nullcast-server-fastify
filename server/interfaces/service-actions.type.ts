@@ -3,6 +3,8 @@ export type Actions =
   | 'SIGN_IN_USER'
   | 'GET_USERS'
 
+  | 'CHECK_ADMIN'
+
   | 'GET_USER_TAGS_BY_USER_ID'
   | 'UPDATE_USER_TAG'
   | 'DELETE_USER_TAG'
@@ -33,7 +35,9 @@ export type Actions =
   | 'DELETE_USER_CHAPTER'
   | 'RESET_PASSWORD'
   |'GET_EVENTS'
-  |'GET_EVENTS_BY_USER_ID';
+  |'GET_EVENTS_BY_USER_ID'
+
+  | 'GET_SUBSCRIBERS';
 
 export type CommonActions =
   | 'INSERT_ONE'

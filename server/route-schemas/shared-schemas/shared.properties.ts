@@ -20,6 +20,7 @@ export function queryStringProps(routeName: string) {
     order: {
       type: 'string',
       default: 'ASC',
+      enum: ['ASC', 'DESC'],
       description: 'The order in which the data would be arranged'
     },
     sort_field: {
@@ -28,17 +29,19 @@ export function queryStringProps(routeName: string) {
       description: 'The field name according to which data would be arranged'
     }
   };
-  if (key != 'events' && key != 'user_tags') {
+  if (key != 'events' && key != 'user_tags' && key != 'tags' && key != 'subscribers') {
     queryParams.with_table = {
       type: 'array',
       default: key === 'post' ? ['users', 'tags'] : ['entity', 'primary_badge'],
       description: 'The tables which should be included'
     };
   }
-  if (key !== 'tags' && key !== 'user_tags') {
+  if (key !== 'tags' && key !== 'user_tags' && key != 'subscribers') {
     queryParams.status= {
       type: 'string',
       default: key === 'post' ? '': key === 'events' ? 'published' : 'active',
+      enum: key === 'post' || key === 'events' ? ['', 'drafted', 'pending', 'published', 'rejected']:
+        ['active', 'inactive'],
       description: `Status of the ${key} data`
     };
   }

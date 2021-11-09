@@ -1,6 +1,7 @@
 import {FastifyInstance} from 'fastify';
 
 import oembedRoutes from './embed/embed.route';
+import initAdminRoutes from './admin/admin.route';
 import initUsersRoutes from './users/users.route';
 import docPath from './doc.route';
 import mailerPath from './mailer.route';
@@ -14,9 +15,11 @@ import initUserChapters from './user-chapters/user-chapters.route';
 import initEvents from './events/events.route';
 import initPostTags from './post-tags/post-tags.route';
 import initUserTags from './user-tags/user-tags.route';
+import initSubscribers from './subscribers/subscribers.route';
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(oembedRoutes);
+  server.register(initAdminRoutes);
   server.register(initUsersRoutes);
   server.register(initTagsRoutes);
   server.register(docPath);
@@ -30,6 +33,7 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initEvents);
   server.register(initPostTags);
   server.register(initUserTags);
+  server.register(initSubscribers);
 
   done();
 }
