@@ -14,7 +14,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 
 const createEvent: RouteOptions = {
   method: 'POST',
-  url: '/event',
+  url: '/admin/event',
   schema: createEventSchema,
   handler: async(request, reply) => {
     try {
@@ -95,7 +95,7 @@ const getEventsByUserId: RouteOptions = {
 
 const updateEvent: RouteOptions = {
   method: 'PUT',
-  url: '/event/:eventId',
+  url: '/admin/event/:eventId',
   schema: updateEventSchema,
   handler: async(request, reply) => {
     try {
@@ -115,12 +115,13 @@ const updateEvent: RouteOptions = {
 
 const deleteEvent: RouteOptions = {
   method: 'DELETE',
-  url: '/event/:eventId',
+  url: '/admin/event/:eventId',
   schema: deleteEventSchema,
   handler: async(request, reply) => {
+    const user = request.user as TokenUser;
     const params = request.params as { eventId: number };
 
-    if (await controller.deleteEventController(params.eventId)) {
+    if (await controller.deleteEventController(params.eventId, user.id)) {
       reply.code(200).send({ message: 'Event deleted' });
     } else {
       reply.code(500).send({ message: 'Event not deleted' });
