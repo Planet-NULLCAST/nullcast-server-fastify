@@ -1,6 +1,6 @@
 import { Actions } from 'interfaces/service-actions.type';
 
-import { signInUser } from './auth.service';
+import { signInUser, resetPasswordService } from './auth.service';
 import { getUser, getUsers } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag, getPostsByUserId
@@ -63,6 +63,8 @@ export const serviceActions: { [x in Actions]: any } = {
   UPDATE_USER_CHAPTER: updateUserChapter,
   DELETE_USER_CHAPTER: deleteUserChapter,
 
+  RESET_PASSWORD: resetPasswordService,
+
   GET_EVENTS: getEvents,
   GET_EVENTS_BY_USER_ID: getEventsByUserId,
 
@@ -75,5 +77,6 @@ export const commonActions = {
   INSERT_MANY: commonService.insertMany,
   DELETE_BY_ID: commonService.deleteOneById,
   UPDATE_BY_ID: commonService.updateOneById,
+  UPDATE_BY_SINGLE_FIELD: commonService.updateBySingleField,
   FIND_ONE_BY_FIELD: commonService.findOneByField
 };
