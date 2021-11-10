@@ -2,6 +2,7 @@ import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 import { SendMailOptions } from 'nodemailer';
 import mailer from 'lib/mailer';
+import { issueToken } from 'utils/jwt.utils';
 
 import { mailerHealthSchema, forgotPassSchema } from 'route-schemas/mailer/mailer.schema';
 
@@ -30,11 +31,13 @@ const forgotPass: RouteOptions = {
   handler: async(request, reply) => {
     try {
       const { to: userMail } = request.body as SendMailOptions;
+      const resetToken = issueToken({email: userMail});
       const sender = await mailer.sendMail({
         from: 'Nullcast <connect@nullcast.io>',
         to: userMail,
         subject: 'Password Reset',
-        text: 'hi nullcast user, here is your password reset link:'
+        // eslint-disable-next-line max-len
+        text: `hi nullcast user, here is your password reset link: ${process.env.CLIENT_URL}/reset-password?token=${resetToken}`
       });
 
       if (sender) {

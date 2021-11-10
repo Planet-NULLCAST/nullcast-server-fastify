@@ -1,6 +1,7 @@
 import { Client, QueryConfig } from 'pg';
-import { ValidateUser } from 'interfaces/user.type';
+import { ValidateUser, ResetPasswordPayload } from 'interfaces/user.type';
 import { USER_TABLE } from 'constants/tables';
+import { DatabaseHandler } from './postgres.handler';
 
 export async function signInUser(payload: ValidateUser) {
   try {
@@ -24,6 +25,21 @@ export async function signInUser(payload: ValidateUser) {
     return false;
   } catch (error) {
     console.error(error);
+    return false;
+  }
+}
+
+export async function resetPasswordService(payload: ResetPasswordPayload) {
+  try {
+    const userHandler = new DatabaseHandler(USER_TABLE);
+    const { hashData, email } = payload as ResetPasswordPayload;
+    const data = await userHandler.updateBySingleField({password: hashData}, email);
+    if (data) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
     return false;
   }
 }
