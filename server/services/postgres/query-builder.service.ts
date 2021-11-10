@@ -191,6 +191,53 @@ export async function deleteOneById(
   }
 }
 
+// exploit: password if passed as payload
+export async function updateBySingleField(
+  tableName: string,
+  payload: { [x: string]: any },
+  field: { key: string, value: string  },
+  returningFields?: string[]
+): Promise<QueryResult> {
+  try {
+
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    let updateStatement = 'SET';
+    const payloadArray = Object.entries(payload);
+
+    const queryValues = [field.value];
+
+    payloadArray.forEach(([key, value], index) => {
+      queryValues.push(value);
+      if (index !== payloadArray.length - 1) {
+        updateStatement = `${updateStatement} ${key} = $${queryValues.length},`;
+      } else {
+        updateStatement = `${updateStatement} ${key} = $${queryValues.length}`;
+      }
+    });
+
+    let returningValues = '';
+    if (returningFields) {
+      returningValues = `, ${returningFields.map((item) => item).join(', ')}`;
+    }
+
+    // Build the query text for prepared statement
+    const text = `UPDATE ${tableName} 
+                  ${updateStatement} 
+                  WHERE ${field.key} = $1
+                  RETURNING id ${returningValues};`;
+
+    const query: QueryConfig = {
+      text,
+      values: queryValues
+    };
+
+    return await postgresClient.query(query);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function updateOneById(
   tableName: string,
   id: number,
