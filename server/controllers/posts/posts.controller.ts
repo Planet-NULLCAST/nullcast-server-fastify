@@ -132,6 +132,10 @@ export async function updatePostController(postData:Post, userId:number, postId:
       payload.mobiledoc = postData.mobiledoc as mobiledoc;
     }
 
+    if (postData.status == 'published') {
+      payload.published_at = new Date().toISOString();
+    }
+
     const fields = ['id', 'html', 'created_at', 'created_by', 'mobiledoc',
       'status', 'published_at', 'updated_at', 'meta_title', 'title'];
 
