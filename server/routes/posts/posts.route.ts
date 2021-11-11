@@ -118,14 +118,13 @@ const getPostsByTag: RouteOptions = {
 
 const getPostsByUserId: RouteOptions = {
   method: 'GET',
-  url: '/posts-by-user/:userId',
+  url: '/posts-by-user',
   schema: getPostsByUserIdSchema,
   handler: async(request, reply) => {
     const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
-    const params = request.params as { userId: number };
     const currentUser = request.user as TokenUser;
     if (queryParams) {
-      const posts = await controller.getPostsByUserIdController(queryParams, currentUser,  params.userId);
+      const posts = await controller.getPostsByUserIdController(queryParams, currentUser);
       reply.code(200).send({ data: posts });
     } else {
       reply.code(500).send({ message: 'some error' });

@@ -90,7 +90,8 @@ function constructQuery(
 
   let SELECT_CLAUSE = `SELECT posts.id as post_id, posts.html as html, ${limitFields}`,
     GROUP_BY_CLAUSE = '',
-    JOIN_CLAUSE = '';
+    JOIN_CLAUSE = `LEFT join ${POST_TAG_TABLE} AS post_tags on post_tags.post_id = posts.id
+                    LEFT join ${TAG_TABLE} AS tags on tags.id = post_tags.tag_id`;
 
   if (with_table) {
     GROUP_BY_CLAUSE = 'GROUP BY posts.id';
@@ -101,6 +102,8 @@ function constructQuery(
 
       SELECT_CLAUSE = `${SELECT_CLAUSE}, JSON_BUILD_OBJECT(${buildUserObj}) AS user`;
       GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, u.id`;
+      JOIN_CLAUSE = `${JOIN_CLAUSE}
+                      LEFT JOIN ${USER_TABLE} AS u ON u.id = posts.created_by`;
     }
 
     if (with_table.includes('tags')) {
@@ -115,6 +118,9 @@ function constructQuery(
         SELECT_CLAUSE = `${SELECT_CLAUSE},
                         COALESCE(JSON_AGG(JSON_BUILD_OBJECT(${buildTagsObj})) 
                         FILTER (WHERE t.id IS NOT NULL), '[]') AS tag`;
+        JOIN_CLAUSE = `${JOIN_CLAUSE}
+                        LEFT join ${POST_TAG_TABLE} AS pt on pt.post_id = posts.id
+                        LEFT JOIN ${TAG_TABLE} AS t on t.id = pt.tag_id`;
       }
     }
 
@@ -123,6 +129,8 @@ function constructQuery(
                           count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
                           count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
                           COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
+      JOIN_CLAUSE = `${JOIN_CLAUSE}
+                      LEFT JOIN ${POST_VOTE_TABLE} AS votes on votes.post_id = posts.id`;
 
 
       if (userId) {
@@ -141,12 +149,6 @@ function constructQuery(
       }
     }
   }
-
-
-  JOIN_CLAUSE = `LEFT join ${POST_TAG_TABLE} AS post_tags on post_tags.tag_id = tags.id
-                  LEFT join ${POST_TABLE} AS posts on posts.id = post_tags.post_id
-                  LEFT JOIN ${POST_VOTE_TABLE} AS votes on votes.post_id = posts.id
-                  JOIN ${USER_TABLE} AS u ON u.id = posts.created_by`;
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE};
 }
@@ -307,10 +309,8 @@ export async function getPostsBytag(
 
   const getPostsQuery: QueryConfig = {
     text: ` ${SELECT_CLAUSE}
-            from ${TAG_TABLE} AS tags
+            from ${POST_TABLE} AS posts
             ${JOIN_CLAUSE}
-            LEFT join ${POST_TAG_TABLE} AS pt on pt.post_id = posts.id
-            LEFT JOIN ${TAG_TABLE} AS t on t.id = pt.tag_id
             ${WHERE_CLAUSE}
             ${GROUP_BY_CLAUSE}
             ORDER BY 
@@ -322,7 +322,7 @@ export async function getPostsBytag(
 
   const getPostsCountQuery: QueryConfig = {
     text: ` SELECT COUNT(posts.id)
-            from ${POST_TABLE}
+            from ${POST_TABLE} AS posts
             LEFT JOIN ${POST_TAG_TABLE} AS post_tags on posts.id = post_tags.post_id
             LEFT JOIN ${TAG_TABLE} AS tags on tags.id = post_tags.tag_id
             ${WHERE_CLAUSE};`,
@@ -336,9 +336,8 @@ export async function getPostsBytag(
 }
 
 export async function getPostsByUserId(
-  payload: { key: string; field: string },
-  queryParams: QueryParams,
-  currentUser: TokenUser
+  payload: TokenUser,
+  queryParams: QueryParams
 ) {
 
   const {
@@ -353,22 +352,14 @@ export async function getPostsByUserId(
     with_table
   } = queryParams;
 
-  const userId = payload.key;
+  const userId = payload.id;
 
-  const { SELECT_CLAUSE, GROUP_BY_CLAUSE } = constructQuery(
+  const { SELECT_CLAUSE, GROUP_BY_CLAUSE, JOIN_CLAUSE } = constructQuery(
     {
       limit_fields,
       with_table,
       tag
-    }, currentUser?.id
-  );
-
-  let { JOIN_CLAUSE } = constructQuery(
-    {
-      limit_fields,
-      with_table,
-      tag
-    }, currentUser?.id
+    }, payload.id
   );
 
   let WHERE_CLAUSE = 'WHERE u.id = $1';
@@ -384,9 +375,6 @@ export async function getPostsByUserId(
   if (tag) {
     queryValues.push(tag);
     WHERE_CLAUSE = `${WHERE_CLAUSE} AND tags.name = $${queryValues.length}`;
-    JOIN_CLAUSE = `${JOIN_CLAUSE} 
-                  LEFT join ${POST_TAG_TABLE} AS pt on pt.post_id = posts.id
-                  LEFT JOIN ${TAG_TABLE} as t on t.id = pt.tag_id`;
   }
 
   if (search) {
@@ -402,10 +390,9 @@ export async function getPostsByUserId(
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-  //Only posts having atleast one tag is fetched
   const getPostsQuery: QueryConfig = {
     text: ` ${SELECT_CLAUSE}
-            from ${TAG_TABLE} AS tags
+            from ${POST_TABLE} AS posts
             ${JOIN_CLAUSE} 
             ${WHERE_CLAUSE}
             ${GROUP_BY_CLAUSE}
@@ -418,9 +405,11 @@ export async function getPostsByUserId(
 
   const getPostsCountQuery: QueryConfig = {
     text: ` SELECT COUNT(DISTINCT posts.id)
-            from ${POST_TAG_TABLE} AS pt
-            LEFT JOIN ${TAG_TABLE} AS tags on tags.id = pt.tag_id
-            LEFT JOIN ${POST_TABLE} AS posts on posts.id = pt.post_id
+            from ${POST_TABLE} AS posts
+            ${tag ?
+    `LEFT JOIN ${POST_TAG_TABLE} as pt on pt.post_id = posts.id
+                LEFT JOIN ${TAG_TABLE} AS tags on tags.id = pt.tag_id`
+    : ''}
             LEFT JOIN ${USER_TABLE} AS u on u.id = posts.created_by
             ${WHERE_CLAUSE};`,
     values: queryValues.slice(0, -2)
@@ -431,4 +420,5 @@ export async function getPostsByUserId(
 
   return { posts: postData.rows, ...countData.rows[0], limit, page};
 }
+
 
