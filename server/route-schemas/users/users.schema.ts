@@ -114,14 +114,7 @@ export const updateUserSchema = {
   },
   body:  {
     type: 'object',
-    required: ['password'],
-    properties: {
-      password: {
-        type: 'string',
-        description: 'user password'
-      },
-      ...userProps
-    }
+    properties: userProps
   },
   response: {
     // 200: {

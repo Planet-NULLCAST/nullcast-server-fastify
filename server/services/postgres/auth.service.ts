@@ -43,3 +43,29 @@ export async function resetPasswordService(payload: ResetPasswordPayload) {
     return false;
   }
 }
+
+export async function updatePassword(payload: {id: number, password: string}) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const updateUserPasswordQuery: QueryConfig = {
+      text: `UPDATE ${USER_TABLE} 
+              SET password = $1
+              WHERE id = $2
+              RETURNING id, user_name, email`,
+      values: [payload.password, payload.id]
+    };
+
+    const queryData = await postgresClient.query<ValidateUser>(
+      updateUserPasswordQuery
+    );
+
+    if (queryData.rows.length) {
+      return queryData.rows[0];
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
