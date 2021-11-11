@@ -45,14 +45,8 @@ export const userProps = {
     default: null,
     description: 'meta_title of the user'
   },
-  title: {
-    type: 'string',
-    default: null,
-    description: 'title of the user'
-  },
   dob: {
-    type: 'integer',
-    default: null,
+    type: 'string',
     description: 'dob of the user'
   },
   avatar: {
