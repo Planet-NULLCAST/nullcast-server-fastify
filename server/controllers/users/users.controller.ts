@@ -40,7 +40,7 @@ export async function createUserController(userData: User): Promise<cookieData> 
       password: hashedPassword,
       avatar: `/images/dummy${randInt}.png`,
       primary_badge: badge.id,
-      slug: userData.user_name.toLowerCase(),
+      slug: userData.user_name.split(' ').join('').toLowerCase(),
       user_name: userData.user_name.split(' ').join('').toLowerCase(),
       full_name: userData.full_name,
       email: userData.email.toLowerCase()

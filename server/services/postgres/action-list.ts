@@ -1,6 +1,6 @@
 import { Actions } from 'interfaces/service-actions.type';
 
-import { signInUser, resetPasswordService } from './auth.service';
+import { signInUser, resetPasswordService, updatePassword } from './auth.service';
 import { getUser, getUsers } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag, getPostsByUserId
@@ -64,6 +64,7 @@ export const serviceActions: { [x in Actions]: any } = {
   DELETE_USER_CHAPTER: deleteUserChapter,
 
   RESET_PASSWORD: resetPasswordService,
+  UPDATE_PASSWORD: updatePassword,
 
   GET_EVENTS: getEvents,
   GET_EVENTS_BY_USER_ID: getEventsByUserId,

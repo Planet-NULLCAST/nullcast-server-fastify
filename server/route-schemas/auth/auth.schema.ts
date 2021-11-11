@@ -97,3 +97,38 @@ export const resetPasswordSchema = {
   }
 };
 
+export const updatePasswordSchema = {
+  summary: 'Update Password',
+  description: 'A POST route to update password',
+  tags: ['User'],
+  body: {
+    type: 'object',
+    required: ['new_password', 'old_password'],
+    properties: {
+      new_password: {
+        type: 'string'
+      },
+      old_password: {
+        type: 'string'
+      },
+      user_name: {
+        type: 'string'
+      },
+      email: {
+        type: 'string'
+      }
+    },
+    oneOf: [
+      {
+        required: [
+          "user_name"
+        ]
+      },
+      {
+        required: [
+          "email"
+        ]
+      },
+    ]
+  }
+};
