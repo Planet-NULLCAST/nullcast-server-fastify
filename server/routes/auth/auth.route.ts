@@ -1,9 +1,12 @@
-import * as controller from '../../controllers/index';
 import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
-import { ValidateUser, ValidateResetPassword } from 'interfaces/user.type';
+
+import * as controller from '../../controllers/index';
 import {
-  logoutSchema, signInSchema, resetPasswordSchema
+  ValidateUser, ValidateResetPassword, ValidateUpdatePassword
+} from 'interfaces/user.type';
+import {
+  logoutSchema, signInSchema, resetPasswordSchema, updatePasswordSchema
 } from '../../route-schemas/auth/auth.schema';
 
 const getNewToken: RouteOptions = {
@@ -68,11 +71,25 @@ const resetPassword: RouteOptions = {
   }
 };
 
+const updatePassword: RouteOptions = {
+  method: 'PUT',
+  url: '/update-password',
+  schema: updatePasswordSchema,
+  handler: async(request, reply) => {
+    const userData = await controller.updatePasswordController(request.body as ValidateUpdatePassword);
+    if (userData) {
+      reply.code(200).send({ message: 'Password updated successfully', data: userData });
+    }
+    reply.code(400).send({ message: 'Password updation failed' });
+  }
+};
+
 function initTokensRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.route(getNewToken);
   server.route(signIn);
   server.route(logOut);
   server.route(resetPassword);
+  server.route(updatePassword);
 
   done();
 }
