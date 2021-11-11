@@ -2,7 +2,8 @@ import { RouteOptions } from 'fastify';
 import { FastifyInstance } from 'fastify/types/instance';
 
 import * as controller from '../../controllers/index';
-import { ValidateUser, ValidateResetPassword, ValidateUpdatePassword 
+import {
+  ValidateUser, ValidateResetPassword, ValidateUpdatePassword
 } from 'interfaces/user.type';
 import {
   logoutSchema, signInSchema, resetPasswordSchema, updatePasswordSchema

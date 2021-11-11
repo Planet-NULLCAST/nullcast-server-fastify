@@ -1,6 +1,8 @@
 import { Actions } from 'interfaces/service-actions.type';
 
-import { signInUser, resetPasswordService, updatePassword } from './auth.service';
+import {
+  signInUser, resetPasswordService, updatePassword
+} from './auth.service';
 import { getUser, getUsers } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag, getPostsByUserId
