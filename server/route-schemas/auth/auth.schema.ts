@@ -121,14 +121,14 @@ export const updatePasswordSchema = {
     oneOf: [
       {
         required: [
-          "user_name"
+          'user_name'
         ]
       },
       {
         required: [
-          "email"
+          'email'
         ]
-      },
+      }
     ]
   }
 };
