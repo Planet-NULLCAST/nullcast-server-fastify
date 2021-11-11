@@ -192,12 +192,6 @@ export const getPostsByUserIdSchema = {
       ...queryStringProps('post')
     }
   },
-  params: {
-    type: 'object',
-    properties: {
-      userId: { type: 'number', description: 'Id of the user whom have created the post' }
-    }
-  },
   response: {
     400: BAD_REQUEST
   }

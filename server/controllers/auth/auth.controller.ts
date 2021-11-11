@@ -1,8 +1,10 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { USER_TABLE } from '../../constants/tables';
 import {
-  ValidateUser, ValidateResponse, ValidateResetPassword, ResetPasswordPayload
+  ValidateUser, ValidateResponse, ValidateResetPassword,
+  ResetPasswordPayload, ValidateUpdatePassword
 } from 'interfaces/user.type';
+
 import { verifyHash } from '../../utils/hash-utils';
 import { issueToken, getTokenData } from 'utils/jwt.utils';
 import { createHash } from 'utils/hash-utils';
@@ -62,6 +64,41 @@ export async function resetPasswordController(userData: ValidateResetPassword) {
     }
 
     return false;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updatePasswordController(userData: ValidateUpdatePassword) {
+  try {
+    const payload = {
+      email: userData.email,
+      user_name: userData.user_name
+    };
+    const dbData: ValidateResponse =  await userHandler.dbHandler(
+      'SIGN_IN_USER',
+      payload
+    );
+
+    if (!dbData) {
+      throw ({statusCode: 404, message: 'User not found'});
+    }
+
+    if (verifyHash(userData.old_password, dbData.password)) {
+      if (userData.old_password === userData.new_password) {
+        throw ({statusCode: 404, message: 'New password cannot be same as the old password'});
+      } else {
+        const hashData = createHash(userData.new_password);
+        const updateData = {
+          id: dbData.id,
+          password: hashData
+        };
+        const data = await userHandler.dbHandler('UPDATE_PASSWORD', updateData);
+        return data;
+      }
+    } else {
+      throw ({statusCode: 404, message: 'Password is wrong'});
+    }
   } catch (error) {
     throw error;
   }
