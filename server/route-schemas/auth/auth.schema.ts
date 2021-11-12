@@ -103,12 +103,12 @@ export const updatePasswordSchema = {
   tags: ['User'],
   body: {
     type: 'object',
-    required: ['new_password', 'old_password'],
+    required: ['new_password', 'current_password'],
     properties: {
       new_password: {
         type: 'string'
       },
-      old_password: {
+      current_password: {
         type: 'string'
       },
       user_name: {
