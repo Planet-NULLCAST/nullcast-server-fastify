@@ -84,8 +84,8 @@ export async function updatePasswordController(userData: ValidateUpdatePassword)
       throw ({statusCode: 404, message: 'User not found'});
     }
 
-    if (verifyHash(userData.old_password, dbData.password)) {
-      if (userData.old_password === userData.new_password) {
+    if (verifyHash(userData.current_password, dbData.password)) {
+      if (userData.current_password === userData.new_password) {
         throw ({statusCode: 404, message: 'New password cannot be same as the old password'});
       } else {
         const hashData = createHash(userData.new_password);
