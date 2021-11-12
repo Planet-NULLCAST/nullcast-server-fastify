@@ -79,6 +79,6 @@ export interface ResetPasswordPayload {
 export interface ValidateUpdatePassword {
   email?: string;
   user_name?: string;
-  old_password: string;
+  current_password: string;
   new_password: string;
 }
