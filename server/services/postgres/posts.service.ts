@@ -39,7 +39,7 @@ function constructJoinQuery({
     if (with_table.includes('tags')) {
       const buildTagsObj = `'id', tag.id, 'name', tag.name`;
       SELECT_CLAUSE = `${SELECT_CLAUSE},
-                        COALESCE(JSON_AGG(JSON_BUILD_OBJECT(${buildTagsObj})) 
+                        COALESCE(JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(${buildTagsObj})) 
                         FILTER (WHERE tag.id IS NOT NULL), '[]') AS tags`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
                           LEFT JOIN ${POST_TAG_TABLE} AS post_tags on post.id = post_tags.post_id
@@ -50,7 +50,8 @@ function constructJoinQuery({
       SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                           count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
                           count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
-                          COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
+                          COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
+                          FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
                           LEFT JOIN ${POST_VOTE_TABLE} AS votes ON votes.post_id = post.id`;
 
@@ -110,13 +111,13 @@ function constructQuery(
       if (!tag) {
         const buildTagsObj = `'id', tags.id, 'name', tags.name`;
         SELECT_CLAUSE = `${SELECT_CLAUSE},
-                        COALESCE(JSON_AGG(JSON_BUILD_OBJECT(${buildTagsObj})) 
+                        COALESCE(JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(${buildTagsObj})) 
                         FILTER (WHERE tags.id IS NOT NULL), '[]') AS tag`;
       }
       else {
         const buildTagsObj = `'id', t.id, 'name', t.name`;
         SELECT_CLAUSE = `${SELECT_CLAUSE},
-                        COALESCE(JSON_AGG(JSON_BUILD_OBJECT(${buildTagsObj})) 
+                        COALESCE(JSONB_AGG(DISTINCT JSONB_BUILD_OBJECT(${buildTagsObj}))
                         FILTER (WHERE t.id IS NOT NULL), '[]') AS tag`;
         JOIN_CLAUSE = `${JOIN_CLAUSE}
                         LEFT join ${POST_TAG_TABLE} AS pt on pt.post_id = posts.id
@@ -128,7 +129,8 @@ function constructQuery(
       SELECT_CLAUSE = `${SELECT_CLAUSE}, 
                           count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
                           count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
-                          COALESCE(JSON_AGG(votes.user_id) FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
+                          COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
+                          FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
                       LEFT JOIN ${POST_VOTE_TABLE} AS votes on votes.post_id = posts.id`;
 
