@@ -21,7 +21,7 @@ import {
 } from 'services/postgres/user-course.service';
 import { getEvents, getEventsByUserId } from './events.service';
 import {
-  deletePostTag, getPostsByTagId, getTagsByPostId
+  deletePostTag, deletePostTagsByPostId, getPostsByTagId, getTagsByPostId
 } from './post-tag.service';
 import {
   deleteUserTag, getUserTagsByUserId, updateUserTag
@@ -50,6 +50,7 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_POSTS_BY_TAG_ID: getPostsByTagId,
   GET_TAGS_BY_POST_ID: getTagsByPostId,
   DELETE_POST_TAG: deletePostTag,
+  DELETE_POST_TAGS_BY_POST_ID: deletePostTagsByPostId,
 
   GET_COURSE: getCourse,
   ADD_COURSE_CHAPTERS: addCoursesWithChapters,

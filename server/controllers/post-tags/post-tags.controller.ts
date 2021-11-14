@@ -85,3 +85,21 @@ export async function deletePostTagController(tagId: number, postId: number) : P
     throw error;
   }
 }
+
+export async function deletePostTagsByPostIdController(postId: number) : Promise<boolean> {
+  try {
+    if (!postId) {
+      return false;
+    }
+
+    const payload = {
+      'postId': postId
+    };
+
+    await postTagHandler.dbHandler('DELETE_POST_TAGS_BY_POST_ID', payload);
+    console.log(await postTagHandler.dbHandler('DELETE_POST_TAGS_BY_POST_ID', payload))
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}

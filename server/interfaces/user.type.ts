@@ -17,6 +17,7 @@ export interface User {
   primary_badge: number;
   cover_image?: string;
   roles?: Record<string, unknown>;
+  skills?: Record<string, unknown>;
 }
 
 export type CreateUserQuery = User;
