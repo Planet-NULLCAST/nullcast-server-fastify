@@ -187,3 +187,18 @@ export async function deletePostTag(payload: {[x: string]: any}) {
     throw err;
   }
 }
+
+export async function deletePostTagsByPostId(payload: {[x: string]: any}) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const deletePostTagsByPostIdQuery: QueryConfig = {
+      text: `DELETE FROM ${POST_TAG_TABLE}
+              WHERE post_id = $1;`,
+      values: [payload.postId]
+    };
+    return await postgresClient.query(deletePostTagsByPostIdQuery);
+  } catch (err) {
+    throw err;
+  }
+}

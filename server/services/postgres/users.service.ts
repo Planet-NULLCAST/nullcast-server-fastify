@@ -3,7 +3,7 @@ import { Client, QueryConfig } from 'pg';
 import { User, UserStatus } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  BADGE_TABLE, ENTITY_TABLE, ROLE_TABLE, USER_ROLE_TABLE, USER_TABLE
+  BADGE_TABLE, ENTITY_TABLE, ROLE_TABLE, TAG_TABLE, USER_ROLE_TABLE, USER_TABLE, USER_TAG_TABLE
 } from 'constants/tables';
 
 
@@ -13,11 +13,15 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const getUserQuery: QueryConfig = {
     text: `SELECT u.entity_id, u.id, u.user_name, u.full_name, 
             u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
-            COALESCE(JSON_AGG(r.name) 
-              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles
+            COALESCE(JSON_AGG(DISTINCT r.name) 
+              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
+            COALESCE(JSON_AGG(DISTINCT t.name) 
+              FILTER (WHERE t.id IS NOT NULL), '[]') AS skills
             FROM ${USER_TABLE} AS u
             LEFT JOIN ${USER_ROLE_TABLE} AS ur ON ur.user_id = u.id
 			      LEFT JOIN ${ROLE_TABLE} AS r ON ur.role_id = r.id
+            LEFT JOIN ${USER_TAG_TABLE} AS ut ON ut.user_id = u.id
+            LEFT JOIN ${TAG_TABLE} AS t ON t.id = ut.tag_id
             WHERE u.user_name = $1
             GROUP BY u.entity_id, u.id;`,
     values: [payload.user_name]
@@ -38,7 +42,8 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
       status: data.rows[0]?.status as UserStatus,
       slug: data.rows[0]?.slug as string,
       primary_badge: data.rows[0]?.primary_badge as number,
-      roles: data.rows[0]?.roles as Record<string, unknown>
+      roles: data.rows[0]?.roles as Record<string, unknown>,
+      skills: data.rows[0]?.skills as Record<string, unknown>
     };
   }
   throw new Error('User not found');
@@ -63,10 +68,10 @@ export async function getUsers(queryParams: QueryParams) {
 
   limitFields = limitFields.map((item) => `u.${item}`);
 
-  let SELECT_CLAUSE = `SELECT u.id as user_id, ${limitFields}`,
+  let SELECT_CLAUSE = `SELECT u.id as user_i, ${limitFields}`,
     JOIN_CLAUSE = '',
     WHERE_CLAUSE = 'WHERE u.status = $1',
-    GROUP_BY_CLAUSE = 'GROUP BY user_id';
+    GROUP_BY_CLAUSE = 'GROUP BY user_i';
 
   const queryValues: any[] = [status];
 
@@ -103,12 +108,16 @@ export async function getUsers(queryParams: QueryParams) {
 
   const getUsersQuery: QueryConfig = {
     text: `${SELECT_CLAUSE},
-            COALESCE(JSON_AGG(r.name) 
-              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles
+            COALESCE(JSON_AGG(DISTINCT r.name) 
+              FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
+            COALESCE(JSON_AGG(DISTINCT t.name) 
+              FILTER (WHERE t.id IS NOT NULL), '[]') AS skills
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
             LEFT JOIN ${USER_ROLE_TABLE} AS ur ON ur.user_id = u.id
 			      LEFT JOIN ${ROLE_TABLE} AS r ON ur.role_id = r.id
+            LEFT JOIN ${USER_TAG_TABLE} AS ut ON ut.user_id = u.id
+            LEFT JOIN ${TAG_TABLE} AS t ON t.id = ut.tag_id
             ${WHERE_CLAUSE}
             ${GROUP_BY_CLAUSE}, u.entity_id, u.id
             ORDER BY 

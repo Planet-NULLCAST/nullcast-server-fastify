@@ -19,8 +19,8 @@ const getNewToken: RouteOptions = {
       if (userToken) {
         reply.setCookie('token',
           userToken,
-          { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: 86400*30, sameSite: 'none' });
-        reply.code(200).send();
+          { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: +(process.env.JWT_EXPIRY as string), sameSite: 'none' });
+        reply.code(200).send({expiresIn: +(process.env.JWT_EXPIRY as string)});
       }
     }
     reply.code(401).send({ message: 'Cannot issue new token. Token provided is not valid' });
@@ -35,8 +35,8 @@ const signIn: RouteOptions = {
     const userData = await controller.signInUserController(request.body as ValidateUser);
     if (userData?.token) {
       reply.setCookie('token', userData.token,
-        { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: 86400*30, sameSite: 'none' });
-      reply.code(200).send({ message: 'User logged in successfully', user: userData.user });
+        { signed: false, domain: '', path: '/', secure: false, httpOnly: true, maxAge: +(process.env.JWT_EXPIRY as string), sameSite: 'none' });
+      reply.code(200).send({ message: 'User logged in successfully', user: userData.user, expiresIn: +(process.env.JWT_EXPIRY as string)});
       return;
     }
     reply.code(401).send({ message: 'Invalid username or password' });
