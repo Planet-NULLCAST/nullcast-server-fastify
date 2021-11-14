@@ -114,6 +114,20 @@ const deletePostTag: RouteOptions = {
   }
 };
 
+const deletePostTagsByPostId: RouteOptions = {
+  method: 'DELETE',
+  url: '/post-tags/:post_id',
+  // schema: deletePostTagSchema,
+  handler: async(request, reply) => {
+    const params = request.params as {post_id: number};
+    if (await controller.deletePostTagsByPostIdController(params.post_id)) {
+      reply.code(200).send({message: 'Tags associated with this post has been successfully deleted'});
+    } else {
+      reply.code(500).send({message: 'Tags not deleted successfully for this post'});
+    }
+  }
+};
+
 
 function initPostTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(createPostTag);
@@ -121,6 +135,7 @@ function initPostTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(getPostsByTagId);
   server.route(getTagsByPostId);
   server.route(deletePostTag);
+  server.route(deletePostTagsByPostId);
 
   done();
 }
