@@ -48,8 +48,8 @@ function constructJoinQuery({
 
     if (with_table.includes('votes')) {
       SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                          count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
-                          count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
+                          count(DISTINCT CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
+                          count(DISTINCT CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
                           COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
                           FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
@@ -127,8 +127,8 @@ function constructQuery(
 
     if (with_table.includes('votes')) {
       SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                          count(CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
-                          count(CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
+                          count(DISTINCT CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
+                          count(DISTINCT CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
                           COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
                           FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
       JOIN_CLAUSE = `${JOIN_CLAUSE}
