@@ -46,6 +46,10 @@ export const createUserSchema = {
               description: 'Avatar of the user'
             }
           }
+        },
+        expiresIn: {
+          type: 'number',
+          description: 'Cookie expiration time in seconds'
         }
       }
     },
@@ -84,6 +88,9 @@ export const getUserSchema = {
           properties: {
             ...userProps,
             roles: {
+              type: 'array'
+            },
+            skills: {
               type: 'array'
             }
           }

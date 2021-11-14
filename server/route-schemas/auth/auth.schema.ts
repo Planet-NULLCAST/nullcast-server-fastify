@@ -41,6 +41,10 @@ export const signInSchema = {
               type: 'string'
             }
           }
+        },
+        expiresIn: {
+          type: 'number',
+          description: 'Cookie expiration time in seconds'
         }
       }
     },
