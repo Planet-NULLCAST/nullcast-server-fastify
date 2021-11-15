@@ -21,6 +21,30 @@ export const createUserTagSchema = {
   }
 };
 
+export const createUserTagsSchema = {
+  summary: 'Add user skills',
+  description: 'A POST route to add multiple userTag information',
+  tags: ['User_tag'],
+  body:  {
+    type: 'array',
+    maxItems: 15,
+    minItems: 1,
+    items: {
+      type: 'object',
+      required: ['tag_id'],
+      properties: {
+        tag_id: {
+          type: 'number',
+          description: 'Id of the Tag'
+        }
+      }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
 export const getUserTagsSchema = {
   summary: 'Get User Tags by userId',
   description: 'To get userTag information',
