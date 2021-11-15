@@ -21,6 +21,24 @@ export async function createUserTagController(userTagData: UserTag, user:TokenUs
   return data.rows[0] as UserTag;
 }
 
+export async function createUserTagsController(userTagData: UserTag[], user:TokenUser): Promise<UserTag[]> {
+
+  for (const userTag of userTagData) {
+    userTag.user_id = user.id as number;
+    userTag.created_by = user.id as number;
+  }
+
+  const payload: UserTag[] = userTagData;
+
+  const fields = ['tag_id', 'user_id', 'created_by', 'created_at'];
+  const uniqueField = 'user_id, tag_id';
+  const needUpdate = false;
+
+  const data = await userTagHandler.insertMany(payload, fields, uniqueField, needUpdate);
+
+  return data.rows as UserTag[];
+}
+
 export async function getUserTagsByUserIdController(queryParams:QueryParams, userId:number):Promise<Event> {
   try {
     const payload = {

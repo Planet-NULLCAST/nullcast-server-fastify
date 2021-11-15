@@ -7,7 +7,8 @@ import { TokenUser } from 'interfaces/user.type';
 import { UpdateUserTag, UserTag } from 'interfaces/user-tag.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  createUserTagSchema, deleteUserTagSchema, getUserTagsSchema, updateUserTagSchema
+  createUserTagSchema, createUserTagsSchema,
+  deleteUserTagSchema, getUserTagsSchema, updateUserTagSchema
 } from 'route-schemas/user-tags/user-tags.schema';
 
 
@@ -27,6 +28,31 @@ const createUserTag: RouteOptions = {
 
     } catch (error) {
       throw error;
+    }
+
+  }
+};
+
+const createUserTags: RouteOptions = {
+  method: 'POST',
+  url: '/user-tags',
+  schema: createUserTagsSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const userTagData = await controller.createUserTagsController(request.body as UserTag[], user);
+      if (userTagData[0]) {
+        reply.code(201).send({message: 'Added all user skills', data: userTagData});
+      } else {
+        reply.code(404).send({statusCode: 404, message:'No skills are added for the user'});
+      }
+    } catch (error: any) {
+      const regExp = error.detail.match(/(\d+)/i)[1];
+      if (error.detail.includes('tag_id')) {
+        throw ({statusCode: 404, message: `Skill with id = ${regExp} doesn't exists`});
+      } else {
+        throw error;
+      }
     }
 
   }
@@ -91,6 +117,7 @@ const deleteUserTag: RouteOptions = {
 
 function initUserTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(createUserTag);
+  server.route(createUserTags);
   server.route(getUserTagsByUserId);
   server.route(updateUserTag);
   server.route(deleteUserTag);
