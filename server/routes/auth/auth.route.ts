@@ -35,7 +35,7 @@ const signIn: RouteOptions = {
     const userData = await controller.signInUserController(request.body as ValidateUser);
     if (userData?.token) {
       reply.setCookie('token', userData.token,
-        { signed: false, domain: '', path: '/', secure: false, httpOnly: true, maxAge: +(process.env.JWT_EXPIRY as string), sameSite: 'none' });
+        { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: +(process.env.JWT_EXPIRY as string), sameSite: 'none' });
       reply.code(200).send({ message: 'User logged in successfully', user: userData.user, expiresIn: +(process.env.JWT_EXPIRY as string)});
       return;
     }
