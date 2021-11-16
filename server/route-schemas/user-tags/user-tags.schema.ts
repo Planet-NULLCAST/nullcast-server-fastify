@@ -148,3 +148,20 @@ export const deleteUserTagSchema = {
     400: BAD_REQUEST
   }
 };
+
+export const deleteUserTagsSchema = {
+  summary: 'Delete User Tag',
+  description: 'To Delete userTag information',
+  tags: ['User_tag'],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};

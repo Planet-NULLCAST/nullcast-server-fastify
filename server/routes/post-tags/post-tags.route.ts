@@ -6,6 +6,7 @@ import * as controller from '../../controllers/index';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
   createPostTagSchema, createPostTagsSchema, deletePostTagSchema,
+  deletePostTagsSchema,
   getPostsByTagIdSchema, getTagsByPostIdSchema
 } from 'route-schemas/post-tags/post-tags.schema';
 import { TokenUser } from 'interfaces/user.type';
@@ -117,7 +118,7 @@ const deletePostTag: RouteOptions = {
 const deletePostTagsByPostId: RouteOptions = {
   method: 'DELETE',
   url: '/post-tags/:post_id',
-  // schema: deletePostTagSchema,
+  schema: deletePostTagsSchema,
   handler: async(request, reply) => {
     const params = request.params as {post_id: number};
     if (await controller.deletePostTagsByPostIdController(params.post_id)) {

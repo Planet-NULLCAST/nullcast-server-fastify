@@ -97,7 +97,6 @@ export async function deletePostTagsByPostIdController(postId: number) : Promise
     };
 
     await postTagHandler.dbHandler('DELETE_POST_TAGS_BY_POST_ID', payload);
-    console.log(await postTagHandler.dbHandler('DELETE_POST_TAGS_BY_POST_ID', payload));
     return true;
   } catch (error) {
     throw error;

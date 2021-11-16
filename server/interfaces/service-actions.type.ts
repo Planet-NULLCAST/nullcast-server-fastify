@@ -8,6 +8,7 @@ export type Actions =
   | 'GET_USER_TAGS_BY_USER_ID'
   | 'UPDATE_USER_TAG'
   | 'DELETE_USER_TAG'
+  | 'DELETE_USER_TAGS'
 
   | 'GET_POST'
   | 'GET_POSTS'
