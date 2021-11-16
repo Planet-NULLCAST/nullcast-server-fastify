@@ -15,7 +15,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
             u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
             COALESCE(JSON_AGG(DISTINCT r.name) 
               FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
-            COALESCE(JSON_AGG(DISTINCT t.name) 
+            COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'name', t.name))
               FILTER (WHERE t.id IS NOT NULL), '[]') AS skills
             FROM ${USER_TABLE} AS u
             LEFT JOIN ${USER_ROLE_TABLE} AS ur ON ur.user_id = u.id
@@ -68,10 +68,10 @@ export async function getUsers(queryParams: QueryParams) {
 
   limitFields = limitFields.map((item) => `u.${item}`);
 
-  let SELECT_CLAUSE = `SELECT u.id as user_i, ${limitFields}`,
+  let SELECT_CLAUSE = `SELECT u.id as user_id, ${limitFields}`,
     JOIN_CLAUSE = '',
     WHERE_CLAUSE = 'WHERE u.status = $1',
-    GROUP_BY_CLAUSE = 'GROUP BY user_i';
+    GROUP_BY_CLAUSE = 'GROUP BY u.id';
 
   const queryValues: any[] = [status];
 
@@ -110,7 +110,7 @@ export async function getUsers(queryParams: QueryParams) {
     text: `${SELECT_CLAUSE},
             COALESCE(JSON_AGG(DISTINCT r.name) 
               FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
-            COALESCE(JSON_AGG(DISTINCT t.name) 
+              COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'name', t.name))
               FILTER (WHERE t.id IS NOT NULL), '[]') AS skills
             FROM ${USER_TABLE} AS u
             ${JOIN_CLAUSE}
