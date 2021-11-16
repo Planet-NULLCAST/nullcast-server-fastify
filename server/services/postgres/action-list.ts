@@ -24,7 +24,7 @@ import {
   deletePostTag, deletePostTagsByPostId, getPostsByTagId, getTagsByPostId
 } from './post-tag.service';
 import {
-  deleteUserTag, getUserTagsByUserId, updateUserTag
+  deleteUserTag, deleteUserTags, getUserTagsByUserId, updateUserTag
 } from './user-tag.service';
 import { checkAdmin } from './admin.service';
 import { getSubscribers } from './subscribers.service';
@@ -39,6 +39,7 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_USER_TAGS_BY_USER_ID: getUserTagsByUserId,
   UPDATE_USER_TAG: updateUserTag,
   DELETE_USER_TAG: deleteUserTag,
+  DELETE_USER_TAGS: deleteUserTags,
 
   GET_POST: getSinglePost,
   GET_POSTS: getPosts,

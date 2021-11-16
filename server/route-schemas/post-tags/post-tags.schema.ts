@@ -131,3 +131,26 @@ export const deletePostTagSchema = {
     400: BAD_REQUEST
   }
 };
+
+export const deletePostTagsSchema = {
+  summary: 'Delete Tags associated with the post',
+  description: 'To Delete postTags information',
+  tags: ['Post_tag'],
+  params: {
+    type: 'object',
+    properties: {
+      post_id: { type: 'number', description: 'Id of post' }
+    }
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};

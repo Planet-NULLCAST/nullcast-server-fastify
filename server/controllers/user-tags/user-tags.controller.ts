@@ -90,3 +90,20 @@ export async function deleteUserTagController(tagId: number, userId: number) : P
     throw error;
   }
 }
+
+export async function deleteUserTagsController(userId: number) : Promise<boolean> {
+  try {
+    if (!userId) {
+      return false;
+    }
+
+    const payload = {
+      'userId': userId
+    };
+
+    await userTagHandler.dbHandler('DELETE_USER_TAGS', payload);
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}

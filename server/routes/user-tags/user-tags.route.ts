@@ -7,8 +7,8 @@ import { TokenUser } from 'interfaces/user.type';
 import { UpdateUserTag, UserTag } from 'interfaces/user-tag.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  createUserTagSchema, createUserTagsSchema,
-  deleteUserTagSchema, getUserTagsSchema, updateUserTagSchema
+  createUserTagSchema, createUserTagsSchema, deleteUserTagSchema,
+  deleteUserTagsSchema, getUserTagsSchema, updateUserTagSchema
 } from 'route-schemas/user-tags/user-tags.schema';
 
 
@@ -114,6 +114,20 @@ const deleteUserTag: RouteOptions = {
   }
 };
 
+const deleteUserTags: RouteOptions = {
+  method: 'DELETE',
+  url: '/user-tags',
+  schema: deleteUserTagsSchema,
+  handler: async(request, reply) => {
+    const user = request.user as TokenUser;
+    if (await controller.deleteUserTagsController(user.id)) {
+      reply.code(200).send({message: 'Skills associated with this user has been successfully deleted'});
+    } else {
+      reply.code(500).send({message: 'Skills not deleted successfully for this user'});
+    }
+  }
+};
+
 
 function initUserTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(createUserTag);
@@ -121,6 +135,7 @@ function initUserTags(server:FastifyInstance, _:any, done: () => void) {
   server.route(getUserTagsByUserId);
   server.route(updateUserTag);
   server.route(deleteUserTag);
+  server.route(deleteUserTags);
 
   done();
 }
