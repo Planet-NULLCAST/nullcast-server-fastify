@@ -7,7 +7,7 @@ import { TokenUser } from 'interfaces/user.type';
 import { UpdateUserTag, UserTag } from 'interfaces/user-tag.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  createUserTagSchema, createUserTagsSchema,deleteUserTagSchema, 
+  createUserTagSchema, createUserTagsSchema, deleteUserTagSchema,
   deleteUserTagsSchema, getUserTagsSchema, updateUserTagSchema
 } from 'route-schemas/user-tags/user-tags.schema';
 
