@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS users (
     meta_description TEXT,
     twitter VARCHAR(255),
     facebook VARCHAR(255),
+    github VARCHAR(255),
     discord VARCHAR(255),
     location TEXT,
     slug VARCHAR(255) NOT NULL,
@@ -114,7 +115,7 @@ CREATE TABLE IF NOT EXISTS posts (
     og_description TEXT,
     html TEXT,
     type VARCHAR(255) DEFAULT 'blog',
-    slug VARCHAR(255),
+    slug VARCHAR(255) UNIQUE,
     custom_excerpt VARCHAR(255),
     viewers jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
@@ -250,8 +251,6 @@ CREATE TABLE IF NOT EXISTS subscribers(
     last_notified TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-
--- Add initial data
 INSERT INTO entity (name, description)
 VALUES ('nullcast', 'Nullcast is an open-source tech community');
 INSERT INTO tags (name, description, meta_title, slug, created_by)
