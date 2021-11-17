@@ -15,6 +15,7 @@
     "lint-fix": "eslint . --ext .ts --fix",
     "init-tables": "node ./initialize-tables.js",
     "create-seed": "ts-node ./seed-db.ts",
+    "migrate": "ts-node ./scripts/migrate/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -70,6 +71,7 @@
     "eslint": "^7.32.0",
     "husky": "^7.0.1",
     "lint-staged": "^11.1.2",
+    "mongoose": "^6.0.11",
     "nodemon": "^2.0.12",
     "standard-version": "^9.3.1",
     "ts-node": "^10.2.0",

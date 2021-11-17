@@ -18,6 +18,7 @@ export interface Post {
     updated_at?: string;
     published_at?: string;
     updated_by?: number;
+    preview_url?: string;
 }
 
 export interface mobiledoc {

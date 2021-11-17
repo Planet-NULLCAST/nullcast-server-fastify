@@ -1,30 +1,21 @@
 Arguments: 
-  /home/ntpl-292/.nvm/versions/node/v14.16.1/bin/node /home/ntpl-292/.nvm/versions/node/v14.16.1/bin/yarn add @type/fastify-nodemailer -D
+  /home/ntpl-290/.nvm/versions/node/v14.17.0/bin/node /home/ntpl-290/.nvm/versions/node/v14.17.0/bin/yarn add -D mongoose
 
 PATH: 
-  /home/ntpl-292/.nvm/versions/node/v14.16.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  /home/ntpl-290/.rbenv/shims:/home/ntpl-290/.rbenv/bin:/home/ntpl-290/.nvm/versions/node/v14.17.0/bin:/home/ntpl-290/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
-  1.22.15
+  1.22.10
 
 Node version: 
-  14.16.1
+  14.17.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@type%2ffastify-nodemailer: Not found
-      at Request.params.callback [as _callback] (/home/ntpl-292/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:66140:18)
-      at Request.self.callback (/home/ntpl-292/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:140885:22)
-      at Request.emit (events.js:315:20)
-      at Request.<anonymous> (/home/ntpl-292/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:141857:10)
-      at Request.emit (events.js:315:20)
-      at IncomingMessage.<anonymous> (/home/ntpl-292/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:141779:12)
-      at Object.onceWrapper (events.js:421:28)
-      at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (internal/streams/readable.js:1327:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:67:26)
 
 npm manifest: 
   {
@@ -77,6 +68,7 @@ npm manifest:
       "got": "^11.8.2",
       "jsonwebtoken": "^8.5.1",
       "lodash": "^4.17.21",
+      "nodemailer": "^6.6.5",
       "oembed-parser": "^1.4.7",
       "pg": "^8.7.1",
       "validator": "^13.6.0"
@@ -87,13 +79,13 @@ npm manifest:
       "@types/jsonwebtoken": "^8.5.4",
       "@types/lodash": "^4.14.172",
       "@types/node": "^15.12.5",
+      "@types/nodemailer": "^6.4.4",
       "@types/pg": "^8.6.0",
       "@types/validator": "^13.6.3",
       "@typescript-eslint/eslint-plugin": "^4.29.1",
       "@typescript-eslint/parser": "^4.29.1",
       "dotenv": "^10.0.0",
       "eslint": "^7.32.0",
-      "fastify-nodemailer": "^5.0.0",
       "husky": "^7.0.1",
       "lint-staged": "^11.1.2",
       "nodemon": "^2.0.12",
@@ -624,6 +616,13 @@ Lockfile:
     version "16.7.1"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-16.7.1.tgz#c6b9198178da504dfca1fd0be9b2e1002f1586f0"
     integrity sha512-ncRdc45SoYJ2H4eWU9ReDfp3vtFqDYhjOsKlFFUDEn8V1Bgr2RjYal8YT5byfadWIRluhPFU6JiDOl0H6Sl87A==
+  
+  "@types/nodemailer@^6.4.4":
+    version "6.4.4"
+    resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.4.tgz#c265f7e7a51df587597b3a49a023acaf0c741f4b"
+    integrity sha512-Ksw4t7iliXeYGvIQcSIgWQ5BLuC/mljIEbjf615svhZL10PE9t+ei8O9gDaD3FPCasUJn9KTLwz2JFJyiiyuqw==
+    dependencies:
+      "@types/node" "*"
   
   "@types/normalize-package-data@^2.4.0":
     version "2.4.1"
@@ -2341,21 +2340,6 @@ Lockfile:
     resolved "https://registry.npmjs.org/fastify-error/-/fastify-error-0.3.1.tgz"
     integrity sha512-oCfpcsDndgnDVgiI7bwFKAun2dO+4h84vBlkWsWnz/OUK9Reff5UFoFl241xTiLeHWX/vU9zkDVXqYUxjOwHcQ==
   
-  fastify-nodemailer@^5.0.0:
-    version "5.0.0"
-    resolved "https://registry.yarnpkg.com/fastify-nodemailer/-/fastify-nodemailer-5.0.0.tgz#073b323dbaaf7a6868f5136b9774ecb93bf59ca3"
-    integrity sha512-xOUhkqbHUDnwa33Y+ITg+bmUVkiBGHD7aqWGKCIdZ09NmOiD/LWnqSaomJNAwoA65DyK/Js56qbYeG1hDlLonA==
-    dependencies:
-      fastify-plugin "^2.0.1"
-      nodemailer "^6.4.10"
-  
-  fastify-plugin@^2.0.1:
-    version "2.3.4"
-    resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-2.3.4.tgz#b17abdc36a97877d88101fb86ad8a07f2c07de87"
-    integrity sha512-I+Oaj6p9oiRozbam30sh39BiuiqBda7yK2nmSPVwDCfIBlKnT8YB3MY+pRQc2Fcd07bf6KPGklHJaQ2Qu81TYQ==
-    dependencies:
-      semver "^7.3.2"
-  
   fastify-plugin@^3.0.0:
     version "3.0.0"
     resolved "https://registry.npmjs.org/fastify-plugin/-/fastify-plugin-3.0.0.tgz"
@@ -3944,7 +3928,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
     integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
   
-  nodemailer@^6.4.10:
+  nodemailer@^6.6.5:
     version "6.6.5"
     resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.6.5.tgz#f9f6953cee5cfe82cbea152eeddacf7a0442049a"
     integrity sha512-C/v856DBijUzHcHIgGpQoTrfsH3suKIRAGliIzCstatM2cAa+MYX3LuyCrABiO/cdJTxgBBHXxV1ztiqUwst5A==
