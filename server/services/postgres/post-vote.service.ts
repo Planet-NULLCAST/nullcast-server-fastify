@@ -1,6 +1,6 @@
-import { Client, QueryConfig } from "pg";
-import { POST_VOTE_TABLE } from "constants/tables";
-import { PostVote } from "interfaces/post-vote.type";
+import { Client, QueryConfig } from 'pg';
+import { POST_VOTE_TABLE } from 'constants/tables';
+import { PostVote } from 'interfaces/post-vote.type';
 
 
 export async function addPostVote(payload: PostVote) {
@@ -13,7 +13,7 @@ export async function addPostVote(payload: PostVote) {
             ON CONFLICT (post_id, user_id) 
             DO UPDATE SET VALUE = EXCLUDED.VALUE
             RETURNING post_id, user_id, value;`,
-    values: [payload.postId, payload.userId, payload.value ]
+    values: [payload.postId, payload.userId, payload.value]
   };
 
   const data = await postgresClient.query(addPostVoteQuery);
@@ -58,7 +58,7 @@ export async function getPostVoteByUser(payload: {postId: number, userId: number
   };
   const userVoteData = await postgresClient.query(userPostVoteQuery);
   if (userVoteData.rows && userVoteData.rows.length) {
-    return userVoteData.rows[0]
+    return userVoteData.rows[0];
   }
   throw {statusCode: 404, message: 'User has not voted for this post'};
 }

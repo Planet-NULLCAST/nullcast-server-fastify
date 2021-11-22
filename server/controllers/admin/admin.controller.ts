@@ -33,7 +33,7 @@ export async function adminReviewPostController(postData:Post, userId:number, po
         throw { statusCode: 404, message: 'Status of the post is not valid' };
       }
     } else {
-        throw { statusCode: 404, message: 'You should have admin access' };
+      throw { statusCode: 404, message: 'You should have admin access' };
     }
 
     const payload : Post = {

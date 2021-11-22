@@ -28,7 +28,8 @@ import {
 } from './user-tag.service';
 import { checkAdmin } from './admin.service';
 import { getSubscribers } from './subscribers.service';
-import { addPostVote, deletePostVote, getPostVoteByUser, getPostVotes 
+import {
+  addPostVote, deletePostVote, getPostVoteByUser, getPostVotes
 } from './post-vote.service';
 
 export const serviceActions: { [x in Actions]: any } = {

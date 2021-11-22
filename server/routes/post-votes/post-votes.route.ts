@@ -5,8 +5,9 @@ import * as controller from '../../controllers/index';
 
 import { TokenUser } from 'interfaces/user.type';
 import { PostVote } from 'interfaces/post-vote.type';
-import { addPostVoteSchema, deletePostVoteSchema, 
-  getPostVoteByUserSchema, getPostVotesSchema 
+import {
+  addPostVoteSchema, deletePostVoteSchema,
+  getPostVoteByUserSchema, getPostVotesSchema
 } from 'route-schemas/post-votes/post-votes.schema';
 
 
