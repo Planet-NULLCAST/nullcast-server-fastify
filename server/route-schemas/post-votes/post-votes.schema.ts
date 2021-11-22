@@ -54,19 +54,19 @@ export const getPostVoteByUserSchema = {
   },
   response: {
     200: {
-    type: 'object',
-    properties: {
-      message: {
-        type: 'string'
-      },
-      data: {
-        type: 'object',
-        properties: {
-          vote_kind: {type: 'string', enum: ['up', 'down'], description: 'Vote type'}
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string'
+        },
+        data: {
+          type: 'object',
+          properties: {
+            vote_kind: {type: 'string', enum: ['up', 'down'], description: 'Vote type'}
+          }
         }
       }
-    }
-  },
+    },
     400: BAD_REQUEST
   }
 };
