@@ -189,6 +189,10 @@ export const getPostsByUserIdSchema = {
           'published_at', 'banner_image', 'title', 'meta_title'],
         example: `['slug', 'created_by', 'mobiledoc']`
       },
+      tag: {
+        type: 'string',
+        description: 'Tag of the post'
+      },
       ...queryStringProps('post')
     }
   },

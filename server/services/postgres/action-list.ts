@@ -28,6 +28,8 @@ import {
 } from './user-tag.service';
 import { checkAdmin } from './admin.service';
 import { getSubscribers } from './subscribers.service';
+import { addPostVote, deletePostVote, getPostVoteByUser, getPostVotes 
+} from './post-vote.service';
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
@@ -52,6 +54,11 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_TAGS_BY_POST_ID: getTagsByPostId,
   DELETE_POST_TAG: deletePostTag,
   DELETE_POST_TAGS_BY_POST_ID: deletePostTagsByPostId,
+
+  ADD_POST_VOTE: addPostVote,
+  GET_POST_VOTES: getPostVotes,
+  GET_POST_VOTE_BY_USER: getPostVoteByUser,
+  DELETE_POST_VOTE: deletePostVote,
 
   GET_COURSE: getCourse,
   ADD_COURSE_CHAPTERS: addCoursesWithChapters,

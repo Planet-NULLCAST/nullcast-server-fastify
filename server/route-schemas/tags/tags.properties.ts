@@ -33,8 +33,8 @@ export const createTagProps = {
     type: 'string',
     minLength: 1,
     maxLength: 20,
-    pattern: '^[a-z_A-Z 0-9]+$',
-    description: 'Name of the tag that follows the expression `/^[a-z_A-Z 0-9]+$/`'
+    pattern: '^[a-z-A-Z 0-9]+$',
+    description: 'Name of the tag that follows the expression `/^[a-z-A-Z 0-9]+$/`'
   },
   ...basicProps
 };

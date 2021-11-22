@@ -8,10 +8,9 @@ import { TokenUser } from 'interfaces/user.type';
 import {DatabaseHandler} from 'services/postgres/postgres.handler';
 import { checkAdminController } from 'controllers';
 
+
 const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
-
 const postHandler = new DatabaseHandler(POST_TABLE);
-
 
 export async function createPostController(postData:Post, userId:number): Promise<Post> {
   try {
@@ -103,15 +102,15 @@ export async function updatePostController(postData:Post, userId:number, postId:
       return false;
     }
     const isAdmin = await checkAdminController(userId);
-    const status = ['drafted', 'pending'];
     const adminStatus = ['published', 'rejected'];
+    const allowedStatus = ['drafted', 'pending'];
 
     if (isAdmin) {
-      if (postData.status && !(adminStatus.concat(status).includes(postData.status.trim().toLowerCase()))) {
+      if (postData.status && !(adminStatus.concat(allowedStatus).includes(postData.status.trim().toLowerCase()))) {
         throw { statusCode: 404, message: 'Status of the post is not valid' };
       }
     } else {
-      if (postData.status && !(status.includes(postData.status.trim().toLowerCase()))) {
+      if (postData.status && !(allowedStatus.includes(postData.status.trim().toLowerCase()))) {
         if (adminStatus.includes(postData.status.trim().toLowerCase())) {
           throw { statusCode: 404, message: 'You should have admin access' };
         }
