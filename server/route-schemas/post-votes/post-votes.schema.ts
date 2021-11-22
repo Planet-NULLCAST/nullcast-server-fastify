@@ -43,7 +43,7 @@ export const getPostVotesSchema = {
 };
 
 export const getPostVoteByUserSchema = {
-  summary: 'Get postVotes by post_id',
+  summary: 'Get vote given by user to a post',
   description: 'To get information of vote regarding a post done by that user',
   tags: ['Post_vote'],
   params: {
@@ -53,6 +53,20 @@ export const getPostVoteByUserSchema = {
     }
   },
   response: {
+    200: {
+    type: 'object',
+    properties: {
+      message: {
+        type: 'string'
+      },
+      data: {
+        type: 'object',
+        properties: {
+          vote_kind: {type: 'string', enum: ['up', 'down'], description: 'Vote type'}
+        }
+      }
+    }
+  },
     400: BAD_REQUEST
   }
 };
