@@ -12,4 +12,4 @@ export * from './user-chapters/user-chapters.controller';
 export * from './events/events.controller';
 export * from './post-tags/post-tags.controller';
 export * from './subscribers/subscribers.controller';
-export * from './post-votes/post-votes.controller'
+export * from './post-votes/post-votes.controller';

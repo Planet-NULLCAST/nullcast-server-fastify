@@ -13,7 +13,7 @@ export async function addPostVoteController(postVoteData: PostVote, postId: numb
       userId: user.id as number,
       value: postVoteData.value as number
     };
-  
+
     return await postVoteHandler.dbHandler('ADD_POST_VOTE', payload) as PostVote;
   } catch (error) {
     throw error;
@@ -23,7 +23,7 @@ export async function addPostVoteController(postVoteData: PostVote, postId: numb
 export async function getPostVoteController(postId: number) {
   try {
     const payload = {
-      postId: postId
+      postId
     };
 
     return await postVoteHandler.dbHandler('GET_POST_VOTES', payload);
@@ -37,7 +37,7 @@ export async function getPostVoteByUserController(postId: number, user:TokenUser
   try {
     const payload = {
       userId: user.id,
-      postId: postId
+      postId
     };
 
     return await postVoteHandler.dbHandler('GET_POST_VOTE_BY_USER', payload);

@@ -174,8 +174,7 @@ export async function getPosts(queryParams: QueryParams) {
   queryValues.push(+limit);
   queryValues.push((page - 1) * +limit);
 
-  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
-    limit_fields,
+  const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({limit_fields,
     with_table});
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
