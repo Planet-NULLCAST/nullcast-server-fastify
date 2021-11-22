@@ -22,6 +22,11 @@ export type Actions =
   | 'DELETE_POST_TAG'
   | 'DELETE_POST_TAGS_BY_POST_ID'
 
+  | 'ADD_POST_VOTE'
+  | 'GET_POST_VOTES'
+  | 'GET_POST_VOTE_BY_USER'
+  | 'DELETE_POST_VOTE'
+
   | 'GET_COURSE'
   | 'ADD_COURSE_CHAPTERS'
 

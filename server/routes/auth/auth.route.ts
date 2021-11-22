@@ -39,7 +39,7 @@ const signIn: RouteOptions = {
       reply.code(200).send({ message: 'User logged in successfully', user: userData.user, expiresIn: +(process.env.JWT_EXPIRY as string)});
       return;
     }
-    reply.code(401).send({ message: 'Invalid username or password' });
+    reply.code(401).send({ message: 'Invalid email or password' });
   }
 };
 

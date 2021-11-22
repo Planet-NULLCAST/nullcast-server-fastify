@@ -13,7 +13,7 @@ const tagsHandler = new DatabaseHandler(TAG_TABLE);
 export async function createTagController(payload: Tag, userData: UserData) {
   try {
     const isAdmin = await checkAdminController(userData.id);
-    const adminTags = ['whatsnew', 'fix', 'announcement', 'improvement'];
+    const adminTags = ['whats-new', 'fix', 'announcement', 'improvement'];
     if (!isAdmin && adminTags.includes(payload.name.trim().toLowerCase())) {
       throw ({statusCode: 404, message: 'You should have admin access'});
     }

@@ -1,7 +1,7 @@
 import { Client, QueryConfig } from 'pg';
 
 import {
-  POST_TABLE, POST_TAG_TABLE, POST_VOTE_TABLE, TAG_TABLE, USER_TABLE
+  POST_TABLE, POST_TAG_TABLE, TAG_TABLE, USER_TABLE
 } from 'constants/tables';
 
 import { Post } from 'interfaces/post.type';
@@ -12,7 +12,7 @@ import { TokenUser } from 'interfaces/user.type';
 function constructJoinQuery({
   limit_fields,
   with_table = ['users', 'tags']
-}: QueryParams, userId?: number) {
+}: QueryParams) {
 
   const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'status', 'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'];
 
@@ -45,32 +45,6 @@ function constructJoinQuery({
                           LEFT JOIN ${POST_TAG_TABLE} AS post_tags on post.id = post_tags.post_id
                           LEFT JOIN ${TAG_TABLE} AS tag on tag.id = post_tags.tag_id`;
     }
-
-    if (with_table.includes('votes')) {
-      SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                          count(DISTINCT CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
-                          count(DISTINCT CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
-                          COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
-                          FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
-      JOIN_CLAUSE = `${JOIN_CLAUSE}
-                          LEFT JOIN ${POST_VOTE_TABLE} AS votes ON votes.post_id = post.id`;
-
-
-      if (userId) {
-        // Check if the user has voted or not,
-        // If voted, find if it's up or down
-        SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                        CASE
-                        WHEN votes.user_id = ${userId} THEN
-                                CASE
-                                        WHEN votes.value = 1 THEN 'up'
-                                        WHEN votes.value = -1 THEN 'down'
-                                END
-                        ELSE null
-                        END as vote_kind`;
-        GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, votes.user_id, votes.value`;
-      }
-    }
   }
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE };
@@ -81,7 +55,7 @@ function constructQuery(
     limit_fields,
     with_table = ['users', 'tags'],
     tag = ''
-  }:QueryParams, userId: number) {
+  }:QueryParams) {
 
   const DEFAULT_FIELDS = ['slug', 'created_by', 'status', 'mobiledoc', 'created_at', 'published_at', 'banner_image', 'title', 'meta_title'];
 
@@ -124,32 +98,6 @@ function constructQuery(
                         LEFT JOIN ${TAG_TABLE} AS t on t.id = pt.tag_id`;
       }
     }
-
-    if (with_table.includes('votes')) {
-      SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                          count(DISTINCT CASE WHEN votes.value = 1 THEN 1 END) AS upvotes,
-                          count(DISTINCT CASE WHEN votes.value = -1 THEN 1 END) AS downvotes,
-                          COALESCE(JSONB_AGG(DISTINCT votes.user_id) 
-                          FILTER (WHERE votes.user_id IS NOT NULL), '[]') AS votes`;
-      JOIN_CLAUSE = `${JOIN_CLAUSE}
-                      LEFT JOIN ${POST_VOTE_TABLE} AS votes on votes.post_id = posts.id`;
-
-
-      if (userId) {
-        // Check if the user has voted or not,
-        // If voted, find if it's up or down
-        SELECT_CLAUSE = `${SELECT_CLAUSE}, 
-                        CASE
-                        WHEN votes.user_id = ${userId} THEN
-                                CASE
-                                        WHEN votes.value = 1 THEN 'up'
-                                        WHEN votes.value = -1 THEN 'down'
-                                END
-                        ELSE null
-                        END as vote_kind`;
-        GROUP_BY_CLAUSE = `${GROUP_BY_CLAUSE}, votes.user_id, votes.value`;
-      }
-    }
   }
 
   return { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE};
@@ -157,8 +105,7 @@ function constructQuery(
 
 export async function getSinglePost(
   payload: { key: string | number; field: string },
-  queryParams: QueryParams,
-  user: TokenUser
+  queryParams: QueryParams
 ) {
   const { key, field = 'id' } = payload;
   // Set default values for query params
@@ -171,7 +118,7 @@ export async function getSinglePost(
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
     with_table
-  }, user?.id);
+  });
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -189,7 +136,7 @@ export async function getSinglePost(
   return data.rows[0];
 }
 
-export async function getPosts(queryParams: QueryParams, user: TokenUser) {
+export async function getPosts(queryParams: QueryParams) {
   // Set default values for query params
   const {
     limit_fields,
@@ -229,8 +176,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
 
   const { SELECT_CLAUSE, JOIN_CLAUSE, GROUP_BY_CLAUSE } = constructJoinQuery({
     limit_fields,
-    with_table
-  }, user?.id);
+    with_table});
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -262,8 +208,7 @@ export async function getPosts(queryParams: QueryParams, user: TokenUser) {
 
 export async function getPostsBytag(
   payload: { key: string; field: string },
-  queryParams: QueryParams,
-  user: TokenUser
+  queryParams: QueryParams
 ) {
 
   const {
@@ -284,7 +229,7 @@ export async function getPostsBytag(
       limit_fields,
       with_table,
       tag
-    }, user?.id
+    }
   );
 
   let WHERE_CLAUSE = 'WHERE tags.name = $1';
@@ -361,7 +306,7 @@ export async function getPostsByUserId(
       limit_fields,
       with_table,
       tag
-    }, payload.id
+    }
   );
 
   let WHERE_CLAUSE = 'WHERE u.id = $1';
