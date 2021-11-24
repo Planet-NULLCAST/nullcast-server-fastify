@@ -17,12 +17,12 @@ export async function replaceImageUrlPost(oldUrl: string, replaceUrl: string) {
   const data = await postgresClient.query(getPostsQuery);
   const posts = data.rows as Post[];
 
-  posts.map(async(post: Post) => {
+  posts.forEach(async(post: Post) => {
     let mobiledoc = post.mobiledoc;
 
     function changeUrl(element: any) {
       if (isArray(element)) {
-        element.map((elementChild, index) => {
+        element.forEach((elementChild, index) => {
           if ((typeof (elementChild) === 'string') && elementChild.toLowerCase().includes(oldUrl)) {
             element[index] = elementChild.replace(oldUrl, replaceUrl);
           } else {
