@@ -11,6 +11,9 @@ import * as db from './models';
 import {
   Client, QueryConfig, QueryResultRow
 } from 'pg';
+import { migrateRoles } from './migrate-roles';
+import { replaceImageUrlPost } from './replace-image-url-post';
+
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -56,6 +59,14 @@ async function migrateData() {
 
     await migratePostAndRelated(userMap);
 
+    //Change the Url structure inside mobiledoc to neede structure
+    const oldUrl = 'https://nullcast.io/';
+    const replaceUrl = `https://s3.amazonaws.com/${server(process.env.ENV as string)}/old/`;
+    await replaceImageUrlPost(oldUrl, replaceUrl);
+
+    //Migrate roles and user-roles
+    await migrateRoles();
+
     process.exit();
   } catch (error) {
     console.log(error);
@@ -64,6 +75,17 @@ async function migrateData() {
   }
 }
 migrateData();
+
+//Function to determine the server from env
+const server = (env: string) => {
+  if (env == 'development') {
+    return 'dev';
+  } else if (env == 'production') {
+    return 'prod';
+  } else {
+    return env;
+  }
+}
 
 async function connectToMongo() {
   const DB_HOST = 'localhost';
