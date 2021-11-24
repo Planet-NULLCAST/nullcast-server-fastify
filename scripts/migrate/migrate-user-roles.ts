@@ -1,4 +1,4 @@
-import { Client, QueryConfig } from "pg";
+import { Client, QueryConfig } from 'pg';
 import * as tableNames from '../../server/constants/tables';
 
 export async function migrateUserRoles() {

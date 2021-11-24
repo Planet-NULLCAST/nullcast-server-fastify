@@ -1,14 +1,14 @@
-import { Client, QueryConfig } from "pg";
+import { Client, QueryConfig } from 'pg';
 import { default as mobiledocLib} from '../../server/lib/mobiledoc';
-import { mobiledoc, Post } from "interfaces/post.type";
+import { mobiledoc, Post } from 'interfaces/post.type';
 import * as tableNames from '../../server/constants/tables';
-import { isArray } from "lodash";
-import { updateOneById } from "../../server/services/postgres/query-builder.service";
+import { isArray } from 'lodash';
+import { updateOneById } from '../../server/services/postgres/query-builder.service';
 
 
 export async function replaceImageUrlPost(oldUrl: string, replaceUrl: string) {
-const postgresClient: Client = (globalThis as any).postgresClient as Client;
-const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
+  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+  const convertToHTML = (mobiledoc: mobiledoc) => mobiledocLib.mobiledocHtmlRenderer.render(mobiledoc);
 
   const getPostsQuery: QueryConfig = {
     text: `SELECT id, mobiledoc

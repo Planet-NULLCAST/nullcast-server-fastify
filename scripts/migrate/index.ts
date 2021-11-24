@@ -82,10 +82,10 @@ const server = (env: string) => {
     return 'dev';
   } else if (env == 'production') {
     return 'prod';
-  } else {
-    return env;
   }
-}
+  return env;
+
+};
 
 async function connectToMongo() {
   const DB_HOST = 'localhost';
