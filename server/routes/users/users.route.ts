@@ -22,7 +22,7 @@ const createUser: RouteOptions = {
         reply.setCookie('token', userData.token,
           {signed: false, domain:'', path:'/', secure:true, httpOnly:true,
             maxAge: +(process.env.JWT_EXPIRY as string), sameSite:'none'});
-        reply.code(201).send({message: 'User created', user: userData.user, expiresIn: +(process.env.JWT_EXPIRY as string)});
+        reply.code(201).send({message: 'User signed up successfully', user: userData.user, expiresIn: +(process.env.JWT_EXPIRY as string)});
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }
@@ -31,7 +31,7 @@ const createUser: RouteOptions = {
       const keys = ['email', 'user_name'];
       keys.map((key: string) => {
         if (error.detail.includes(key)) {
-          throw ({statusCode: 404, message: `${key} already exists.`});
+          throw ({statusCode: 404, message: `${key == 'user_name' ? 'username' : key} already exists.`});
         }
       });
       throw error;
