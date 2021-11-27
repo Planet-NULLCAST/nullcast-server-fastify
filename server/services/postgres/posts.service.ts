@@ -367,4 +367,36 @@ export async function getPostsByUserId(
   return { posts: postData.rows, ...countData.rows[0], limit, page};
 }
 
+export async function getPostsCount(
+  payload: {[x: string]: any},
+  queryParams: QueryParams
+) {
 
+  const {
+    status = ''
+  } = queryParams;
+
+  const userId = payload.userId;
+
+  let WHERE_CLAUSE = 'WHERE posts.created_by = $1';
+
+  const queryValues: any[] = [userId];
+
+  if (status) {
+    queryValues.push(status);
+    WHERE_CLAUSE = `${WHERE_CLAUSE} AND posts.status = $${queryValues.length}`;
+  }
+
+  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+  const getPostsQuery: QueryConfig = {
+    text: ` SELECT COUNT(posts.id)
+            from ${POST_TABLE} AS posts
+            ${WHERE_CLAUSE};`,
+    values: queryValues
+  };
+
+  const postData = await postgresClient.query<Post>(getPostsQuery);
+
+  return { ...postData.rows[0]};
+}
