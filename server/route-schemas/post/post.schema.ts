@@ -201,6 +201,40 @@ export const getPostsByUserIdSchema = {
   }
 };
 
+export const getPostsCountSchema = {
+  summary: 'Get posts count by userId',
+  description: 'To get posts count information',
+  tags: ['Post'],
+  querystring: {
+    type: 'object',
+    properties: {
+      status: {
+        type: 'string',
+        default: '',
+        enum: ['', 'drafted', 'pending', 'published', 'rejected'],
+        description: `Status of the post data`
+      }
+    }
+  },
+  response: {
+    200: {
+      message: {
+        type: 'string'
+      },
+      data: {
+        type: 'object',
+        properties: {
+          count: {
+            type: 'number',
+            description: 'Number of posts'
+          }
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
 export const deletePostSchema = {
   summary: 'Delete Post',
   description: 'To Delete Post information',
