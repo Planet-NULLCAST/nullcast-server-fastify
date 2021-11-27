@@ -100,7 +100,7 @@ export async function getPostsCountController(
   queryParams: QueryParams, userId: number) {
   try {
     const payload = {
-      userId: userId
+      userId
     };
     return await postHandler.dbHandler('GET_POSTS_COUNT', payload, queryParams);
 
