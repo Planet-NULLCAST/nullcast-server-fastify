@@ -43,7 +43,7 @@ export const getEventsSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+        default: ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
           'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
         example: `['id', 'created_at', 'created_by', 'status']`
       },
@@ -65,7 +65,7 @@ export const getEventsByUserIdSchema = {
       limit_fields: {
         type: 'array',
         description: 'The fields that are needed to be returned',
-        default: ['id', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+        default: ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
           'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
         example: `['id', 'created_at', 'created_by', 'status']`
       },
