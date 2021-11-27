@@ -14,6 +14,7 @@ export type Actions =
   | 'GET_POSTS'
   | 'GET_POSTS_BY_TAG'
   | 'GET_POSTS_BY_USER_ID'
+  | 'GET_POSTS_COUNT'
 
   | 'GET_TAGS'
 

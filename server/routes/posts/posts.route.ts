@@ -8,7 +8,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
   createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema,
-  getPostsByTagSchema, getPostsByUserIdSchema
+  getPostsByTagSchema, getPostsByUserIdSchema, getPostsCountSchema
 } from '../../route-schemas/post/post.schema';
 
 
@@ -132,6 +132,22 @@ const getPostsByUserId: RouteOptions = {
   }
 };
 
+const getPostsCount: RouteOptions = {
+  method: 'GET',
+  url: '/posts-count/:user_id',
+  schema: getPostsCountSchema,
+  handler: async(request, reply) => {
+    const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+    const params = request.params as {user_id: number};
+    if (queryParams) {
+      const posts = await controller.getPostsCountController(queryParams, params.user_id);
+      reply.code(200).send({message: 'Posts count', data: posts });
+    } else {
+      reply.code(500).send({ message: 'some error' });
+    }
+  }
+};
+
 const updatePost: RouteOptions = {
   method: 'PUT',
   url: '/post/:postId',
@@ -174,6 +190,7 @@ function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(getPosts);
   server.route(getPostsByTag);
   server.route(getPostsByUserId);
+  server.route(getPostsCount);
   server.route(updatePost);
   server.route(deletePost);
   //getPublishedPostsCountByUserId
