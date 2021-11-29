@@ -179,12 +179,6 @@ export const getPostsByUserIdSchema = {
   summary: 'Get posts by userId',
   description: 'To get post information',
   tags: ['Post'],
-  params: {
-    type: 'object',
-    properties: {
-      user_id: { type: 'string', description: 'Id of the user' }
-    }
-  },
   querystring: {
     type: 'object',
     properties: {
