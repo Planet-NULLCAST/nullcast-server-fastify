@@ -6,7 +6,6 @@ import {
 
 import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { TokenUser } from 'interfaces/user.type';
 
 
 function constructJoinQuery({
@@ -284,7 +283,7 @@ export async function getPostsBytag(
 }
 
 export async function getPostsByUserId(
-  payload: TokenUser,
+  payload: {[x: string]: any},
   queryParams: QueryParams
 ) {
 
@@ -300,7 +299,7 @@ export async function getPostsByUserId(
     with_table
   } = queryParams;
 
-  const userId = payload.id;
+  const userId = payload.userId;
 
   const { SELECT_CLAUSE, GROUP_BY_CLAUSE, JOIN_CLAUSE } = constructQuery(
     {

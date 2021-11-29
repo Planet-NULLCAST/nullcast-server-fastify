@@ -84,10 +84,10 @@ export async function getPostsByTagController(tag: string, queryParams: QueryPar
 }
 
 export async function getPostsByUserIdController(
-  queryParams: QueryParams, currentUser: TokenUser): Promise<Post> {
+  queryParams: QueryParams, userId: number): Promise<Post> {
   try {
-    const payload: TokenUser = {
-      ...currentUser
+    const payload = {
+      userId: userId
     };
     return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams);
 
