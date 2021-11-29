@@ -354,9 +354,9 @@ export async function getPostsByUserId(
     text: ` SELECT COUNT(DISTINCT posts.id)
             from ${POST_TABLE} AS posts
             ${tag ?
-            `LEFT JOIN ${POST_TAG_TABLE} as pt on pt.post_id = posts.id
+    `LEFT JOIN ${POST_TAG_TABLE} as pt on pt.post_id = posts.id
                         LEFT JOIN ${TAG_TABLE} AS tags on tags.id = pt.tag_id`
-            : ''}
+    : ''}
             LEFT JOIN ${USER_TABLE} AS u on u.id = posts.created_by
             ${WHERE_CLAUSE};`,
     values: queryValues.slice(0, -2)
