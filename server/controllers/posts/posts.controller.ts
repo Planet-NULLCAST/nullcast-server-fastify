@@ -87,7 +87,7 @@ export async function getPostsByUserIdController(
   queryParams: QueryParams, userId: number): Promise<Post> {
   try {
     const payload = {
-      userId: userId
+      userId
     };
     return await postHandler.dbHandler('GET_POSTS_BY_USER_ID', payload, queryParams);
 
