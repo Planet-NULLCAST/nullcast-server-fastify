@@ -179,6 +179,12 @@ export const getPostsByUserIdSchema = {
   summary: 'Get posts by userId',
   description: 'To get post information',
   tags: ['Post'],
+  params: {
+    type: 'object',
+    properties: {
+      user_id: { type: 'string', description: 'Id of the user' }
+    }
+  },
   querystring: {
     type: 'object',
     properties: {
@@ -192,6 +198,10 @@ export const getPostsByUserIdSchema = {
       tag: {
         type: 'string',
         description: 'Tag of the post'
+      },
+      user_id: {
+        type: 'number',
+        description: 'Id of the user'
       },
       ...queryStringProps('post')
     }

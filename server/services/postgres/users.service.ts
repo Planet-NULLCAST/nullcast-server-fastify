@@ -11,7 +11,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const getUserQuery: QueryConfig = {
-    text: `SELECT u.entity_id, u.id, u.user_name, u.full_name, 
+    text: `SELECT u.id, u.entity_id, u.id, u.user_name, u.full_name, 
             u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
             u.discord, u.facebook, u.twitter, u.meta_description, u.meta_title,
             u.dob, u.avatar, u.linkedin,
