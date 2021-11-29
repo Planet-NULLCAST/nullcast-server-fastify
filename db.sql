@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS users (
     facebook VARCHAR(255),
     github VARCHAR(255),
     discord VARCHAR(255),
+    linkedin VARCHAR(255),
     location TEXT,
     slug VARCHAR(255) NOT NULL,
     locale VARCHAR(10),
