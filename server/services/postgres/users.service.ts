@@ -1,6 +1,6 @@
 import { Client, QueryConfig } from 'pg';
 
-import { User, UserStatus } from 'interfaces/user.type';
+import { User } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
   BADGE_TABLE, ENTITY_TABLE, ROLE_TABLE, TAG_TABLE, USER_ROLE_TABLE, USER_TABLE, USER_TAG_TABLE
@@ -13,6 +13,8 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const getUserQuery: QueryConfig = {
     text: `SELECT u.entity_id, u.id, u.user_name, u.full_name, 
             u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
+            u.discord, u.facebook, u.twitter, u.meta_description, u.meta_title,
+            u.dob, u.avatar,
             COALESCE(JSON_AGG(DISTINCT r.name) 
               FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
             COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'name', t.name))
@@ -30,21 +32,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const data = await postgresClient.query<User>(getUserQuery);
 
   if (data.rows && data.rows.length) {
-    return {
-      id: data.rows[0]?.id as number,
-      user_name: data.rows[0]?.user_name as string,
-      password: '',
-      full_name: data.rows[0]?.full_name as string,
-      email: data.rows[0]?.email as string,
-      created_at: data.rows[0]?.created_at as string,
-      updated_at: data.rows[0]?.updated_at as string,
-      bio: data.rows[0]?.bio as string,
-      status: data.rows[0]?.status as UserStatus,
-      slug: data.rows[0]?.slug as string,
-      primary_badge: data.rows[0]?.primary_badge as number,
-      roles: data.rows[0]?.roles as Record<string, unknown>,
-      skills: data.rows[0]?.skills as Record<string, unknown>
-    };
+    return data.rows[0] as User
   }
   throw new Error('User not found');
 }
