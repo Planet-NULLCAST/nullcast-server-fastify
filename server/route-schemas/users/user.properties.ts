@@ -62,5 +62,10 @@ export const userProps = {
     type: 'string',
     default: null,
     description: 'avatar of the user'
+  },
+  webiste: {
+    type: 'string',
+    default: null,
+    description: 'Url of the website of the user'
   }
 };
