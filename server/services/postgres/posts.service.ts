@@ -14,8 +14,8 @@ function constructJoinQuery({
   with_table = ['users', 'tags']
 }: QueryParams) {
 
-  const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'status', 'mobiledoc', 
-  'created_at', 'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'];
+  const DEFAULT_FIELDS = ['id', 'slug', 'created_by', 'html', 'status', 'mobiledoc',
+    'created_at', 'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'];
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
@@ -58,8 +58,8 @@ function constructQuery(
     tag = ''
   }:QueryParams) {
 
-  const DEFAULT_FIELDS = ['slug', 'created_by', 'status', 'mobiledoc', 'created_at', 
-  'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'];
+  const DEFAULT_FIELDS = ['slug', 'created_by', 'status', 'mobiledoc', 'created_at',
+    'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'];
 
   let limitFields: string[] = limit_fields ? (typeof limit_fields === 'string' ? [limit_fields] : limit_fields) : DEFAULT_FIELDS;
 
