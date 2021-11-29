@@ -118,7 +118,7 @@ const getPostsByTag: RouteOptions = {
 
 const getPostsByUserId: RouteOptions = {
   method: 'GET',
-  url: '/posts-by-user/:user_id',
+  url: '/posts-by-user',
   schema: getPostsByUserIdSchema,
   handler: async(request, reply) => {
     const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
