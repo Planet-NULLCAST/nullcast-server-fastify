@@ -10,7 +10,6 @@ const eventHandler = new DatabaseHandler(EVENT_TABLE);
 export async function createEventController(eventData:Event, userId:number): Promise<Event> {
   try {
     const isAdmin = await checkAdminController(userId);
-    const allowedStatus = ['published', 'rejected', 'drafted', 'pending'];
 
     if (isAdmin) {
       const slug = eventData.title.toLowerCase().split(' ').join('-');
@@ -22,19 +21,13 @@ export async function createEventController(eventData:Event, userId:number): Pro
         guest_image: eventData.guest_image,
         registration_link: eventData.registration_link,
         event_time: eventData.event_time,
+        status: 'published',
         slug,
         location: eventData.location,
         banner_image: eventData.banner_image,
         created_by: userId,
         user_id: userId
       };
-
-      if (eventData.status) {
-        if (!allowedStatus.includes(eventData.status.trim().toLowerCase())) {
-          throw { statusCode: 404, message: 'Status of the event is not valid' };
-        }
-        payload.status = eventData.status;
-      }
 
       const fields = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
         'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];

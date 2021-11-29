@@ -39,7 +39,7 @@ export function queryStringProps(routeName: string) {
   if (key !== 'tags' && key !== 'user_tags' && key != 'subscribers') {
     queryParams.status= {
       type: 'string',
-      default: key === 'post' ? '': key === 'events' ? 'published' : 'active',
+      default: key === 'post' || key === 'events' ? '' : 'active',
       enum: key === 'post' || key === 'events' ? ['', 'drafted', 'pending', 'published', 'rejected']:
         ['active', 'inactive'],
       description: `Status of the ${key} data`

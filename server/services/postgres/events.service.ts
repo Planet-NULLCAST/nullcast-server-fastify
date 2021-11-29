@@ -13,26 +13,37 @@ export async function getEvents(queryParams: QueryParams) {
     search = '',
     page = 1,
     limit = 10,
-    status = 'published',
+    status = '',
     order = 'ASC',
     sort_field = 'created_at'
   } = queryParams;
 
-  let WHERE_CLAUSE = 'WHERE events.status = $1';
+  let WHERE_CLAUSE = '';
+  const queryValues: any[] = [];
 
-  const queryValues: any[] = [status];
+  if (status) {
+    queryValues.push(status);
+    WHERE_CLAUSE = `WHERE events.status = $${queryValues.length}`;
+  }
 
   if (search) {
     queryValues.push(`%${search}%`);
-    WHERE_CLAUSE = `${WHERE_CLAUSE} 
-        AND (events.meta_title LIKE $${queryValues.length} 
-        OR events.meta_description LIKE $${queryValues.length} 
-        OR events.custom_excerpt LIKE $${queryValues.length})`;
+    if (status) {
+      WHERE_CLAUSE = `${WHERE_CLAUSE} 
+      AND (events.meta_title LIKE $${queryValues.length} 
+      OR events.meta_description LIKE $${queryValues.length} 
+      OR events.custom_excerpt LIKE $${queryValues.length})`;
+    } else {
+      WHERE_CLAUSE = `WHERE
+      (events.meta_title LIKE $${queryValues.length} 
+      OR events.meta_description LIKE $${queryValues.length} 
+      OR events.custom_excerpt LIKE $${queryValues.length})`;
+    }
   }
-  const limitFields = limit_fields.map((item) => `events.${item}`);
-
   queryValues.push(+limit);
   queryValues.push((page - 1) * +limit);
+
+  const limitFields = limit_fields.map((item) => `events.${item}`);
 
   const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -73,14 +84,19 @@ export async function getEventsByUserId(payload: {userId: number}, queryParams: 
     search = '',
     page = 1,
     limit = 10,
-    status = 'published',
+    status = '',
     order = 'ASC',
     sort_field = 'created_at'
   } = queryParams;
 
-  let WHERE_CLAUSE = 'WHERE events.status = $1 AND events.user_id = $2';
+  let WHERE_CLAUSE = 'WHERE events.user_id = $1';
 
-  const queryValues = [status, payload.userId];
+  const queryValues: any[] = [payload.userId];
+
+  if (status) {
+    queryValues.push(status);
+    WHERE_CLAUSE = `${WHERE_CLAUSE} AND events.status = $${queryValues.length}`;
+  }
 
   if (search) {
     queryValues.push(`%${search}%`);
