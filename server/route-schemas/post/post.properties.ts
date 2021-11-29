@@ -84,5 +84,9 @@ export const postProps = {
     type: 'string',
     description: 'user should provide title'
   },
+  description: {
+    type: 'string',
+    description: 'user should provide description'
+  },
   mobiledoc
 };
