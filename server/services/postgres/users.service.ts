@@ -14,7 +14,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
     text: `SELECT u.entity_id, u.id, u.user_name, u.full_name, 
             u.email, u.created_at, u.updated_at, u.cover_image, u.bio, u.status,
             u.discord, u.facebook, u.twitter, u.meta_description, u.meta_title,
-            u.dob, u.avatar,
+            u.dob, u.avatar, u.linkedin,
             COALESCE(JSON_AGG(DISTINCT r.name) 
               FILTER (WHERE r.id IS NOT NULL), '[]') AS roles,
             COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', t.id, 'name', t.name))
