@@ -35,6 +35,11 @@ export const userProps = {
     default: null,
     description: 'twitter of the user'
   },
+  linkedin: {
+    type: 'string',
+    default: null,
+    description: 'twitter of the user'
+  },
   meta_description: {
     type: 'string',
     default: null,
