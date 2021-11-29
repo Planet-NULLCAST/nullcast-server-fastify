@@ -32,7 +32,7 @@ export async function getUser(payload: { user_name: string }): Promise<User> {
   const data = await postgresClient.query<User>(getUserQuery);
 
   if (data.rows && data.rows.length) {
-    return data.rows[0] as User
+    return data.rows[0] as User;
   }
   throw new Error('User not found');
 }
