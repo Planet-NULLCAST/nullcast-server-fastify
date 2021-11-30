@@ -68,7 +68,7 @@ export const userProps = {
     default: null,
     description: 'Url of the website of the user'
   },
-  gitbhub: {
+  github: {
     type: 'string',
     default: null,
     description: 'Gitbhub account of the user'
