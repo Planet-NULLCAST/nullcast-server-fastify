@@ -39,6 +39,9 @@ export const signInSchema = {
             },
             full_name: {
               type: 'string'
+            },
+            avatar: {
+              type: 'string'
             }
           }
         },

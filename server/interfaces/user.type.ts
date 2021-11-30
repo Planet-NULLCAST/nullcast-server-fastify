@@ -29,11 +29,12 @@ export interface ValidateUser  {
 }
 
 export interface ValidateResponse {
-    user_name: string,
-    password: string,
-    email: string,
-    id: string,
-    full_name: string,
+    user_name: string;
+    password: string;
+    email: string;
+    id: string;
+    full_name: string;
+    avatar: string;
 }
 
 export interface UpdateUser {
