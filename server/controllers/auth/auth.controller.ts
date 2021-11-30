@@ -27,7 +27,8 @@ export async function signInUserController(userData: ValidateUser) {
       const user = {
         id: dbData.id,
         user_name: dbData.user_name,
-        full_name: dbData.full_name
+        full_name: dbData.full_name,
+        avatar: dbData.avatar
       };
       const token = issueToken({user_name: dbData.user_name, id: dbData.id});
 
