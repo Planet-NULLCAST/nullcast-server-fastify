@@ -49,5 +49,6 @@ export async function replaceImageUrlPost(oldUrl: string, replaceUrl: string) {
     const data = await updateOneById(tableNames.POST_TABLE, post.id as number, payload);
     return data.rows[0] as Post;
   });
+  console.log("Image Url replaced")
   return 'Updated url of the posts';
 }

@@ -130,7 +130,7 @@ export async function insertMany(
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     let returnStatement = '';
-    if (fields) {
+    if (fields?.length) {
       returnStatement = `RETURNING ${fields.map((item) => item).join(', ')}`;
     }
 
