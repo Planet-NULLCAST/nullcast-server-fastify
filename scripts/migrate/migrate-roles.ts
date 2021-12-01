@@ -30,9 +30,9 @@ export async function migrateRoles() {
       item.created_by = userId;
     });
   }
-  const data = await insertMany(tableNames.ROLE_TABLE, payload, [], uniqueField, true)
+  const data = await insertMany(tableNames.ROLE_TABLE, payload, [], uniqueField, true);
   if (data) {
-    console.log("Migrated roles")
+    console.log('Migrated roles');
     await migrateUserRoles();
   }
 
