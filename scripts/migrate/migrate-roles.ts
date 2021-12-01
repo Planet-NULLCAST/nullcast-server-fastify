@@ -1,5 +1,5 @@
 import { Client, QueryConfig } from 'pg';
-import { insertMany } from 'services/postgres/query-builder.service';
+import { insertMany } from '../../server/services/postgres/query-builder.service';
 import * as tableNames from '../../server/constants/tables';
 import { migrateUserRoles } from './migrate-user-roles';
 
@@ -30,9 +30,11 @@ export async function migrateRoles() {
       item.created_by = userId;
     });
   }
-  await insertMany(tableNames.ROLE_TABLE, payload, [], uniqueField, false);
-
-  migrateUserRoles();
+  const data = await insertMany(tableNames.ROLE_TABLE, payload, [], uniqueField, true)
+  if (data) {
+    console.log("Migrated roles")
+    await migrateUserRoles();
+  }
 
   return 'Roles migrated';
 }

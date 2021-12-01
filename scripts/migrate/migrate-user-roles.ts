@@ -14,11 +14,11 @@ export async function migrateUserRoles() {
 
   const AddUserRoleQuery: QueryConfig = {
     text: `INSERT INTO 
-            ${tableNames.USER_ROLE_TABLE} AS ur
-            (ur.user_id, ur.role_id, ur.created_by)
+            ${tableNames.USER_ROLE_TABLE}
+            (user_id, role_id, created_by)
             SELECT u.id, ${roleId}, u.id
             FROM ${tableNames.USER_TABLE} AS u
-            ON CONFLICT (ur.user_id, ur.role_id)
+            ON CONFLICT (user_id, role_id)
             DO NOTHING;`
   };
   await postgresClient.query(AddUserRoleQuery);
