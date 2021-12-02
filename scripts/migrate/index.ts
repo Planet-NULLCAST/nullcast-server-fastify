@@ -89,7 +89,7 @@ const server = (env: string) => {
 
 async function connectToMongo() {
   const DB_HOST = 'localhost';
-  const DB_PORT = '8000';
+  const DB_PORT = '27017';
   const DB_NAME = 'nullcast';
   const MONGOURL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 
