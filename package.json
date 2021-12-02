@@ -15,7 +15,7 @@
     "lint-fix": "eslint . --ext .ts --fix",
     "init-tables": "node ./initialize-tables.js",
     "create-seed": "ts-node ./seed-db.ts",
-    "migrate": "ts-node ./scripts/server/migrate/index.ts",
+    "migrate": "ts-node ./scripts/migrate/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
