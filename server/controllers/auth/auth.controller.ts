@@ -98,7 +98,7 @@ export async function updatePasswordController(userData: ValidateUpdatePassword)
         return data;
       }
     } else {
-      throw ({statusCode: 404, message: 'Password is wrong'});
+      throw ({statusCode: 404, message: 'Current password is incorrect'});
     }
   } catch (error) {
     throw error;
