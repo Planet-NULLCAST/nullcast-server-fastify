@@ -39,5 +39,3 @@ export async function sendMailForSubscribers() {
     return false;
   }
 }
-
-sendMailForSubscribers();

@@ -37,7 +37,7 @@ const forgotPass: RouteOptions = {
         to: userMail,
         subject: 'Password Reset',
         // eslint-disable-next-line max-len
-        text: `hi nullcast user, here is your password reset link: ${process.env.CLIENT_URL}/reset-password?token=${resetToken}`
+        text: `Hi nullcast user, here is your password reset link: ${process.env.CLIENT_URL}/reset-password?token=${resetToken}`
       });
 
       if (sender) {
