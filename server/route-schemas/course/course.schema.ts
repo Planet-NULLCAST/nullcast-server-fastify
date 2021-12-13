@@ -102,7 +102,7 @@ export const addCoursesWithChaptersSchema = {
   tags: ['Course'],
   body:  {
     type: 'array',
-    maxItems: 5,
+    maxItems: 20,
     minItems: 1,
     items: {
       type: 'object',
@@ -111,7 +111,7 @@ export const addCoursesWithChaptersSchema = {
         ...courseProps,
         chapters: {
           type: 'array',
-          maxItems: 5,
+          maxItems: 30,
           minItems: 1,
           items: {
             type: 'object',
