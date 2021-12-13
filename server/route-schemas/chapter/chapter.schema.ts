@@ -103,7 +103,7 @@ export const getChapterSchema = {
   params: {
     type: 'object',
     properties: {
-      chapter_name: { type: 'number', description: 'Name of the Chapter' }
+      chapter_name: { type: 'string', description: 'Name of the Chapter' }
     }
   },
   response: {
