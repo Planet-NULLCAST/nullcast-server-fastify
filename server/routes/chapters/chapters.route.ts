@@ -52,11 +52,11 @@ const addChapters: RouteOptions = {
 
 const getChapter: RouteOptions = {
   method: 'GET',
-  url: '/chapter/:chapterId',
+  url: '/chapter/:chapter_name',
   schema: getChapterSchema,
   handler: async(request, reply) => {
-    const params = request.params as {chapterId: number};
-    const courseData =  await controller.getChapterController(params.chapterId);
+    const params = request.params as {chapter_name: string};
+    const courseData =  await controller.getChapterController(params.chapter_name);
     if (courseData) {
       reply.code(200).send({message: 'Chapter Found', data: courseData});
     }
