@@ -57,10 +57,10 @@ export async function addChaptersController(chapterData: Chapter[], user: TokenU
   return data.rows[0];
 }
 
-export async function getChapterController(chapterId: number): Promise<Chapter> {
+export async function getChapterController(chapterName: string): Promise<Chapter> {
   try {
-    return await chapterHandler.dbHandler<{ chapterId: number }, Chapter>('GET_CHAPTER', {
-      chapterId
+    return await chapterHandler.dbHandler<{ chapterName: string }, Chapter>('GET_CHAPTER', {
+      chapterName
     });
   } catch (error) {
     throw error;
