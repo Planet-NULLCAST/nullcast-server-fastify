@@ -47,23 +47,23 @@ export async function getPostVoteByUser(payload: {postId: number, userId: number
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-  const userPostVoteQuery: QueryConfig = {
-    text: `SELECT
+    const userPostVoteQuery: QueryConfig = {
+      text: `SELECT
               CASE
                 WHEN value = 1 THEN 'up'
                 WHEN value = -1 THEN 'down'
               END as vote_kind
             FROM ${POST_VOTE_TABLE}
             WHERE post_id = $1 AND user_id = $2;`,
-    values: [payload.postId, payload.userId]
-  };
-  const userVoteData = await postgresClient.query(userPostVoteQuery);
-  if (userVoteData.rows && userVoteData.rows.length) {
-    return userVoteData.rows[0];
-  }
-  throw {statusCode: 200, message: 'User has not voted for this post'};
-  } catch(err) {
-    throw(err);
+      values: [payload.postId, payload.userId]
+    };
+    const userVoteData = await postgresClient.query(userPostVoteQuery);
+    if (userVoteData.rows && userVoteData.rows.length) {
+      return userVoteData.rows[0];
+    }
+    throw {statusCode: 200, message: 'User has not voted for this post'};
+  } catch (err) {
+    throw (err);
   }
 }
 
