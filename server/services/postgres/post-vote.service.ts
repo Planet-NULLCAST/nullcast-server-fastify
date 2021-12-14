@@ -44,7 +44,8 @@ export async function getPostVotes(payload: {postId: number}) {
 }
 
 export async function getPostVoteByUser(payload: {postId: number, userId: number}) {
-  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
   const userPostVoteQuery: QueryConfig = {
     text: `SELECT
@@ -60,7 +61,10 @@ export async function getPostVoteByUser(payload: {postId: number, userId: number
   if (userVoteData.rows && userVoteData.rows.length) {
     return userVoteData.rows[0];
   }
-  throw {statusCode: 404, message: 'User has not voted for this post'};
+  throw {statusCode: 200, message: 'User has not voted for this post'};
+  } catch(err) {
+    throw(err);
+  }
 }
 
 export async function deletePostVote(payload: {postId: number, userId: number}) {

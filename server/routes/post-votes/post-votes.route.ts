@@ -62,7 +62,7 @@ const getPostVoteByUser: RouteOptions = {
       const postVoteData = await controller.getPostVoteByUserController(params.post_id, user);
 
       if (!postVoteData) {
-        reply.code(400).send({message: 'User has not voted for this post'});
+        reply.code(200).send({message: 'User has not voted for this post'});
       }
       reply.code(200).send({ message: 'User response for this post has been fetched', data: postVoteData });
     } catch (error) {
