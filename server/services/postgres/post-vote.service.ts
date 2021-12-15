@@ -60,9 +60,9 @@ export async function getPostVoteByUser(payload: {postId: number, userId: number
     const userVoteData = await postgresClient.query(userPostVoteQuery);
     if (userVoteData.rows && userVoteData.rows.length) {
       return userVoteData.rows[0];
-    } else {
-      return null;
     }
+    return null;
+
   } catch (err) {
     throw (err);
   }
