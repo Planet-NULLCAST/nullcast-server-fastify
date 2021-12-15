@@ -60,8 +60,9 @@ export async function getPostVoteByUser(payload: {postId: number, userId: number
     const userVoteData = await postgresClient.query(userPostVoteQuery);
     if (userVoteData.rows && userVoteData.rows.length) {
       return userVoteData.rows[0];
+    } else {
+      return null;
     }
-    throw {statusCode: 200, message: 'User has not voted for this post'};
   } catch (err) {
     throw (err);
   }
