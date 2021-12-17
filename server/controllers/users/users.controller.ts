@@ -10,7 +10,7 @@ import { createHash } from '../../utils/hash-utils';
 import {
   USER_TABLE, ENTITY_TABLE, BADGE_TABLE, ROLE_TABLE, USER_ROLE_TABLE
 } from '../../constants/tables';
-import { issueToken } from 'utils/jwt.utils';
+import { getTokenData, issueToken } from 'utils/jwt.utils';
 
 const userHandler = new DatabaseHandler(USER_TABLE);
 const entityHandler = new DatabaseHandler(ENTITY_TABLE);
@@ -78,6 +78,29 @@ export async function getUserController(user_name: string): Promise<User> {
     return await userHandler.dbHandler<{ user_name: string }, User>('GET_USER', {
       user_name
     });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function verifyUserEmailController(userData: {token: string}) {
+  try {
+
+    const { token } = userData as {token: string};
+
+    const tokenData = getTokenData(token);
+    if (tokenData && tokenData.email) {
+      const email = tokenData.email as string;
+      const dbData = await userHandler.dbHandler(
+        'VERIFY_USER_EMAIL',
+        { email }
+      );
+      if (dbData) {
+        return true;
+      }
+      return false;
+    }
+    throw ({statusCode: 401, message: 'Invalid Verification link'});
   } catch (error) {
     throw error;
   }

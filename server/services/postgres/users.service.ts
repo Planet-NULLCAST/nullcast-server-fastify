@@ -128,3 +128,24 @@ export async function getUsers(queryParams: QueryParams) {
 
   return {users: userData.rows, ...countData.rows[0], limit, page};
 }
+
+export async function verifyUserEmail(payload:{[x: string]: any}) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+    const verifyUserEmailQuery: QueryConfig = {
+      text: `UPDATE ${USER_TABLE}
+              SET email_verified = TRUE
+              WHERE email=$1
+              RETURNING id, email;`,
+      values: [payload.email]
+    };
+
+    const userData = await postgresClient.query(verifyUserEmailQuery);
+    if (userData.rows[0]) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    throw err;
+  }
+}

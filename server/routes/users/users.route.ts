@@ -4,11 +4,16 @@ import * as controller from '../../controllers/index';
 
 import  {
   createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema,
-  getUsersSchema
+  getUsersSchema,
+  sendVerficationMailSchema,
+  verifyUserEmailSchema
 }  from '../../route-schemas/users/users.schema';
 
 import { User, UpdateUser } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
+import { issueToken } from 'utils/jwt.utils';
+import mailer from 'lib/mailer';
+import { SendMailOptions } from 'nodemailer';
 
 
 const createUser: RouteOptions = {
@@ -52,6 +57,46 @@ const getUser: RouteOptions = {
     }
     reply.code(400).send({message: 'User not Found'});
 
+  }
+};
+
+const sendVerficationMail: RouteOptions = {
+  method: 'POST',
+  url: '/send-verification-mail',
+  schema: sendVerficationMailSchema,
+  handler: async(request, reply) => {
+    try {
+      const { to: userMail } = request.body as SendMailOptions;
+      const resetToken = issueToken({email: userMail});
+      const sender = await mailer.sendMail({
+        from: 'Nullcast <connect@nullcast.io>',
+        to: userMail,
+        subject: 'Account verification',
+        // eslint-disable-next-line max-len
+        text: `Hi nullcast user, here is your account verification link: ${process.env.CLIENT_URL}/verify-user?token=${resetToken}`
+      });
+
+      if (sender) {
+        reply.code(200).send({ message: `Verification link sent to ${userMail}` });
+      } else {
+        reply.code(500).send({ message: 'Some error occurred' });
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+const verifyUserEmail: RouteOptions = {
+  method: 'PUT',
+  url: '/verify-user',
+  schema: verifyUserEmailSchema,
+  handler: async(request, reply) => {
+    const userData = await controller.verifyUserEmailController(request.body as { token: string });
+    if (userData) {
+      reply.code(200).send({ message: 'Email verified successfully' });
+    }
+    reply.code(400).send({ message: 'Email verification failed' });
   }
 };
 
@@ -107,6 +152,8 @@ const getUsers: RouteOptions = {
 function initUsers(server:FastifyInstance, _:any, done: () => void) {
   server.route(createUser);
   server.route(getUser);
+  server.route(sendVerficationMail);
+  server.route(verifyUserEmail);
   server.route(updateUser);
   server.route(deleteUser);
   server.route(getUsers);

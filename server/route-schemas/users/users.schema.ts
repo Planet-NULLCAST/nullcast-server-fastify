@@ -109,6 +109,58 @@ export const getUserSchema = {
   }
 };
 
+export const sendVerficationMailSchema = {
+  summary: 'Send verfication email',
+  description: 'To send user verification link to user email',
+  tags: ['User'],
+  body: {
+    type: 'object',
+    required: ['to'],
+    properties: {
+      to: {
+        type: 'string',
+        description: 'user should provide email id'
+      }
+    }
+  },
+  response: {
+    200: {
+      description: 'Request Succeeded',
+      type: 'object',
+      properties: {
+        message: { type: 'string', description: 'response message' }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
+export const verifyUserEmailSchema = {
+  summary: 'Verify user email',
+  description: 'To verify user email',
+  tags: ['User'],
+  body: {
+    type: 'object',
+    required: ['token'],
+    properties: {
+      token: {
+        type: 'string',
+        description: 'Auto-generated token while sending verification link to email'
+      }
+    }
+  },
+  response: {
+    200: {
+      description: 'Request Succeeded',
+      type: 'object',
+      properties: {
+        message: { type: 'string', description: 'response message' }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
 export const updateUserSchema = {
   summary: 'Update User',
   description: 'A PUT route to update register user information',
