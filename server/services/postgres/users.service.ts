@@ -139,13 +139,13 @@ export async function verifyUserEmail(payload:{[x: string]: any}) {
               RETURNING id, email;`,
       values: [payload.email]
     };
-  
+
     const userData = await postgresClient.query(verifyUserEmailQuery);
-    if(userData.rows[0]) {
-      return true
+    if (userData.rows[0]) {
+      return true;
     }
-    return false
-  } catch(err) {
+    return false;
+  } catch (err) {
     throw err;
   }
 }

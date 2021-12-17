@@ -87,7 +87,7 @@ export async function verifyUserEmailController(userData: {token: string}) {
   try {
 
     const { token } = userData as {token: string};
-    
+
     const tokenData = getTokenData(token);
     if (tokenData && tokenData.email) {
       const email = tokenData.email as string;
@@ -100,7 +100,7 @@ export async function verifyUserEmailController(userData: {token: string}) {
       }
       return false;
     }
-    throw({statusCode: 401, message: "Invalid Verification link"})
+    throw ({statusCode: 401, message: 'Invalid Verification link'});
   } catch (error) {
     throw error;
   }

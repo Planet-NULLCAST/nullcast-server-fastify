@@ -3,7 +3,9 @@ import { Actions } from 'interfaces/service-actions.type';
 import {
   signInUser, resetPasswordService, updatePassword
 } from './auth.service';
-import { getUser, getUsers, verifyUserEmail } from './users.service';
+import {
+  getUser, getUsers, verifyUserEmail
+} from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag, getPostsByUserId, getPostsCount
 } from './posts.service';
