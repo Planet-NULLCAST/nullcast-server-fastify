@@ -21,8 +21,8 @@ export async function signInUserController(userData: ValidateUser) {
     if (!dbData) {
       return;
     }
-    if(!dbData?.email_verified) {
-      throw({statusCode: 401, message: "User not verified"})
+    if (!dbData?.email_verified) {
+      throw ({statusCode: 401, message: 'User not verified'});
     }
 
     if (verifyHash(userData.password, dbData.password)) {
