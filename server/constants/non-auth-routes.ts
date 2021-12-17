@@ -9,5 +9,7 @@ export const NON_AUTH_ROUTES: {[x: string]: string} = {
   'event': 'GET',
   'events': 'GET',
   'reset-password': 'POST',
-  'subscribe': 'POST'
+  'subscribe': 'POST',
+  'send-verification-mail': 'POST',
+  'verify-user': 'PUT'
 };

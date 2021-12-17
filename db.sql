@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_name VARCHAR(64) NOT NULL UNIQUE,
     full_name VARCHAR(64) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
+    email_verified boolean DEFAULT FALSE,
     password TEXT NOT NULL,
     cover_image VARCHAR(512),
     avatar VARCHAR(512),

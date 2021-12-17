@@ -9,7 +9,7 @@ export async function signInUser(payload: ValidateUser) {
 
     const ValidateUserQuery: QueryConfig = {
       name: 'validate-user',
-      text: `SELECT id, email, user_name, password, full_name, avatar 
+      text: `SELECT id, email, user_name, password, full_name, avatar, email_verified 
               FROM ${USER_TABLE} 
               WHERE (user_name = $1)
               OR (email = $1)`,
