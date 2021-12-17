@@ -3,7 +3,7 @@ import { Actions } from 'interfaces/service-actions.type';
 import {
   signInUser, resetPasswordService, updatePassword
 } from './auth.service';
-import { getUser, getUsers } from './users.service';
+import { getUser, getUsers, verifyUserEmail } from './users.service';
 import {
   getPosts, getSinglePost, getPostsBytag, getPostsByUserId, getPostsCount
 } from './posts.service';
@@ -36,6 +36,7 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
   SIGN_IN_USER: signInUser,
   GET_USERS: getUsers,
+  VERIFY_USER_EMAIL: verifyUserEmail,
 
   CHECK_ADMIN: checkAdmin,
 

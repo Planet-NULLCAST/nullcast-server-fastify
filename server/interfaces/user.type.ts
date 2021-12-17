@@ -25,7 +25,8 @@ export type CreateUserQuery = User;
 export interface ValidateUser  {
     email?: string;
     user_name?: string;
-    password: string
+    password: string;
+    email_verified?: boolean;
 }
 
 export interface ValidateResponse {
@@ -35,6 +36,7 @@ export interface ValidateResponse {
     id: string;
     full_name: string;
     avatar: string;
+    email_verified?: boolean;
 }
 
 export interface UpdateUser {
