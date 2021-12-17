@@ -2,6 +2,7 @@ export type Actions =
   | 'GET_USER'
   | 'SIGN_IN_USER'
   | 'GET_USERS'
+  | 'VERIFY_USER_EMAIL'
 
   | 'CHECK_ADMIN'
 
