@@ -64,7 +64,7 @@ const getEvents: RouteOptions = {
       const eventData = await controller.getEventsController(queryParams);
 
       if (!eventData) {
-        reply.code(400).send({message: 'Events not Found'});
+        reply.code(200).send({message: 'Events not Found'});
       }
       reply.code(200).send({ data: eventData });
     } catch (error) {
