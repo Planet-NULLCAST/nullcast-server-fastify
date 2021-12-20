@@ -80,7 +80,7 @@ export const getPostSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
-          'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'],
+          'published_at', 'banner_image', 'featured', 'title', 'meta_title', 'updated_at'],
         example: `['id', 'slug', 'created_by']`
       },
       ...queryStringProps('post')
@@ -108,7 +108,7 @@ export const getPostBySlugSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['id', 'slug', 'created_by', 'html', 'mobiledoc', 'created_at',
-          'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'],
+          'published_at', 'banner_image', 'featured', 'title', 'meta_title', 'updated_at'],
         example: `['id', 'slug', 'created_by']`
       },
       ...queryStringProps('post')
@@ -136,7 +136,7 @@ export const getPostsSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['id', 'slug', 'created_by', 'html', 'status', 'mobiledoc',
-          'created_at', 'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'],
+          'created_at', 'published_at', 'banner_image', 'featured', 'title', 'meta_title', 'updated_at'],
         example: `['id', 'slug', 'created_by']`
       },
       ...queryStringProps('post')
@@ -158,7 +158,7 @@ export const getPostsByTagSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['slug', 'created_by', 'status', 'mobiledoc', 'created_at',
-          'published_at', 'banner_image', 'title', 'meta_title'],
+          'published_at', 'banner_image', 'featured', 'title', 'meta_title'],
         example: `['slug', 'created_by', 'mobiledoc']`
       },
       ...queryStringProps('post')
@@ -192,7 +192,7 @@ export const getPostsByUserIdSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['slug', 'created_by', 'status', 'mobiledoc', 'created_at',
-          'published_at', 'banner_image', 'title', 'meta_title', 'updated_at'],
+          'published_at', 'banner_image', 'featured', 'title', 'meta_title', 'updated_at'],
         example: `['slug', 'created_by', 'mobiledoc']`
       },
       tag: {
