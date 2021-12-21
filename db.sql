@@ -164,6 +164,7 @@ CREATE TABLE IF NOT EXISTS courses (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     certificate_id INTEGER REFERENCES certificates (id) NOT NULL,
     name VARCHAR(255) NOT NULL UNIQUE,
+    slug VARCHAR(255) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
@@ -262,3 +263,5 @@ INSERT INTO badges (name, description)
 VALUES ('noob', 'Just getting started!');
 INSERT INTO roles (name, description)
 VALUES ('admin', 'Admin access'), ('user', 'No admin access');
+INSERT INTO certificates (name, description, content)
+VALUES ('nullcast', 'Certificate provided by nullcast', 'Nullcast certificate');

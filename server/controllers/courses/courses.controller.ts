@@ -1,17 +1,19 @@
 import {
-  Course, CourseChapter, UpdateCourse
+  Course, CourseChapter, CourseChapterStructure, UpdateCourse
 } from 'interfaces/course.type';
-import { COURSE_TABLE } from 'constants/tables';
+import { CERTIFICATE_TABLE, COURSE_TABLE } from 'constants/tables';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { TokenUser } from 'interfaces/user.type';
 
 
 const courseHandler = new DatabaseHandler(COURSE_TABLE);
+const certificateHandler = new DatabaseHandler(CERTIFICATE_TABLE);
 
 export async function createCourseController(courseData: Course, user:TokenUser): Promise<Course> {
   const payload: Course = {
     ...courseData,
     name: courseData.name.toLowerCase() as string,
+    slug: courseData.name.toLowerCase().replace(/ /g, '-') as string,
     created_by: user.id as number
   };
 
@@ -25,6 +27,7 @@ export async function createCourseController(courseData: Course, user:TokenUser)
 export async function addCoursesController(courseData: Course[], user: TokenUser): Promise<Course> {
   for (const course of courseData) {
     course.name = course.name.toLowerCase();
+    course.slug = course.name.toLowerCase().replace(/ /g, '-') as string;
     course.created_by = user.id;
   }
 
@@ -39,22 +42,35 @@ export async function addCoursesController(courseData: Course[], user: TokenUser
 }
 
 export async function addCoursesWithChaptersController(
-  courseData: CourseChapter[], user: TokenUser): Promise<CourseChapter[]> {
-  for (const course of courseData) {
-    course.name = course.name.toLowerCase();
-    course.created_by = user.id;
-    for (const chapter of course.chapters) {
-      const courseDetails = await courseHandler.findOneByField({ name: course.name },
-        ['id']);
+  courseData: CourseChapterStructure[], user: TokenUser): Promise<CourseChapter[]> {
 
-      chapter.name = chapter.name.toLowerCase();
-      chapter.created_by = user.id;
-      chapter.slug = chapter.name.toLowerCase();
-      chapter.course_id = courseDetails?.id;
+  const certificate = await certificateHandler.findOneByField(
+    { name: 'nullcast' },
+    ['id']
+  );
+  for (const course of courseData) {
+    course.name = course.courseName?.toLowerCase() as string;
+    course.slug = course.courseUrl as string;
+    course.created_by = user.id as number;
+    course.certificate_id = certificate.id as number;
+
+    delete course.courseName;
+    delete course.courseUrl;
+    delete course.courseId;
+    for (const chapter of course.chapters) {
+
+      chapter.name = chapter.chapterName?.toLowerCase() as string;
+      chapter.slug = chapter.chapterUrl as string;
+      chapter.chapter_no = chapter.chapterId as number;
+      chapter.created_by = user.id as number;
+
+      delete chapter.chapterName;
+      delete chapter.chapterUrl;
+      delete chapter.chapterId;
     }
   }
 
-  const payload: CourseChapter[] = courseData;
+  const payload = courseData as CourseChapter[];
 
   const data:CourseChapter[] = [];
   for (const item of payload) {

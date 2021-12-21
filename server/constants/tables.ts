@@ -14,3 +14,4 @@ export const USER_CHAPTER_TABLE = 'user_chapters';
 export const EVENT_TABLE = 'events';
 export const USER_TAG_TABLE = 'user_tags';
 export const SUBSCRIBER_TABLE = 'subscribers';
+export const CERTIFICATE_TABLE = 'certificates';
