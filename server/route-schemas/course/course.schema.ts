@@ -106,24 +106,35 @@ export const addCoursesWithChaptersSchema = {
     minItems: 1,
     items: {
       type: 'object',
-      required: ['name', 'certificate_id'],
+      required: ['courseName', 'courseUrl'],
       properties: {
-        ...courseProps,
+        courseName: {
+          type: 'string',
+          description: 'Course name'
+        },
+        courseUrl: {
+          type: 'string',
+          description: 'Course name'
+        },
         chapters: {
           type: 'array',
           maxItems: 30,
           minItems: 1,
           items: {
             type: 'object',
-            required: ['name', 'chapter_no'],
+            required: ['chapterName', 'chapterId', 'chapterUrl'],
             properties: {
-              name: {
+              chapterName: {
                 type: 'string',
                 description: 'Name of the Chapter'
               },
-              chapter_no: {
+              chapterId: {
                 type: 'number',
                 description: 'Serial number of the Chapter'
+              },
+              chapterUrl: {
+                type: 'string',
+                description: 'Url of the Chapter'
               }
             }
           }

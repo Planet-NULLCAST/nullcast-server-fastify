@@ -4,7 +4,20 @@ export interface Chapter {
     slug?: string;
     course_name?: string;
     chapter_no: number;
-    created_by?: number
+    created_by?: number;
+}
+
+export interface ChapterStructure {
+    chapterName?: string;
+    chapterUrl?: string;
+    chapterId?: number;
+
+    name?: string;
+    course_id?: number;
+    slug?: string;
+    course_name?: string;
+    chapter_no?: number;
+    created_by?: number;
 }
 
 export interface UpdateChapter {
