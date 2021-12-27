@@ -4,7 +4,7 @@ import { sendMailForSubscribers } from './subscribe-newsletter.service';
 const cron = require('node-cron');
 
 export async function runJobs() {
-  cron.schedule('0 6 * * 1', () => sendMailForSubscribers());
+  cron.schedule('* * * * *', () => sendMailForSubscribers());
 }
 
 runJobs();
