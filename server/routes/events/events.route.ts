@@ -6,7 +6,7 @@ import * as controller from '../../controllers';
 import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createEventSchema, deleteEventSchema, 
+  createEventSchema, deleteEventSchema,
   getEventBySlugSchema, getEventsByUserIdSchema, getEventSchema, getEventsSchema, updateEventSchema
 }
   from 'route-schemas/events/events.schema';

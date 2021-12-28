@@ -81,7 +81,7 @@ export const getEventsByUserIdSchema = {
         type: 'array',
         description: 'The fields that are needed to be returned',
         default: ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
-        'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
+          'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'],
         example: `['id', 'created_at', 'created_by', 'status']`
       },
       ...queryStringProps('events')

@@ -21,7 +21,9 @@ import {
 import {
   deleteUserCourse, getUserCourse, updateUserCourse
 } from 'services/postgres/user-course.service';
-import { getEventBySlug, getEvents, getEventsByUserId } from './events.service';
+import {
+  getEventBySlug, getEvents, getEventsByUserId
+} from './events.service';
 import {
   deletePostTag, deletePostTagsByPostId, getPostsByTagId, getTagsByPostId
 } from './post-tag.service';

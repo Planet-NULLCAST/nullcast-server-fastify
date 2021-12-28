@@ -4,7 +4,7 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { Client, QueryConfig } from 'pg';
 
 
-export async function getEventBySlug(payload: {slug: string} ) {
+export async function getEventBySlug(payload: {slug: string}) {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
@@ -20,10 +20,10 @@ export async function getEventBySlug(payload: {slug: string} ) {
 
     const eventData = await postgresClient.query<Event>(getEventsQuery);
     if (!eventData.rows[0]) {
-      throw({statusCode: 400, message: "Event not found"})
+      throw ({statusCode: 400, message: 'Event not found'});
     }
     return eventData.rows[0] as Event;
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
 }
@@ -105,7 +105,7 @@ export async function getEvents(queryParams: QueryParams) {
 export async function getEventsByUserId(payload: {userId: number}, queryParams: QueryParams) {
 
   const DEFAULT_FIELDS = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
-      'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+    'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
     limit_fields = DEFAULT_FIELDS,
