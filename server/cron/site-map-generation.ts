@@ -175,7 +175,7 @@ export async function generateSitemap() {
       fs.writeFileSync(`${dirname}/public/sitemap-posts-${(i/1000)+1}.xml`, formattedSitemap2, 'utf8'); // Configure the posts sitemap here.
       mainSitemap.push(`${APP_URL}sitemap-posts-${(i/1000)+1}.xml`); // Pushing the created sitemap to main sitemap entry.
     }
-/* sitemap-events-[number].xml section */
+    /* sitemap-events-[number].xml section */
     const siteMapEventsData = AllEvents
       .map((event) => `
         <url>
