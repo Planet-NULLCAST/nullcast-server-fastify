@@ -3,10 +3,35 @@ import { Event } from 'interfaces/event.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { Client, QueryConfig } from 'pg';
 
+
+export async function getEventBySlug(payload: {slug: string} ) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const getEventsQuery: QueryConfig = {
+      text: `SELECT id, title, guest_name, guest_designation, guest_image, 
+              registration_link, guest_bio, created_at, slug,
+              created_by, status, published_at, banner_image, updated_at, 
+              meta_title, description, location, primary_tag, event_time
+              FROM ${EVENT_TABLE} AS events
+              WHERE slug = $1;`,
+      values: [payload.slug]
+    };
+
+    const eventData = await postgresClient.query<Event>(getEventsQuery);
+    if (!eventData.rows[0]) {
+      throw({statusCode: 400, message: "Event not found"})
+    }
+    return eventData.rows[0] as Event;
+  } catch(err) {
+    throw err;
+  }
+}
+
 export async function getEvents(queryParams: QueryParams) {
   try {
     const DEFAULT_FIELDS = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
-      'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+      'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
     const {
       limit_fields = DEFAULT_FIELDS,
@@ -80,7 +105,7 @@ export async function getEvents(queryParams: QueryParams) {
 export async function getEventsByUserId(payload: {userId: number}, queryParams: QueryParams) {
 
   const DEFAULT_FIELDS = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
-    'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+      'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
 
   const {
     limit_fields = DEFAULT_FIELDS,

@@ -45,6 +45,7 @@ export type Actions =
   | 'RESET_PASSWORD'
   | 'UPDATE_PASSWORD'
 
+  | 'GET_EVENT_BY_SLUG'
   | 'GET_EVENTS'
   | 'GET_EVENTS_BY_USER_ID'
 

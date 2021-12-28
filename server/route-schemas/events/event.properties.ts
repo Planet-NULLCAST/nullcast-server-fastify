@@ -27,6 +27,10 @@ export const eventProps = {
     type: 'string',
     description: 'user should provide type'
   },
+  slug: {
+    type: 'string',
+    description: 'Url of the event'
+  },
   description: {
     type: 'string',
     description: 'user should provide description'

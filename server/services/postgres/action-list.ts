@@ -21,7 +21,7 @@ import {
 import {
   deleteUserCourse, getUserCourse, updateUserCourse
 } from 'services/postgres/user-course.service';
-import { getEvents, getEventsByUserId } from './events.service';
+import { getEventBySlug, getEvents, getEventsByUserId } from './events.service';
 import {
   deletePostTag, deletePostTagsByPostId, getPostsByTagId, getTagsByPostId
 } from './post-tag.service';
@@ -82,6 +82,7 @@ export const serviceActions: { [x in Actions]: any } = {
   RESET_PASSWORD: resetPasswordService,
   UPDATE_PASSWORD: updatePassword,
 
+  GET_EVENT_BY_SLUG: getEventBySlug,
   GET_EVENTS: getEvents,
   GET_EVENTS_BY_USER_ID: getEventsByUserId,
 

@@ -6,7 +6,8 @@ import * as controller from '../../controllers';
 import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createEventSchema, deleteEventSchema, getEventsByUserIdSchema, getEventSchema, getEventsSchema, updateEventSchema
+  createEventSchema, deleteEventSchema, 
+  getEventBySlugSchema, getEventsByUserIdSchema, getEventSchema, getEventsSchema, updateEventSchema
 }
   from 'route-schemas/events/events.schema';
 import { QueryParams } from 'interfaces/query-params.type';
@@ -43,6 +44,26 @@ const getEvent: RouteOptions = {
       const params = request.params as { eventId: number };
 
       const eventData = await controller.getEventController(params.eventId);
+
+      if (!eventData) {
+        reply.code(400).send({message: 'Event not Found'});
+      }
+      reply.code(200).send({ data: eventData });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+const getEventBySlug: RouteOptions = {
+  method: 'GET',
+  url: '/event-by-slug/:slug',
+  schema: getEventBySlugSchema,
+  handler: async(request, reply) => {
+    try {
+      const params = request.params as { slug: string };
+
+      const eventData = await controller.getEventBySlugController(params.slug);
 
       if (!eventData) {
         reply.code(400).send({message: 'Event not Found'});
@@ -131,6 +152,7 @@ const deleteEvent: RouteOptions = {
 function initEvents(server: FastifyInstance, _: any, done: () => void) {
   server.route(createEvent);
   server.route(getEvent);
+  server.route(getEventBySlug);
   server.route(getEvents);
   server.route(getEventsByUserId);
   server.route(updateEvent);
