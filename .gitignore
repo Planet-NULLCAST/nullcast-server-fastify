@@ -11,3 +11,4 @@ lambdas/*/*.zip
 # Dependency directories
 node_modules
 lambdas/*/node_modules/
+public/*.xml
