@@ -3,7 +3,7 @@ import prettier  from 'prettier';
 import { Client, QueryConfig } from 'pg';
 import initServices from '../initialize-services';
 import {
-  CHAPTER_TABLE, COURSE_TABLE, POST_TABLE, USER_TABLE
+  CHAPTER_TABLE, COURSE_TABLE, EVENT_TABLE, POST_TABLE, USER_TABLE
 } from '../constants/tables';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -37,6 +37,23 @@ async function getAllPosts() {
     };
     const posts = await postgresClient.query(getPostsQuery);
     return posts.rows as {slug: string}[];
+  } catch (err) {
+    throw err;
+  }
+}
+
+//Function to fetch all events from db
+async function getAllEvents() {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const getEventsQuery: QueryConfig = {
+      text: `SELECT slug 
+        FROM ${EVENT_TABLE}
+        WHERE status = 'published';`
+    };
+    const events = await postgresClient.query(getEventsQuery);
+    return events.rows as {slug: string}[];
   } catch (err) {
     throw err;
   }
@@ -77,6 +94,7 @@ export async function generateSitemap() {
 
     const AllUserNames = await getAllUserNames();
     const AllPosts = await getAllPosts();
+    const AllEvents = await getAllEvents();
     const courses = await getAllCoursesAndChapters();
 
 
@@ -125,7 +143,7 @@ export async function generateSitemap() {
         <url>
           <loc>${APP_URL}${post.slug}</loc>
           <lastmod>${getDate}</lastmod>
-        </url>`); // Generating Posts urls for sitemap if anything wrong in user Pots Urls please look it this.
+        </url>`); // Generating Posts urls for sitemap if anything wrong in user Pots Urls please look at this.
 
     for (let i = 0; i < siteMapPostsData.length; i += 1000) {
       let generatedSitemapSlice1 = '';
@@ -156,6 +174,44 @@ export async function generateSitemap() {
       const formattedSitemap2 = formatted(generatedSitemapSlice1);
       fs.writeFileSync(`${dirname}/public/sitemap-posts-${(i/1000)+1}.xml`, formattedSitemap2, 'utf8'); // Configure the posts sitemap here.
       mainSitemap.push(`${APP_URL}sitemap-posts-${(i/1000)+1}.xml`); // Pushing the created sitemap to main sitemap entry.
+    }
+/* sitemap-events-[number].xml section */
+    const siteMapEventsData = AllEvents
+      .map((event) => `
+        <url>
+          <loc>${APP_URL}e/${event.slug}</loc>
+          <lastmod>${getDate}</lastmod>
+        </url>`); // Generating Events urls for sitemap if anything wrong in user Events Urls please look at this.
+
+    for (let i = 0; i < siteMapEventsData.length; i += 1000) {
+      let generatedSitemapSlice1 = '';
+      let sitemapSlice = '';
+      if (i + 1000 > siteMapEventsData.length) {
+        console.log(siteMapEventsData.slice(i, siteMapEventsData.length).length);
+        sitemapSlice = `${siteMapEventsData.slice(i, siteMapEventsData.length).join('')}`;
+        generatedSitemapSlice1 = `<?xml version="1.0" encoding="UTF-8"?>
+                                    <urlset
+                                    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+                                    >
+                                    ${sitemapSlice}
+                                    </urlset>`;
+      } else {
+        console.log(siteMapEventsData.slice(i, i + 1000).length);
+        sitemapSlice = `${siteMapEventsData.slice(i, i+1000).join('')}`;
+        generatedSitemapSlice1 = `<?xml version="1.0" encoding="UTF-8"?>
+                                    <urlset
+                                    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+                                    >
+                                    ${sitemapSlice}
+                                    </urlset>`;
+      }
+      const formattedSitemap2 = formatted(generatedSitemapSlice1);
+      fs.writeFileSync(`${dirname}/public/sitemap-events-${(i/1000)+1}.xml`, formattedSitemap2, 'utf8'); // Configure the events sitemap here.
+      mainSitemap.push(`${APP_URL}sitemap-events-${(i/1000)+1}.xml`); // Pushing the created sitemap to main sitemap entry.
     }
 
     //The courses section.
