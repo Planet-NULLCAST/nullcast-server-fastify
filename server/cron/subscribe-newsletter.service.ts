@@ -27,6 +27,7 @@ export async function sendMailForSubscribers() {
         });
 
         if (sender) {
+          console.log(`Email send to ${userMail.email}`);
           return true;
         }
         throw ({statusCode: 400, message: 'Sender error'});

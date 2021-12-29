@@ -127,7 +127,7 @@ export const updateUserTagSchema = {
 };
 
 export const deleteUserTagSchema = {
-  summary: 'Delete User Tag',
+  summary: 'Delete specific Tag associated with a User',
   description: 'To Delete userTag information',
   tags: ['User_tag'],
   params: {
@@ -150,7 +150,7 @@ export const deleteUserTagSchema = {
 };
 
 export const deleteUserTagsSchema = {
-  summary: 'Delete User Tag',
+  summary: 'Delete Tags associated with a user',
   description: 'To Delete userTag information',
   tags: ['User_tag'],
   response: {
