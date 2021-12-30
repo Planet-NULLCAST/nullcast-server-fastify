@@ -240,3 +240,26 @@ export const getUsersSchema = {
     400: BAD_REQUEST
   }
 };
+
+export const getAllUsernameSchema = {
+  summary: 'Get all usernames',
+  description: 'To get all usernames information',
+  tags: ['User'],
+  response: {
+    200: {
+      message: {
+        type: 'string'
+      },
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            user_name: { type: 'string', description: 'Username of the user'}
+          }
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};

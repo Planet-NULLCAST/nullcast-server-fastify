@@ -388,3 +388,47 @@ export async function findOneByField(
     throw error;
   }
 }
+
+export async function findMany(
+  tableName: string,
+  payload: { [x: string]: any },
+  attributes?: any[]
+): Promise<QueryResultRow> {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    // If no attributes are passed set the columns to *
+    let columns = '*';
+
+    // Construct columns for the prepared statement from the payload
+    if (attributes && attributes.length) {
+      columns = attributes.join(', ');
+    }
+    let WHERE_CLAUSE = '';
+    let queryValues = [];
+    
+    if (Object.keys(payload).length !== 0) {
+      for (const [key, value] of Object.entries(payload)) {
+        queryValues.push(value);
+        if (!WHERE_CLAUSE) {
+          WHERE_CLAUSE = `WHERE ${key} = $${queryValues.length}`
+        } else {
+          WHERE_CLAUSE = `${WHERE_CLAUSE} AND ${key} = $${queryValues.length}`
+        }
+      }
+    }
+
+    // Build the query text for prepared statement
+    const text = `SELECT ${columns} FROM ${tableName} ${WHERE_CLAUSE};`;
+
+    const query: QueryConfig = {
+      text,
+      values: queryValues
+    };
+
+    return await (await postgresClient.query(query)).rows;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

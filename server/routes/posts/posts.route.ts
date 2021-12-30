@@ -7,8 +7,10 @@ import {Post} from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createPostSchema, getPostSchema, updatePostSchema, deletePostSchema, getPostsSchema, getPostBySlugSchema,
-  getPostsByTagSchema, getPostsByUserIdSchema, getPostsCountSchema
+  createPostSchema, getPostSchema, updatePostSchema, 
+  deletePostSchema, getPostsSchema, getPostBySlugSchema,
+  getPostsByTagSchema, getPostsByUserIdSchema, 
+  getPostsCountSchema, getAllPostUrlSchema
 } from '../../route-schemas/post/post.schema';
 
 
@@ -148,6 +150,20 @@ const getPostsCount: RouteOptions = {
   }
 };
 
+const getAllPostUrl: RouteOptions = {
+  method: 'GET',
+  url: '/posts-url',
+  schema: getAllPostUrlSchema,
+  handler: async(_request, reply) => {
+    try {
+      const posts = await controller.getAllPostUrlController();
+      reply.code(200).send({ data: posts });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 const updatePost: RouteOptions = {
   method: 'PUT',
   url: '/post/:postId',
@@ -191,6 +207,7 @@ function initPosts(server: FastifyInstance, _: any, done: () => void) {
   server.route(getPostsByTag);
   server.route(getPostsByUserId);
   server.route(getPostsCount);
+  server.route(getAllPostUrl);
   server.route(updatePost);
   server.route(deletePost);
   //getPublishedPostsCountByUserId

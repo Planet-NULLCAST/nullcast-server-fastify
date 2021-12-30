@@ -3,10 +3,9 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 
 import  {
-  createUserSchema, getUserSchema, updateUserSchema, deleteUserSchema,
-  getUsersSchema,
-  sendVerficationMailSchema,
-  verifyUserEmailSchema
+  createUserSchema, getUserSchema, updateUserSchema, 
+  deleteUserSchema, getUsersSchema,sendVerficationMailSchema, 
+  verifyUserEmailSchema, getAllUsernameSchema
 }  from '../../route-schemas/users/users.schema';
 
 import { User, UpdateUser } from 'interfaces/user.type';
@@ -149,6 +148,20 @@ const getUsers: RouteOptions = {
   }
 };
 
+const getAllUsername: RouteOptions = {
+  method: 'GET',
+  url: '/users-username',
+  schema: getAllUsernameSchema,
+  handler: async(_request, reply) => {
+    try {
+      const users = await controller.getAllUsernameController();
+      reply.code(200).send({ data: users });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 function initUsers(server:FastifyInstance, _:any, done: () => void) {
   server.route(createUser);
   server.route(getUser);
@@ -157,6 +170,7 @@ function initUsers(server:FastifyInstance, _:any, done: () => void) {
   server.route(updateUser);
   server.route(deleteUser);
   server.route(getUsers);
+  server.route(getAllUsername);
 
   done();
 }

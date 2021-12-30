@@ -7,7 +7,9 @@ import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
   createEventSchema, deleteEventSchema,
-  getEventBySlugSchema, getEventsByUserIdSchema, getEventSchema, getEventsSchema, updateEventSchema
+  getAllEventUrlSchema,
+  getEventBySlugSchema, getEventsByUserIdSchema, 
+  getEventSchema, getEventsSchema, updateEventSchema
 }
   from 'route-schemas/events/events.schema';
 import { QueryParams } from 'interfaces/query-params.type';
@@ -94,6 +96,20 @@ const getEvents: RouteOptions = {
   }
 };
 
+const getAllEventUrl: RouteOptions = {
+  method: 'GET',
+  url: '/events-url',
+  schema: getAllEventUrlSchema,
+  handler: async(_request, reply) => {
+    try {
+      const events = await controller.getAllEventUrlController();
+      reply.code(200).send({ data: events });
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 const getEventsByUserId: RouteOptions = {
   method: 'GET',
   url: '/events/:userId',
@@ -154,6 +170,7 @@ function initEvents(server: FastifyInstance, _: any, done: () => void) {
   server.route(getEvent);
   server.route(getEventBySlug);
   server.route(getEvents);
+  server.route(getAllEventUrl);
   server.route(getEventsByUserId);
   server.route(updateEvent);
   server.route(deleteEvent);

@@ -77,6 +77,19 @@ export async function getEventsController(queryParams:QueryParams):Promise<Event
   }
 }
 
+export async function getAllEventUrlController() {
+  try {
+    const fields = ['slug'];
+    const payload = {
+      "status": "published"
+    }
+    const events =  await eventHandler.findMany(payload, fields)
+    return events;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getEventsByUserIdController(queryParams:QueryParams, userId:number):Promise<Event> {
   try {
     const payload: {userId: number} = {userId};

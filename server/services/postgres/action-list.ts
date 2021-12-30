@@ -98,5 +98,6 @@ export const commonActions = {
   DELETE_BY_ID: commonService.deleteOneById,
   UPDATE_BY_ID: commonService.updateOneById,
   UPDATE_BY_SINGLE_FIELD: commonService.updateBySingleField,
-  FIND_ONE_BY_FIELD: commonService.findOneByField
+  FIND_ONE_BY_FIELD: commonService.findOneByField,
+  FIND_MANY: commonService.findMany
 };

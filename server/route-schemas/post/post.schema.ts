@@ -241,6 +241,29 @@ export const getPostsCountSchema = {
   }
 };
 
+export const getAllPostUrlSchema = {
+  summary: 'Get all posts slug',
+  description: 'To get all posts slug information',
+  tags: ['Post'],
+  response: {
+    200: {
+      message: {
+        type: 'string'
+      },
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            slug: { type: 'string', description: 'Url of the post'}
+          }
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
 export const deletePostSchema = {
   summary: 'Delete Post',
   description: 'To Delete Post information',

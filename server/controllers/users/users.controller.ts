@@ -149,3 +149,13 @@ export async function getUsersController(qParam:QueryParams): Promise<User> {
     throw error;
   }
 }
+
+export async function getAllUsernameController() {
+  try {
+    const fields = ['user_name']
+    const users =  await userHandler.findMany({}, fields)
+    return users;
+  } catch (error) {
+    throw error;
+  }
+}

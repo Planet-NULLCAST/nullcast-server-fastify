@@ -168,6 +168,28 @@ export class DatabaseHandler {
       throw error;
     }
   }
+
+  /**
+   * A function to find all records by multiple or no fields
+   *
+   * @param field {{ key: string, value: string  }}
+   * @param attributes {Array}
+   * @returns {Promise}
+   */
+   public async findMany<PayLoadType>(
+    payload: PayLoadType,
+    attributes: any[]
+  ): Promise<QueryResultRow> {
+    try {
+      return await commonActions.FIND_MANY(
+        this.tableName,
+        payload,
+        attributes
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new DatabaseHandler('' as string);

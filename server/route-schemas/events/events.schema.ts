@@ -98,6 +98,29 @@ export const getEventsByUserIdSchema = {
   }
 };
 
+export const getAllEventUrlSchema = {
+  summary: 'Get all events slug',
+  description: 'To get all events slug information',
+  tags: ['Event'],
+  response: {
+    200: {
+      message: {
+        type: 'string'
+      },
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            slug: { type: 'string', description: 'Url of the event'}
+          }
+        }
+      }
+    },
+    400: BAD_REQUEST
+  }
+};
+
 export const updateEventSchema = {
   summary: 'Update Event',
   description: 'A PUT route to update data in events',

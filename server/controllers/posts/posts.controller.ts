@@ -109,6 +109,19 @@ export async function getPostsCountController(
   }
 }
 
+export async function getAllPostUrlController() {
+  try {
+    const fields = ['slug'];
+    const payload = {
+      "status": "published"
+    }
+    const events =  await postHandler.findMany(payload, fields)
+    return events;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function updatePostController(postData:Post, userId:number, postId: number) :Promise<Post | boolean> {
   try {
     if (!postId) {
