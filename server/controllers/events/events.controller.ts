@@ -81,9 +81,9 @@ export async function getAllEventUrlController() {
   try {
     const fields = ['slug'];
     const payload = {
-      "status": "published"
-    }
-    const events =  await eventHandler.findMany(payload, fields)
+      'status': 'published'
+    };
+    const events =  await eventHandler.findMany(payload, fields);
     return events;
   } catch (error) {
     throw error;

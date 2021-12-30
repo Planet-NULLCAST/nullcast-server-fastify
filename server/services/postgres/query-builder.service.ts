@@ -405,15 +405,15 @@ export async function findMany(
       columns = attributes.join(', ');
     }
     let WHERE_CLAUSE = '';
-    let queryValues = [];
-    
+    const queryValues = [];
+
     if (Object.keys(payload).length !== 0) {
       for (const [key, value] of Object.entries(payload)) {
         queryValues.push(value);
         if (!WHERE_CLAUSE) {
-          WHERE_CLAUSE = `WHERE ${key} = $${queryValues.length}`
+          WHERE_CLAUSE = `WHERE ${key} = $${queryValues.length}`;
         } else {
-          WHERE_CLAUSE = `${WHERE_CLAUSE} AND ${key} = $${queryValues.length}`
+          WHERE_CLAUSE = `${WHERE_CLAUSE} AND ${key} = $${queryValues.length}`;
         }
       }
     }

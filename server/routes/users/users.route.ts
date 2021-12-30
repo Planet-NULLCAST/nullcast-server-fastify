@@ -3,8 +3,8 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 
 import  {
-  createUserSchema, getUserSchema, updateUserSchema, 
-  deleteUserSchema, getUsersSchema,sendVerficationMailSchema, 
+  createUserSchema, getUserSchema, updateUserSchema,
+  deleteUserSchema, getUsersSchema, sendVerficationMailSchema,
   verifyUserEmailSchema, getAllUsernameSchema
 }  from '../../route-schemas/users/users.schema';
 

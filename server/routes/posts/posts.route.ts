@@ -7,9 +7,9 @@ import {Post} from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createPostSchema, getPostSchema, updatePostSchema, 
+  createPostSchema, getPostSchema, updatePostSchema,
   deletePostSchema, getPostsSchema, getPostBySlugSchema,
-  getPostsByTagSchema, getPostsByUserIdSchema, 
+  getPostsByTagSchema, getPostsByUserIdSchema,
   getPostsCountSchema, getAllPostUrlSchema
 } from '../../route-schemas/post/post.schema';
 

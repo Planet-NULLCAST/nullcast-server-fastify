@@ -176,7 +176,7 @@ export class DatabaseHandler {
    * @param attributes {Array}
    * @returns {Promise}
    */
-   public async findMany<PayLoadType>(
+  public async findMany<PayLoadType>(
     payload: PayLoadType,
     attributes: any[]
   ): Promise<QueryResultRow> {

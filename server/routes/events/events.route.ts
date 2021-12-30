@@ -8,7 +8,7 @@ import { TokenUser } from 'interfaces/user.type';
 import {
   createEventSchema, deleteEventSchema,
   getAllEventUrlSchema,
-  getEventBySlugSchema, getEventsByUserIdSchema, 
+  getEventBySlugSchema, getEventsByUserIdSchema,
   getEventSchema, getEventsSchema, updateEventSchema
 }
   from 'route-schemas/events/events.schema';

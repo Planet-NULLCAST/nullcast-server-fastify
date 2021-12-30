@@ -113,9 +113,9 @@ export async function getAllPostUrlController() {
   try {
     const fields = ['slug'];
     const payload = {
-      "status": "published"
-    }
-    const events =  await postHandler.findMany(payload, fields)
+      'status': 'published'
+    };
+    const events =  await postHandler.findMany(payload, fields);
     return events;
   } catch (error) {
     throw error;
