@@ -35,6 +35,8 @@ import { getSubscribers } from './subscribers.service';
 import {
   addPostVote, deletePostVote, getPostVoteByUser, getPostVotes
 } from './post-vote.service';
+import { getFollowers } from './followers.service';
+
 
 export const serviceActions: { [x in Actions]: any } = {
   GET_USER: getUser,
@@ -88,7 +90,8 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_EVENTS: getEvents,
   GET_EVENTS_BY_USER_ID: getEventsByUserId,
 
-  GET_SUBSCRIBERS: getSubscribers
+  GET_SUBSCRIBERS: getSubscribers,
+  GET_FOLLOWERS: getFollowers
 };
 
 export const commonActions = {

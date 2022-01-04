@@ -165,6 +165,7 @@ const deleteEvent: RouteOptions = {
     }
   }
 };
+
 function initEvents(server: FastifyInstance, _: any, done: () => void) {
   server.route(createEvent);
   server.route(getEvent);
