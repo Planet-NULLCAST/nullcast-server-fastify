@@ -178,13 +178,15 @@ export class DatabaseHandler {
    */
   public async findMany<PayLoadType>(
     payload: PayLoadType,
-    attributes: any[]
+    attributes: any[],
+    limit?: number
   ): Promise<QueryResultRow> {
     try {
       return await commonActions.FIND_MANY(
         this.tableName,
         payload,
-        attributes
+        attributes,
+        limit
       );
     } catch (error) {
       throw error;

@@ -322,11 +322,60 @@
   optionalDependencies:
     sharp "^0.28.1"
 
+<<<<<<< HEAD
+=======
+"@tryghost/kg-card-factory@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@tryghost/kg-card-factory/-/kg-card-factory-3.1.0.tgz#2a135754fabafa32074e6cddb28de0cc3a8d7e7d"
+  integrity sha512-Y52DqAM/BahMumbX39mBwaSHJTyx/mwIsFVDNCNg0XBoM2ZqHjHLefNBEsUTdocP8LPpK4HYSOxKVugQOBAACA==
+
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
 "@tryghost/kg-clean-basic-html@^1.0.18":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@tryghost/kg-clean-basic-html/-/kg-clean-basic-html-1.0.18.tgz#2d626c5da951551cf09c28a55ac23df801d2e880"
   integrity sha512-5jUY/McF01hDi6BsdKOsBhtdhmuCv1djYYj7eVOFGFcdmLkxRHOJWqmRfJTCVdfeU5hnOu+D6XcNsDxmTJXLKQ==
 
+<<<<<<< HEAD
+=======
+"@tryghost/kg-default-atoms@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@tryghost/kg-default-atoms/-/kg-default-atoms-3.1.0.tgz#4daff7104c1f261b1b816dd75ae4104009f9c1e6"
+  integrity sha512-FfROzVgqJWqJ7cVdS9dcALz7rnzNfV8zcrymAJrDTHDsqzAdMfSLe1tNQRm8zas9pyZLsD8zBGmLxG9dr4WFSA==
+
+"@tryghost/kg-default-cards@^5.15.11":
+  version "5.15.11"
+  resolved "https://registry.yarnpkg.com/@tryghost/kg-default-cards/-/kg-default-cards-5.15.11.tgz#6a25c1a2180acf409f5e352f223a8a1737167554"
+  integrity sha512-8A0NPTz7L/zhDpMKa5vdyW7Y3lzdD4z2Yyvcqk5sYBPbfW5r+fN39j7bxLNdqStsYEp7gwqfHl7p0C861gkQRQ==
+  dependencies:
+    "@tryghost/kg-markdown-html-renderer" "^5.1.0"
+    "@tryghost/url-utils" "^2.0.0"
+    handlebars "^4.7.6"
+    juice "^8.0.0"
+    lodash "^4.17.21"
+    luxon "^2.1.1"
+
+"@tryghost/kg-markdown-html-renderer@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@tryghost/kg-markdown-html-renderer/-/kg-markdown-html-renderer-5.1.0.tgz#e0eafe0043ea3398f5b9d41e5b62d8e66e9e5e99"
+  integrity sha512-9Xw6wGRd1SID1XK4pJXoRHdzKGI7c4kyNBVKgvq+2URV8xq7hHzHyflOv3kme6T98EeQ9rSJXSRTGHg/gYirrg==
+  dependencies:
+    markdown-it "^12.2.0"
+    markdown-it-footnote "^3.0.3"
+    markdown-it-image-lazy-loading "^1.1.0"
+    markdown-it-lazy-headers "^0.1.3"
+    markdown-it-mark "^3.0.0"
+    semver "^7.3.4"
+
+"@tryghost/kg-mobiledoc-html-renderer@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@tryghost/kg-mobiledoc-html-renderer/-/kg-mobiledoc-html-renderer-5.3.1.tgz#ee8dc66a48a4056f76cd64567fc3a1f36715aaa4"
+  integrity sha512-GzJ9EwHBEyFpGwJPx03Hi/RNz0mdS+DK+LsvqxLg55VQGG6o05srikE0/uB3+ESg0rdH2GC+jYr36JirAdrKZw==
+  dependencies:
+    mobiledoc-dom-renderer "^0.7.0"
+    semver "^7.3.4"
+    simple-dom "^1.4.0"
+
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
 "@tryghost/kg-parser-plugins@^1.1.7":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@tryghost/kg-parser-plugins/-/kg-parser-plugins-1.1.8.tgz#ce722ed3f8376c8f38d88f0c40ed5d9c04203f7b"
@@ -466,7 +515,11 @@
 
 "@types/prettier@^2.4.2":
   version "2.4.2"
+<<<<<<< HEAD
   resolved "https://registry.npmjs.org/@types/prettier/-/prettier-2.4.2.tgz#4c62fae93eb479660c3bd93f9d24d561597a8281"
+=======
+  resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.4.2.tgz#4c62fae93eb479660c3bd93f9d24d561597a8281"
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
   integrity sha512-ekoj4qOQYp7CvjX8ZDBgN86w3MqQhLE1hczEJbEIjgFEumDy+na/4AJAbLXfgEWFNB2pKadM5rPFtuSGMWK7xA==
 
 "@types/responselike@*", "@types/responselike@^1.0.0":
@@ -3258,6 +3311,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+luxon@^2.1.1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-2.3.0.tgz#bf16a7e642513c2a20a6230a6a41b0ab446d0045"
+  integrity sha512-gv6jZCV+gGIrVKhO90yrsn8qXPKD8HYZJtrUDSfEbow8Tkw84T9OnCyJhWvnJIaIF/tBuiAjZuQHUt1LddX2mg==
+
 make-dir@^3.0.0, make-dir@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"
@@ -3280,6 +3338,64 @@ map-obj@^4.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.2.1.tgz#e4ea399dbc979ae735c83c863dd31bdf364277b7"
   integrity sha512-+WA2/1sPmDj1dlvvJmB5G6JKfY9dpn7EVBUL06+y6PoljPkh+6V1QihwxNkbcGxCRjt2b0F9K0taiCuo7MbdFQ==
 
+<<<<<<< HEAD
+=======
+markdown-escapes@^1.0.0:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
+  integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
+
+markdown-it-footnote@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/markdown-it-footnote/-/markdown-it-footnote-3.0.3.tgz#e0e4c0d67390a4c5f0c75f73be605c7c190ca4d8"
+  integrity sha512-YZMSuCGVZAjzKMn+xqIco9d1cLGxbELHZ9do/TSYVzraooV8ypsppKNmUJ0fVH5ljkCInQAtFpm8Rb3eXSrt5w==
+
+markdown-it-image-lazy-loading@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-image-lazy-loading/-/markdown-it-image-lazy-loading-1.1.0.tgz#8df2b76bd5ee7c40b029cd73a5f2a02d00e97390"
+  integrity sha512-3Mk/UjzNdYvhWyslIti9YUFSzQkmnaGsI3HC4jkw19VcIbnmp5Sofi18p1sIAHIvrQUGTAx8oW8tSDKSZEL49Q==
+  dependencies:
+    image-size "^1.0.0"
+
+markdown-it-lazy-headers@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/markdown-it-lazy-headers/-/markdown-it-lazy-headers-0.1.3.tgz#e70dd4da79c87a9ce82ca4701b8b7c0e2d72297b"
+  integrity sha1-5w3U2nnIepzoLKRwG4t8Di1yKXs=
+
+markdown-it-mark@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-mark/-/markdown-it-mark-3.0.1.tgz#51257db58787d78aaf46dc13418d99a9f3f0ebd3"
+  integrity sha512-HyxjAu6BRsdt6Xcv6TKVQnkz/E70TdGXEFHRYBGLncRE9lBFwDNLVtFojKxjJWgJ+5XxUwLaHXy+2sGBbDn+4A==
+
+markdown-it@^12.2.0:
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-12.3.0.tgz#11490c61b412b8f41530319c005ecdcd4367171f"
+  integrity sha512-T345UZZ6ejQWTjG6PSEHplzNy5m4kF6zvUpHVDv8Snl/pEU0OxIK0jGg8YLVNwJvT8E0YJC7/2UvssJDk/wQCQ==
+  dependencies:
+    argparse "^2.0.1"
+    entities "~2.1.0"
+    linkify-it "^3.0.1"
+    mdurl "^1.0.1"
+    uc.micro "^1.0.5"
+
+markdown-table@^1.1.0:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.3.tgz#9fcb69bcfdb8717bfd0398c6ec2d93036ef8de60"
+  integrity sha512-1RUZVgQlpJSPWYbFSpmudq5nHY1doEIv89gBtF0s4gW1GF2XorxcA/70M5vq7rLv0a6mhOUccRsqkwhwLCIQ2Q==
+
+mdast-util-compact@^1.0.0:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mdast-util-compact/-/mdast-util-compact-1.0.4.tgz#d531bb7667b5123abf20859be086c4d06c894593"
+  integrity sha512-3YDMQHI5vRiS2uygEFYaqckibpJtKq5Sj2c8JioeOQBU6INpKbdWzfyLqFFnDwEcEnRFIdMsguzs5pC1Jp4Isg==
+  dependencies:
+    unist-util-visit "^1.1.0"
+
+mdurl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
+  integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
+
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
 memory-pager@^1.0.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/memory-pager/-/memory-pager-1.5.0.tgz#d8751655d22d384682741c972f2c3d6dfa3e66b5"
@@ -3437,7 +3553,11 @@ moment-timezone@^0.5.31:
   dependencies:
     moment ">= 2.9.0"
 
+<<<<<<< HEAD
 "moment@>= 2.9.0":
+=======
+"moment@>= 2.9.0", moment@^2.27.0:
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -4050,7 +4170,11 @@ prepend-http@^2.0.0:
 
 prettier@^2.5.1:
   version "2.5.1"
+<<<<<<< HEAD
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
+=======
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
+>>>>>>> d2155be5001348f0712a59350d96c825eff6688e
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
 process-nextick-args@~2.0.0:

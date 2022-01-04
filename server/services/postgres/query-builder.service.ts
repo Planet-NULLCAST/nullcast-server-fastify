@@ -392,7 +392,8 @@ export async function findOneByField(
 export async function findMany(
   tableName: string,
   payload: { [x: string]: any },
-  attributes?: any[]
+  attributes?: any[],
+  limit?: number
 ): Promise<QueryResultRow> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
@@ -419,7 +420,7 @@ export async function findMany(
     }
 
     // Build the query text for prepared statement
-    const text = `SELECT ${columns} FROM ${tableName} ${WHERE_CLAUSE};`;
+    const text = `SELECT ${columns} FROM ${tableName} ${WHERE_CLAUSE} ${limit ? `LIMIT ${limit}` : ''};`;
 
     const query: QueryConfig = {
       text,
