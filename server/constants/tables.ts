@@ -15,3 +15,4 @@ export const EVENT_TABLE = 'events';
 export const USER_TAG_TABLE = 'user_tags';
 export const SUBSCRIBER_TABLE = 'subscribers';
 export const CERTIFICATE_TABLE = 'certificates';
+export const FOLLOWER_TABLE = 'followers';

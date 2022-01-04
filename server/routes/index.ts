@@ -17,6 +17,8 @@ import initPostTags from './post-tags/post-tags.route';
 import initUserTags from './user-tags/user-tags.route';
 import initSubscribers from './subscribers/subscribers.route';
 import initPostVotes from './post-votes/post-votes.route';
+import initFollowers from './followers/followers.route';
+
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(oembedRoutes);
@@ -36,6 +38,7 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initUserTags);
   server.register(initSubscribers);
   server.register(initPostVotes);
+  server.register(initFollowers);
 
   done();
 }
