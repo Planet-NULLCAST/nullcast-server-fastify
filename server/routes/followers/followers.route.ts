@@ -1,9 +1,9 @@
-import { FastifyInstance, RouteOptions } from "fastify";
-import * as controller from '../../controllers'
-import { TokenUser } from "interfaces/user.type";
-import { Follow } from "interfaces/followers.type";
-import { QueryParams } from "interfaces/query-params.type";
-import { addFollowerSchema, getFollwersSchema } from "route-schemas/followers/followers.schema";
+import { FastifyInstance, RouteOptions } from 'fastify';
+import * as controller from '../../controllers';
+import { TokenUser } from 'interfaces/user.type';
+import { Follow } from 'interfaces/followers.type';
+import { QueryParams } from 'interfaces/query-params.type';
+import { addFollowerSchema, getFollwersSchema } from 'route-schemas/followers/followers.schema';
 
 
 const addFollower: RouteOptions = {

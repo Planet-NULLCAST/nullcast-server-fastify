@@ -33,7 +33,7 @@ export async function getFollowers(payload: Follow, queryParams: QueryParams): P
     const count = await postgresClient.query(getCountFollowersQuery);
 
     return { followers: data.rows as Follow[], ...count.rows[0], limit, page };
-  } catch(error) {  
+  } catch (error) {
     throw error;
   }
 }

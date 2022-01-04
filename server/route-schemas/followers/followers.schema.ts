@@ -1,4 +1,4 @@
-import { BAD_REQUEST } from "route-schemas/response";
+import { BAD_REQUEST } from 'route-schemas/response';
 
 
 export const addFollowerSchema = {
@@ -36,7 +36,7 @@ export const getFollwersSchema = {
         type: 'number',
         default: 10,
         description: 'Number of datas to be fetched'
-      },
+      }
     }
   },
   response: {
