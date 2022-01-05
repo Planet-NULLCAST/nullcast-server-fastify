@@ -3,7 +3,9 @@ import * as controller from '../../controllers';
 import { TokenUser } from 'interfaces/user.type';
 import { Follow } from 'interfaces/followers.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { addFollowerSchema, getFollwersSchema } from 'route-schemas/followers/followers.schema';
+import {
+  addFollowerSchema, getFollwersSchema, removeFollwerSchema
+} from 'route-schemas/followers/followers.schema';
 
 
 const addFollower: RouteOptions = {
@@ -54,10 +56,31 @@ const getFollowers: RouteOptions = {
   }
 };
 
+const removeFollower: RouteOptions = {
+  method: 'DELETE',
+  url: '/follow/:following_id',
+  schema: removeFollwerSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const params = request.params as { following_id: number };
+
+      if (await controller.removeFollowerController(params.following_id, user.id)) {
+        reply.code(200).send({message: 'Successfully unfollowed the user'});
+      } else {
+        reply.code(500).send({message: 'User not unfollowed'});
+      }
+    } catch (error: any) {
+      throw error;
+    }
+  }
+};
+
 
 function initFollowers(server: FastifyInstance, _: any, done: () => void) {
   server.route(addFollower);
   server.route(getFollowers);
+  server.route(removeFollower);
 
   done();
 }

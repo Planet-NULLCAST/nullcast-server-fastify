@@ -22,17 +22,42 @@ export async function getFollowers(payload: Follow, queryParams: QueryParams): P
       values: [payload.following_id]
     };
 
-    const getCountFollowersQuery: QueryConfig = {
-      text: `SELECT COUNT(follower_id)
+    const getFollowersCountQuery: QueryConfig = {
+      text: `SELECT COUNT(follower_id) AS followersCount
               FROM ${FOLLOWER_TABLE} AS f
               WHERE f.following_id = $1;`,
       values: [payload.following_id]
     };
 
-    const data = await postgresClient.query<Follow>(getFollowersQuery);
-    const count = await postgresClient.query(getCountFollowersQuery);
+    const getFollowingCountQuery: QueryConfig = {
+      text: `SELECT COUNT(following_id) AS followingCount
+              FROM ${FOLLOWER_TABLE} AS f
+              WHERE f.follower_id = $1;`,
+      values: [payload.following_id]
+    };
 
-    return { followers: data.rows as Follow[], ...count.rows[0], limit, page };
+    const data = await postgresClient.query<Follow>(getFollowersQuery);
+    const followerCount = await postgresClient.query(getFollowersCountQuery);
+    const followingCount = await postgresClient.query(getFollowingCountQuery);
+
+    return { followers: data.rows as Follow[], ...followerCount.rows[0], ...followingCount.rows[0], limit, page };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function unfollowUser(payload: Follow) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const unfollowUserQuery: QueryConfig = {
+      text: `DELETE 
+              FROM ${FOLLOWER_TABLE} AS f
+              WHERE following_id =$1 AND follower_id = $2;`,
+      values: [payload.following_id, payload.follower_id]
+    };
+
+    return await postgresClient.query(unfollowUserQuery);
   } catch (error) {
     throw error;
   }

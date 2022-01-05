@@ -31,3 +31,15 @@ export async function getFollowersController(followingId: number, queryParams: Q
     throw error;
   }
 }
+
+export async function removeFollowerController(followingId: number, followerId: number) {
+  try {
+    const payload: Follow = {
+      following_id: followingId,
+      follower_id: followerId
+    };
+    return await followerHandler.dbHandler('UNFOLLOW_USER', payload);
+  } catch (error) {
+    throw error;
+  }
+}
