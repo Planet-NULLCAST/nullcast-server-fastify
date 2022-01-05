@@ -24,6 +24,12 @@ export const getFollwersSchema = {
   summary: 'Get Followers',
   description: 'To get followers information',
   tags: ['Follower'],
+  params: {
+    type: 'object',
+    properties: {
+      following_id: { type: 'number', description: 'Id of the user who is to be followed' }
+    }
+  },
   querystring: {
     type: 'object',
     properties: {
@@ -36,6 +42,24 @@ export const getFollwersSchema = {
         type: 'number',
         default: 10,
         description: 'Number of datas to be fetched'
+      }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const removeFollwerSchema = {
+  summary: 'Remove Follower',
+  description: 'A DELETE route to unfollow a user',
+  tags: ['Follower'],
+  params: {
+    type: 'object',
+    properties: {
+      following_id: {
+        type: 'number',
+        description: 'Id of the user who is to be followed'
       }
     }
   },
