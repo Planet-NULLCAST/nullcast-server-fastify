@@ -3,7 +3,9 @@ import * as controller from '../../controllers';
 import { TokenUser } from 'interfaces/user.type';
 import { Follow } from 'interfaces/followers.type';
 import { QueryParams } from 'interfaces/query-params.type';
-import { addFollowerSchema, getFollwersSchema, removeFollwerSchema } from 'route-schemas/followers/followers.schema';
+import {
+  addFollowerSchema, getFollwersSchema, removeFollwerSchema
+} from 'route-schemas/followers/followers.schema';
 
 
 const addFollower: RouteOptions = {
