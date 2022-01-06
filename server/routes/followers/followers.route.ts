@@ -4,7 +4,7 @@ import { TokenUser } from 'interfaces/user.type';
 import { Follow } from 'interfaces/followers.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import {
-  addFollowerSchema, getFollwersSchema, removeFollwerSchema
+  addFollowerSchema, getFollowerSchema, getFollowersSchema, removeFollwerSchema
 } from 'route-schemas/followers/followers.schema';
 
 
@@ -33,10 +33,31 @@ const addFollower: RouteOptions = {
   }
 };
 
+const getFollower: RouteOptions = {
+  method: 'GET',
+  url: '/follower/:following_id',
+  schema: getFollowerSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const params = request.params as { following_id: number };
+      const followerData = await controller.getFollowerController(params.following_id, user.id);
+      if (!followerData) {
+        reply.code(404).send({ message: 'You are neither following nor followed by this user' });
+      }
+      reply.code(200).send({data: followerData });
+
+    } catch (error) {
+      throw error;
+    }
+
+  }
+};
+
 const getFollowers: RouteOptions = {
   method: 'GET',
   url: '/followers/:following_id',
-  schema: getFollwersSchema,
+  schema: getFollowersSchema,
   handler: async(request, reply) => {
     try {
       const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
@@ -79,6 +100,7 @@ const removeFollower: RouteOptions = {
 
 function initFollowers(server: FastifyInstance, _: any, done: () => void) {
   server.route(addFollower);
+  server.route(getFollower);
   server.route(getFollowers);
   server.route(removeFollower);
 

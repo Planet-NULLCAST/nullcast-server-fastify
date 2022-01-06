@@ -51,6 +51,7 @@ export type Actions =
 
   | 'GET_SUBSCRIBERS'
 
+  | 'GET_FOLLOWER'
   | 'GET_FOLLOWERS'
   | 'UNFOLLOW_USER';
 
