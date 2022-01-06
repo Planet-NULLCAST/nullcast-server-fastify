@@ -20,7 +20,22 @@ export const addFollowerSchema = {
   }
 };
 
-export const getFollwersSchema = {
+export const getFollowerSchema = {
+  summary: 'Get Follower',
+  description: 'To get follower and following information',
+  tags: ['Follower'],
+  params: {
+    type: 'object',
+    properties: {
+      following_id: { type: 'number', description: 'Id of the user who is to be followed' }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getFollowersSchema = {
   summary: 'Get Followers',
   description: 'To get followers information',
   tags: ['Follower'],

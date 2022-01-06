@@ -20,6 +20,17 @@ export async function addFollowerController(data: Follow, followerId: number) {
     throw error;
   }
 }
+export async function getFollowerController(followingId: number, followerId: number) {
+  try {
+    const payload: Follow = {
+      following_id: followingId,
+      follower_id: followerId
+    };
+    return await followerHandler.dbHandler('GET_FOLLOWER', payload);
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function getFollowersController(followingId: number, queryParams: QueryParams) {
   try {

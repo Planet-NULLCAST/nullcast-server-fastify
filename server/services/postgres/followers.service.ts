@@ -4,6 +4,30 @@ import { Follow } from 'interfaces/followers.type';
 import { QueryParams } from 'interfaces/query-params.type';
 
 
+export async function getFollower(payload: Follow) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const getFollowersQuery: QueryConfig = {
+      text: `SELECT
+              CASE
+                WHEN following_id = $1 AND follower_id = $2 THEN TRUE ELSE FALSE
+              END is_follower,
+              CASE
+                WHEN following_id = $2 AND follower_id = $1 THEN TRUE ELSE FALSE
+              END is_following
+              FROM ${FOLLOWER_TABLE} WHERE following_id IN( $1, $2) AND follower_id IN( $1, $2);`,
+      values: [payload.following_id, payload.follower_id]
+    };
+
+    const data = await postgresClient.query(getFollowersQuery);
+
+    return data.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getFollowers(payload: Follow, queryParams: QueryParams): Promise<Follow[]> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
