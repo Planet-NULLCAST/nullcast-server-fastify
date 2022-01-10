@@ -18,6 +18,9 @@ import initUserTags from './user-tags/user-tags.route';
 import initSubscribers from './subscribers/subscribers.route';
 import initPostVotes from './post-votes/post-votes.route';
 import initFollowers from './followers/followers.route';
+import initClasses from './classes/classes.route';
+import initActivities from './activities/activities.route';
+import initActivityTypes from './activity-types/activity-types.route';
 
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
@@ -39,6 +42,9 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initSubscribers);
   server.register(initPostVotes);
   server.register(initFollowers);
+  server.register(initClasses);
+  server.register(initActivities);
+  server.register(initActivityTypes);
 
   done();
 }

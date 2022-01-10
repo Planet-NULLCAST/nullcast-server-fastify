@@ -16,3 +16,6 @@ export const USER_TAG_TABLE = 'user_tags';
 export const SUBSCRIBER_TABLE = 'subscribers';
 export const CERTIFICATE_TABLE = 'certificates';
 export const FOLLOWER_TABLE = 'followers';
+export const CLASS_TABLE = 'classes';
+export const ACTIVITY_TABLE = 'activities';
+export const ACTIVITY_TYPE_TABLE = 'activity_types';

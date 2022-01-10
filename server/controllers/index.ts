@@ -14,3 +14,6 @@ export * from './post-tags/post-tags.controller';
 export * from './subscribers/subscribers.controller';
 export * from './post-votes/post-votes.controller';
 export * from './followers/followers.controller';
+export * from './classes/classes.controller';
+export * from './activities/activities.controller';
+export * from './activity-types/activity-types.controller';
