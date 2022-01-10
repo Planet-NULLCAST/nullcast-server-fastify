@@ -3,9 +3,7 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { ActivityType } from 'interfaces/activity-types.type';
-import { 
-  createActivityTypeSchema, deleteActivityTypeSchema 
-} from 'route-schemas/activity-types/activity-types.schema';
+import {createActivityTypeSchema, deleteActivityTypeSchema} from 'route-schemas/activity-types/activity-types.schema';
 
 
 const createActivityType: RouteOptions = {

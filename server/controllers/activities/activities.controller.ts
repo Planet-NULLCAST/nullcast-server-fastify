@@ -1,6 +1,8 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
-import { ACTIVITY_TABLE, ACTIVITY_TYPE_TABLE, 
-  CLASS_TABLE } from 'constants/tables';
+import {
+  ACTIVITY_TABLE, ACTIVITY_TYPE_TABLE,
+  CLASS_TABLE
+} from 'constants/tables';
 import { Activity } from 'interfaces/activities.type';
 
 

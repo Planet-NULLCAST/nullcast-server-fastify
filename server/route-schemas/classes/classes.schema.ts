@@ -16,7 +16,7 @@ export const createClassSchema = {
       description: {
         type: 'string',
         description: 'Description of the class'
-      },
+      }
     }
   },
   response: {
