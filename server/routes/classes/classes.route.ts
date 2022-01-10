@@ -2,14 +2,15 @@ import { RouteOptions } from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 import { Class } from 'interfaces/classes.type';
-import { deleteClassSchema } from 'route-schemas/classes/classes.schema';
-import { createChapterSchema } from 'route-schemas/chapter/chapter.schema';
+import { 
+  createClassSchema, deleteClassSchema
+} from 'route-schemas/classes/classes.schema';
 
 
 const createClass: RouteOptions = {
   method: 'POST',
   url: '/class',
-  schema: createChapterSchema,
+  schema: createClassSchema,
   handler: async(request, reply) => {
     try {
       const classData = await controller.createClassController(request.body as Class);
