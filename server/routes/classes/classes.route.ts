@@ -2,9 +2,7 @@ import { RouteOptions } from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 import { Class } from 'interfaces/classes.type';
-import { 
-  createClassSchema, deleteClassSchema
-} from 'route-schemas/classes/classes.schema';
+import {createClassSchema, deleteClassSchema} from 'route-schemas/classes/classes.schema';
 
 
 const createClass: RouteOptions = {
