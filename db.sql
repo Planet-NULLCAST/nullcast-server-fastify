@@ -255,6 +255,52 @@ CREATE TABLE IF NOT EXISTS subscribers(
     last_notified TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+-- CREATE TABLE IF NOT EXISTS event_register (
+--     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+--     event_id INTEGER NOT NULL REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
+--     email VARCHAR(64) NOT NULL PRIMARY KEY,
+--     full_name VARCHAR(255),
+--     isSubscribed boolean DEFAULT TRUE,
+--     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+--     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+--     created_by INTEGER,
+--     updated_by INTEGER
+-- );
+CREATE TABLE IF NOT EXISTS activities (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    class_id INTEGER NOT NULL REFERENCES classes (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    name VARCHAR(255)NOT NULL,
+    status VARCHAR(255) DEFAULT 'active',
+    activity_type_id INTEGER NOT NULL REFERENCES activity_types (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    event_id INTEGER REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    post_id INTEGER REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    -- comment_id INTEGER REFERENCES comments (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS classes (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS activity_types (
+    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
+    class_id INTEGER NOT NULL REFERENCES classes (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    status VARCHAR(255) DEFAULT 'active',
+    points INTEGER,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
 INSERT INTO entity (name, description)
 VALUES ('nullcast', 'Nullcast is an open-source tech community');
 INSERT INTO tags (name, description, meta_title, slug, created_by)
