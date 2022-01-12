@@ -14,3 +14,8 @@ export interface Activity {
     updated_at?: string;
     updated_by?: number;
 }
+
+export interface userActivity {
+    date: string;
+    count: number;
+}

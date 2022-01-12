@@ -3,7 +3,7 @@ import {
   ACTIVITY_TABLE, ACTIVITY_TYPE_TABLE,
   CLASS_TABLE
 } from 'constants/tables';
-import { Activity } from 'interfaces/activities.type';
+import { Activity, userActivity } from 'interfaces/activities.type';
 
 
 const activityHandler = new DatabaseHandler(ACTIVITY_TABLE);
@@ -37,6 +37,18 @@ export async function createActivityController(activityData: Activity, userId: n
   const data = await activityHandler.insertOne(payload, fields);
 
   return data.rows[0] as Activity;
+}
+
+export async function getUserYearlyActivitiesController(
+  queryParams: {year: number}, userId: number): Promise<userActivity[]> {
+  const payload = {
+    year: queryParams.year,
+    userId
+  };
+
+  const data = await activityHandler.dbHandler('GET_USER_ACTIVITIES', payload);
+
+  return data as userActivity[];
 }
 
 export async function deleteActivityController(activityId: number) : Promise<boolean> {
