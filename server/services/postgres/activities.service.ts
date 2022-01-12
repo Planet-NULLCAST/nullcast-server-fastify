@@ -18,7 +18,7 @@ export async function getUserActivities(payload: {[x: string]: any}): Promise<us
 
     const data = await postgresClient.query(getChapterQuery);
     return data.rows as userActivity[];
-  } catch(error) {
+  } catch (error) {
     throw error;
   }
 }

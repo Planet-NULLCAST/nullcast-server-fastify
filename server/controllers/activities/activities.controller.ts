@@ -43,8 +43,8 @@ export async function getUserYearlyActivitiesController(
   queryParams: {year: number}, userId: number): Promise<userActivity[]> {
   const payload = {
     year: queryParams.year,
-    userId: userId
-  }
+    userId
+  };
 
   const data = await activityHandler.dbHandler('GET_USER_ACTIVITIES', payload);
 
