@@ -38,6 +38,7 @@ import {
 import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
+import { getUserActivities } from './activities.service';
 
 
 export const serviceActions: { [x in Actions]: any } = {
@@ -96,7 +97,9 @@ export const serviceActions: { [x in Actions]: any } = {
 
   GET_FOLLOWER: getFollower,
   GET_FOLLOWERS: getFollowers,
-  UNFOLLOW_USER: unfollowUser
+  UNFOLLOW_USER: unfollowUser,
+
+  GET_USER_ACTIVITIES: getUserActivities
 };
 
 export const commonActions = {

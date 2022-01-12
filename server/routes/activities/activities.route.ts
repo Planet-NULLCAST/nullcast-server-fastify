@@ -3,7 +3,7 @@ import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { Activity } from 'interfaces/activities.type';
-import {createActivitySchema, deleteActivitySchema} from 'route-schemas/activities/activities.schema';
+import {createActivitySchema, deleteActivitySchema, getUserYearlyActivitiesSchema} from 'route-schemas/activities/activities.schema';
 
 
 const createActivity: RouteOptions = {
@@ -19,6 +19,27 @@ const createActivity: RouteOptions = {
       } else {
         reply.code(500).send({message:'Something Error happend'});
       }
+
+    } catch (error) {
+      throw error;
+    }
+
+  }
+};
+
+const getUserYearlyActivities: RouteOptions = {
+  method: 'GET',
+  url: '/user-activities/:user_id',
+  schema: getUserYearlyActivitiesSchema,
+  handler: async(request, reply) => {
+    try {
+      const params = request.params as {user_id: number};
+      const queryParams = request.query as {year: number};
+      const activityData = await controller.getUserYearlyActivitiesController(queryParams, params.user_id);
+      if (!activityData[0]) {
+        reply.code(404).send({message: 'No activities found for this user'});
+      }
+      reply.code(200).send({message: 'Activities found', data: activityData});
 
     } catch (error) {
       throw error;
@@ -44,6 +65,7 @@ const deleteActivity: RouteOptions = {
 
 function initActivities(server:FastifyInstance, _:any, done: () => void) {
   server.route(createActivity);
+  server.route(getUserYearlyActivities);
   server.route(deleteActivity);
 
   done();
