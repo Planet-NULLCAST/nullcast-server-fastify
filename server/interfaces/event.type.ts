@@ -22,5 +22,6 @@ export interface Event {
     event_time?: string;
     location?: string;
     description?: string;
+    meta_description?: string,
     user_id?: number;
 }

@@ -17,6 +17,7 @@ export async function createEventController(eventData:Event, userId:number): Pro
         title: eventData.title,
         meta_title: eventData.meta_title,
         description: eventData.description,
+        meta_description: eventData.meta_description,
         guest_name: eventData.guest_name,
         guest_designation: eventData.guest_designation,
         guest_image: eventData.guest_image,
