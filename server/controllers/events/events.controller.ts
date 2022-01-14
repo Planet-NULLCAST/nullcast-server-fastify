@@ -119,7 +119,7 @@ export async function updateEventController(eventData:Event, userId:number, even
       };
 
       const fields = ['id', 'created_at', 'created_by', 'status', 'published_at', 'banner_image',
-        'updated_at', 'updated_by', 'meta_title', 'description', 'location', 'primary_tag', 'event_time'];
+        'updated_at', 'updated_by', 'meta_title', 'description', 'meta_description', 'location', 'primary_tag', 'event_time'];
 
       const data = await eventHandler.updateOneById(eventId, payload, fields);
       return data.rows[0] as Event;
