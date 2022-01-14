@@ -6,6 +6,7 @@ export interface Event {
     guest_name: string;
     guest_designation: string;
     guest_image: string;
+    guest_bio: string;
     registration_link: string;
     slug?: string;
     created_by?: number;

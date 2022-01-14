@@ -15,10 +15,12 @@ export async function createEventController(eventData:Event, userId:number): Pro
       const slug = eventData.title.toLowerCase().split(' ').join('-');
       const payload : Event = {
         title: eventData.title,
+        meta_title: eventData.meta_title,
         description: eventData.description,
         guest_name: eventData.guest_name,
         guest_designation: eventData.guest_designation,
         guest_image: eventData.guest_image,
+        guest_bio: eventData.guest_bio,
         registration_link: eventData.registration_link,
         event_time: eventData.event_time,
         status: 'published',

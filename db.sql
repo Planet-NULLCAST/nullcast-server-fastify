@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS followers(
 CREATE TABLE IF NOT EXISTS events (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(255) UNIQUE NOT NULL,
     guest_name VARCHAR(255),
     guest_designation VARCHAR(255),
     guest_image TEXT,
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS events (
     description TEXT,
     type VARCHAR(255),
     custom_excerpt VARCHAR(2000),
-    slug VARCHAR(255),
+    slug VARCHAR(255) UNIQUE,
     viewers jsonb
 );
 CREATE TABLE IF NOT EXISTS subscribers(
