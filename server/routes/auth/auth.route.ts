@@ -48,7 +48,7 @@ const logOut: RouteOptions = {
   url: '/logout',
   schema: logoutSchema,
   handler: async(_request, reply) => {
-    reply.setCookie('token', '', { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: 0, sameSite: 'none' });
+    reply.setCookie('token', '', { signed: false, domain: '', path: '/', secure: true, httpOnly: true, maxAge: 0, sameSite: 'none', expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT') });
     reply.code(200).send({ message: 'User logged out successfully' });
   }
 };
