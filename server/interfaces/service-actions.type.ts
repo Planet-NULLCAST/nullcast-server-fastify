@@ -55,7 +55,10 @@ export type Actions =
   | 'GET_FOLLOWERS'
   | 'UNFOLLOW_USER'
 
-  | 'GET_USER_ACTIVITIES';
+  | 'GET_USER_ACTIVITIES'
+
+  | 'GET_EVENT_ATTENDEES'
+  | 'DELETE_EVENT_ATTENDEE';
 
 export type CommonActions =
   | 'INSERT_ONE'

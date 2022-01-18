@@ -19,3 +19,4 @@ export const FOLLOWER_TABLE = 'followers';
 export const CLASS_TABLE = 'classes';
 export const ACTIVITY_TABLE = 'activities';
 export const ACTIVITY_TYPE_TABLE = 'activity_types';
+export const EVENT_REGISTER_TABLE = 'event_register';
