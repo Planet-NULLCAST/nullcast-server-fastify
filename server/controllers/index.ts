@@ -17,3 +17,4 @@ export * from './followers/followers.controller';
 export * from './classes/classes.controller';
 export * from './activities/activities.controller';
 export * from './activity-types/activity-types.controller';
+export * from './event-register/event-register.controller';

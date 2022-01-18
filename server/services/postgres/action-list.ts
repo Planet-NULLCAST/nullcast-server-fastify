@@ -39,6 +39,7 @@ import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
 import { getUserActivities } from './activities.service';
+import { deleteEventAttendee, getEventAttendees } from './event-register.service';
 
 
 export const serviceActions: { [x in Actions]: any } = {
@@ -99,7 +100,10 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_FOLLOWERS: getFollowers,
   UNFOLLOW_USER: unfollowUser,
 
-  GET_USER_ACTIVITIES: getUserActivities
+  GET_USER_ACTIVITIES: getUserActivities,
+
+  GET_EVENT_ATTENDEES: getEventAttendees,
+  DELETE_EVENT_ATTENDEE: deleteEventAttendee
 };
 
 export const commonActions = {

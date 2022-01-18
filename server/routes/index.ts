@@ -21,6 +21,7 @@ import initFollowers from './followers/followers.route';
 import initClasses from './classes/classes.route';
 import initActivities from './activities/activities.route';
 import initActivityTypes from './activity-types/activity-types.route';
+import initEventRegister from './event-register/event-register.route';
 
 
 function initRoutes(server: FastifyInstance, _: any, done: () => void) {
@@ -45,6 +46,7 @@ function initRoutes(server: FastifyInstance, _: any, done: () => void) {
   server.register(initClasses);
   server.register(initActivities);
   server.register(initActivityTypes);
+  server.register(initEventRegister);
 
   done();
 }

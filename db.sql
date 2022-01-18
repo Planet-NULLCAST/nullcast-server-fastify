@@ -255,17 +255,6 @@ CREATE TABLE IF NOT EXISTS subscribers(
     last_notified TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
--- CREATE TABLE IF NOT EXISTS event_register (
---     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
---     event_id INTEGER NOT NULL REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
---     email VARCHAR(64) NOT NULL PRIMARY KEY,
---     full_name VARCHAR(255),
---     isSubscribed boolean DEFAULT TRUE,
---     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
---     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
---     created_by INTEGER,
---     updated_by INTEGER
--- );
 CREATE TABLE IF NOT EXISTS activities (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -296,6 +285,17 @@ CREATE TABLE IF NOT EXISTS activity_types (
     name VARCHAR(255) NOT NULL,
     status VARCHAR(255) DEFAULT 'active',
     points INTEGER,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INTEGER,
+    updated_by INTEGER
+);
+CREATE TABLE IF NOT EXISTS event_register (
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    event_id INTEGER NOT NULL REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    email VARCHAR(64) NOT NULL PRIMARY KEY,
+    full_name VARCHAR(255),
+    is_subscribed boolean DEFAULT TRUE,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
