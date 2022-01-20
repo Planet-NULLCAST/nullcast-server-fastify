@@ -291,11 +291,11 @@ CREATE TABLE IF NOT EXISTS activity_types (
     updated_by INTEGER
 );
 CREATE TABLE IF NOT EXISTS event_register (
-    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     event_id INTEGER NOT NULL REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
     email VARCHAR(64) NOT NULL PRIMARY KEY,
     full_name VARCHAR(255),
-    is_subscribed boolean DEFAULT TRUE,
+    is_subscribed boolean DEFAULT FALSE,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
