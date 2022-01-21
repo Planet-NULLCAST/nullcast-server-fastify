@@ -26,7 +26,7 @@ const createEventRegistration: RouteOptions = {
       }
     } catch (error: any) {
       if (error.detail.includes('email')) {
-        throw ({statusCode: 404, message: 'The user has already registered for this event through this eamil id'});
+        throw ({statusCode: 404, message: 'The user has already registered for this event through this email id'});
       }
       if (error.detail.includes('event_id')) {
         throw ({statusCode: 404, message: 'Event does not exists'});
