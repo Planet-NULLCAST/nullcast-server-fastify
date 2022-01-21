@@ -2,7 +2,6 @@ import {RouteOptions} from 'fastify';
 import {FastifyInstance} from 'fastify/types/instance';
 import * as controller from '../../controllers/index';
 
-import { TokenUser } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { EventRegister } from 'interfaces/event-register.type';
 import {
@@ -13,12 +12,13 @@ import {
 
 const createEventRegistration: RouteOptions = {
   method: 'POST',
-  url: '/event-registration',
+  url: '/event-registration/',
   schema: createEventRegistrationSchema,
   handler: async(request, reply) => {
     try {
-      const user = request.user as TokenUser;
-      const eventRegisterData = await controller.createEventRegistrationController(request.body as EventRegister, user);
+      const queryParams = request.query as {user_id: number};
+      const eventRegisterData = await controller.createEventRegistrationController(
+        request.body as EventRegister, queryParams.user_id);
       if (eventRegisterData) {
         reply.code(201).send({message: 'User registered for the event successfully', data: eventRegisterData});
       } else {

@@ -5,6 +5,15 @@ export const createEventRegistrationSchema = {
   summary: 'Register event attendees',
   description: 'A POST route to register a user to an event',
   tags: ['Event Register'],
+  querystring: {
+    type: 'object',
+    properties: {
+      user_id: {
+        type: 'number',
+        description: 'Id of the user'
+      }
+    }
+  },
   body:  {
     type: 'object',
     required: ['event_id', 'email', 'full_name'],

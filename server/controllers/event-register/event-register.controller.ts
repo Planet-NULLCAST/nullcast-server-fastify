@@ -1,6 +1,5 @@
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
 import { EVENT_REGISTER_TABLE } from 'constants/tables';
-import { TokenUser } from 'interfaces/user.type';
 import { QueryParams } from 'interfaces/query-params.type';
 import { EventRegister } from 'interfaces/event-register.type';
 
@@ -8,14 +7,14 @@ import { EventRegister } from 'interfaces/event-register.type';
 const eventRegisterHandler = new DatabaseHandler(EVENT_REGISTER_TABLE);
 
 export async function createEventRegistrationController(
-  eventRegisterData: EventRegister, user:TokenUser): Promise<EventRegister> {
+  eventRegisterData: EventRegister, userId:number): Promise<EventRegister> {
 
   const payload: EventRegister = {
-    user_id: user.id as number,
+    user_id: userId as number,
     event_id: eventRegisterData.event_id as number,
     email: eventRegisterData.email as string,
     full_name: eventRegisterData.full_name as string,
-    created_by: user.id as number
+    created_by: userId as number
   };
 
   const fields = ['user_id', 'event_id', 'full_name', 'email', 'is_subscribed', 'created_by', 'created_at'];

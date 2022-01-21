@@ -11,5 +11,6 @@ export const NON_AUTH_ROUTES: {[x: string]: string} = {
   'reset-password': 'POST',
   'subscribe': 'POST',
   'send-verification-mail': 'POST',
-  'verify-user': 'PUT'
+  'verify-user': 'PUT',
+  'event-registration': 'POST'
 };
