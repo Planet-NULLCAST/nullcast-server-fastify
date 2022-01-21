@@ -36,15 +36,15 @@ export async function getEventAttendeesController(eventId: number, qParams:Query
   }
 }
 
-export async function deleteEventAttendeeController(EventId: number, userId: number) : Promise<boolean> {
+export async function deleteEventAttendeeController(EventId: number, email: string) : Promise<boolean> {
   try {
-    if (!(EventId && userId)) {
+    if (!(EventId && email)) {
       return false;
     }
 
     const payload = {
       event_id: EventId,
-      user_id : userId
+      user_id : email
     };
 
     await eventRegisterHandler.dbHandler('DELETE_EVENT_ATTENDEE', payload);

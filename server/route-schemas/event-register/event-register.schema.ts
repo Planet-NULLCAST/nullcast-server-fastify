@@ -76,7 +76,7 @@ export const deleteEventAttendeeSchema = {
     type: 'object',
     properties: {
       event_id: { type: 'number', description: 'Id of the event' },
-      user_id: { type: 'number', description: 'Id of the user' }
+      email: { type: 'string', description: 'Email id of the user' }
     }
   },
   response: {

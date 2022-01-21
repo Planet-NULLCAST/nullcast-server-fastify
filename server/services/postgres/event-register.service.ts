@@ -50,8 +50,8 @@ export async function deleteEventAttendee(payload: {[x: string]: any}) {
     const deleteEventAttendeeQuery: QueryConfig = {
       text: `DELETE FROM 
               ${EVENT_REGISTER_TABLE}
-              WHERE event_id = $1 AND user_id = $2;`,
-      values: [payload.event_id, payload.user_id]
+              WHERE event_id = $1 AND email = $2;`,
+      values: [payload.event_id, payload.email]
     };
     return await postgresClient.query(deleteEventAttendeeQuery);
   } catch (err) {

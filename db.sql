@@ -293,13 +293,14 @@ CREATE TABLE IF NOT EXISTS activity_types (
 CREATE TABLE IF NOT EXISTS event_register (
     user_id INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     event_id INTEGER NOT NULL REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    email VARCHAR(64) NOT NULL PRIMARY KEY,
+    email VARCHAR(64) NOT NULL,
     full_name VARCHAR(255),
     is_subscribed boolean DEFAULT FALSE,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
-    updated_by INTEGER
+    updated_by INTEGER,
+    PRIMARY KEY(email, event_id)
 );
 INSERT INTO entity (name, description)
 VALUES ('nullcast', 'Nullcast is an open-source tech community');

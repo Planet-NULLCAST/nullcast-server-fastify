@@ -24,7 +24,13 @@ const createEventRegistration: RouteOptions = {
       } else {
         reply.code(500).send({message:'User registration failed'});
       }
-    } catch (error) {
+    } catch (error: any) {
+        if (error.detail.includes('email')) {
+          throw ({statusCode: 404, message: "The user has already registered for this event through this eamil id"});
+        };
+        if (error.detail.includes('event_id')) {
+          throw ({statusCode: 404, message: "Event does not exists"});
+        };
       throw error;
     }
   }
@@ -52,13 +58,12 @@ const getEventAttendees: RouteOptions = {
 
 const deleteEventAttendee: RouteOptions = {
   method: 'DELETE',
-  url: '/event-registration/:event_id-:user_id',
+  url: '/event-registration/:event_id-:email',
   schema: deleteEventAttendeeSchema,
   handler: async(request, reply) => {
-    const user = request.user as TokenUser;
-    const params = request.params as {event_id: number};
+    const params = request.params as {event_id: number, email: string};
 
-    if (await controller.deleteEventAttendeeController(params.event_id, user.id)) {
+    if (await controller.deleteEventAttendeeController(params.event_id, params.email)) {
       reply.code(200).send({message: 'User successfully deregistered from the event'});
     } else {
       reply.code(500).send({message: 'User not deregistered'});
