@@ -25,12 +25,12 @@ const createEventRegistration: RouteOptions = {
         reply.code(500).send({message:'User registration failed'});
       }
     } catch (error: any) {
-        if (error.detail.includes('email')) {
-          throw ({statusCode: 404, message: "The user has already registered for this event through this eamil id"});
-        };
-        if (error.detail.includes('event_id')) {
-          throw ({statusCode: 404, message: "Event does not exists"});
-        };
+      if (error.detail.includes('email')) {
+        throw ({statusCode: 404, message: 'The user has already registered for this event through this eamil id'});
+      }
+      if (error.detail.includes('event_id')) {
+        throw ({statusCode: 404, message: 'Event does not exists'});
+      }
       throw error;
     }
   }
