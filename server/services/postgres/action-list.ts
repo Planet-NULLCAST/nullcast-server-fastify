@@ -39,8 +39,8 @@ import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
 import { getUserActivities } from './activities.service';
-import { 
-  deleteEventAttendee, getEventAttendee, getEventAttendees 
+import {
+  deleteEventAttendee, getEventAttendee, getEventAttendees
 } from './event-register.service';
 
 
