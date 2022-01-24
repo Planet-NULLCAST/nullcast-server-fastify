@@ -6,8 +6,10 @@ import { QueryParams } from 'interfaces/query-params.type';
 import { EventRegister } from 'interfaces/event-register.type';
 import {
   createEventRegistrationSchema, deleteEventAttendeeSchema,
+  getEventAttendeeSchema,
   getEventAttendeesSchema
 } from 'route-schemas/event-register/event-register.schema';
+import { TokenUser } from 'interfaces/user.type';
 
 
 const createEventRegistration: RouteOptions = {
@@ -31,6 +33,26 @@ const createEventRegistration: RouteOptions = {
       if (error.detail.includes('event_id')) {
         throw ({statusCode: 404, message: 'Event does not exists'});
       }
+      throw error;
+    }
+  }
+};
+
+const getEventAttendee: RouteOptions = {
+  method: 'GET',
+  url: '/event-attendee/:event_id',
+  schema: getEventAttendeeSchema,
+  handler: async(request, reply) => {
+    try {
+      const user = request.user as TokenUser;
+      const params = request.params as {event_id: number};
+      const eventRegisterData = await controller.getEventAttendeeController(params.event_id, user.id);
+      if (eventRegisterData) {
+        reply.code(200).send({ data: eventRegisterData });
+      } else {
+        reply.code(404).send({ message: 'This user has not registered for this event' });
+      }
+    } catch (error) {
       throw error;
     }
   }
@@ -73,6 +95,7 @@ const deleteEventAttendee: RouteOptions = {
 
 function initEventRegister(server:FastifyInstance, _:any, done: () => void) {
   server.route(createEventRegistration);
+  server.route(getEventAttendee);
   server.route(getEventAttendees);
   server.route(deleteEventAttendee);
 

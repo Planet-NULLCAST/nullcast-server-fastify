@@ -39,7 +39,9 @@ import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
 import { getUserActivities } from './activities.service';
-import { deleteEventAttendee, getEventAttendees } from './event-register.service';
+import { 
+  deleteEventAttendee, getEventAttendee, getEventAttendees 
+} from './event-register.service';
 
 
 export const serviceActions: { [x in Actions]: any } = {
@@ -102,6 +104,7 @@ export const serviceActions: { [x in Actions]: any } = {
 
   GET_USER_ACTIVITIES: getUserActivities,
 
+  GET_EVENT_ATTENDEE: getEventAttendee,
   GET_EVENT_ATTENDEES: getEventAttendees,
   DELETE_EVENT_ATTENDEE: deleteEventAttendee
 };

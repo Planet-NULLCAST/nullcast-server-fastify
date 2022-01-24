@@ -37,8 +37,23 @@ export const createEventRegistrationSchema = {
   }
 };
 
+export const getEventAttendeeSchema = {
+  summary: 'Get an event attendee',
+  description: 'To Get a regitered user detail',
+  tags: ['Event Register'],
+  params: {
+    type: 'object',
+    properties: {
+      event_id: { type: 'number', description: 'Id of the event' }
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
 export const getEventAttendeesSchema = {
-  summary: 'Ger event attendees',
+  summary: 'Get event attendees',
   description: 'To Get all users registered for a specific event',
   tags: ['Event Register'],
   params: {

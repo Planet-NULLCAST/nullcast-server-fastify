@@ -24,6 +24,18 @@ export async function createEventRegistrationController(
   return data.rows[0] as EventRegister;
 }
 
+export async function getEventAttendeeController(eventId: number, userId: number) {
+  try {
+    const payload = {
+      event_id: eventId,
+      user_id: userId
+    };
+    return await eventRegisterHandler.dbHandler('GET_EVENT_ATTENDEE', payload);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getEventAttendeesController(eventId: number, qParams:QueryParams) {
   try {
     const payload = {

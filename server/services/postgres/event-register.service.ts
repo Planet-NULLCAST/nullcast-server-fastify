@@ -3,6 +3,22 @@ import { EVENT_REGISTER_TABLE, USER_TABLE } from 'constants/tables';
 import { QueryParams } from 'interfaces/query-params.type';
 
 
+export async function getEventAttendee(payload: {event_id: number, user_id: number}) {
+
+  const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+  const getEventAttendeeQuery: QueryConfig = {
+    text: `SELECT er.user_id, er.event_id
+            FROM ${EVENT_REGISTER_TABLE} AS er
+            WHERE event_id = $1 AND user_id = $2;`,
+    values: [payload.event_id, payload.user_id]
+  };
+
+  const data = await postgresClient.query(getEventAttendeeQuery);
+
+  return data.rows[0];
+}
+
 export async function getEventAttendees(payload: {event_id: number}, queryParams: QueryParams) {
   const {
     page = 1,

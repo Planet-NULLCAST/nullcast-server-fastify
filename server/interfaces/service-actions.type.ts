@@ -57,6 +57,7 @@ export type Actions =
 
   | 'GET_USER_ACTIVITIES'
 
+  | 'GET_EVENT_ATTENDEE'
   | 'GET_EVENT_ATTENDEES'
   | 'DELETE_EVENT_ATTENDEE';
 
