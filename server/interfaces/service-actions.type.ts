@@ -16,6 +16,7 @@ export type Actions =
   | 'GET_POSTS_BY_TAG'
   | 'GET_POSTS_BY_USER_ID'
   | 'GET_POSTS_COUNT'
+  | 'UPDATE_AND_PUBLISH_POST'
 
   | 'GET_TAGS'
 
@@ -56,6 +57,7 @@ export type Actions =
   | 'UNFOLLOW_USER'
 
   | 'GET_USER_ACTIVITIES'
+  | 'GET_USER_ACTIVITY_POINTS'
 
   | 'GET_EVENT_ATTENDEE'
   | 'GET_EVENT_ATTENDEES'

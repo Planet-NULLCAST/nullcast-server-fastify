@@ -38,7 +38,7 @@ const adminReviewPost: RouteOptions = {
       const params = request.params as { post_id: number };
       const post = await controller.adminReviewPostController(request.body as Post, user.id, params.post_id);
       if (post) {
-        reply.code(200).send({ message: 'Post updated', data: post});
+        reply.code(200).send({ message: 'Post updated'});
       } else {
         reply.code(500).send({ message: 'Something Error happend' });
       }

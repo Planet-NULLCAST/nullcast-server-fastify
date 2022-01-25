@@ -7,7 +7,8 @@ import {
   getUser, getUsers, verifyUserEmail
 } from './users.service';
 import {
-  getPosts, getSinglePost, getPostsBytag, getPostsByUserId, getPostsCount
+  getPosts, getSinglePost, getPostsBytag,
+  getPostsByUserId, getPostsCount, updateAndPublishPost
 } from './posts.service';
 import * as commonService from './query-builder.service';
 import { getTags } from './tags.service';
@@ -38,7 +39,7 @@ import {
 import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
-import { getUserActivities } from './activities.service';
+import { getUserActivities, getUserActivityPoints } from './activities.service';
 import {
   deleteEventAttendee, getEventAttendee, getEventAttendees
 } from './event-register.service';
@@ -62,6 +63,7 @@ export const serviceActions: { [x in Actions]: any } = {
   GET_POSTS_BY_TAG: getPostsBytag,
   GET_POSTS_BY_USER_ID: getPostsByUserId,
   GET_POSTS_COUNT: getPostsCount,
+  UPDATE_AND_PUBLISH_POST: updateAndPublishPost,
 
   GET_TAGS: getTags,
 
@@ -103,6 +105,7 @@ export const serviceActions: { [x in Actions]: any } = {
   UNFOLLOW_USER: unfollowUser,
 
   GET_USER_ACTIVITIES: getUserActivities,
+  GET_USER_ACTIVITY_POINTS: getUserActivityPoints,
 
   GET_EVENT_ATTENDEE: getEventAttendee,
   GET_EVENT_ATTENDEES: getEventAttendees,

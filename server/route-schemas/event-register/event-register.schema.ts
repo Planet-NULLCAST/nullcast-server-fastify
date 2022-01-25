@@ -39,7 +39,7 @@ export const createEventRegistrationSchema = {
 
 export const getEventAttendeeSchema = {
   summary: 'Get an event attendee',
-  description: 'To Get a regitered user detail',
+  description: 'To Get a registered user detail',
   tags: ['Event Register'],
   params: {
     type: 'object',

@@ -37,8 +37,8 @@ export const createActivitySchema = {
 };
 
 export const getUserYearlyActivitiesSchema = {
-  summary: 'Create Activity',
-  description: 'A POST route to create an activity',
+  summary: 'Get user yearly activity',
+  description: 'Route to get yearly user activity information',
   tags: ['Activities'],
   params: {
     type: 'object',
@@ -51,6 +51,21 @@ export const getUserYearlyActivitiesSchema = {
     required: ['year'],
     properties: {
       year: {type: 'number', description: 'The year specified for the activities to be fetched'}
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
+export const getUserActivityPointsSchema = {
+  summary: 'Get user activity points',
+  description: 'Route to get user activity points information',
+  tags: ['Activities'],
+  params: {
+    type: 'object',
+    properties: {
+      user_id: {type: 'number', description: 'Id of the user'}
     }
   },
   response: {

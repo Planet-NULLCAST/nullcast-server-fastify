@@ -1,6 +1,10 @@
-import { POST_TABLE, USER_ROLE_TABLE } from 'constants/tables';
+import {
+  ACTIVITY_TYPE_TABLE, POST_TABLE, USER_ROLE_TABLE
+} from 'constants/tables';
+import { Activity } from 'interfaces/activities.type';
 import { mobiledoc, Post } from 'interfaces/post.type';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
+import { findOneByField } from 'services/postgres/query-builder.service';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
 
 
@@ -20,7 +24,7 @@ export async function checkAdminController(userId: number): Promise<boolean> {
   }
 }
 
-export async function adminReviewPostController(postData:Post, userId:number, postId: number) :Promise<Post | boolean> {
+export async function adminReviewPostController(postData:Post, userId:number, postId: number): Promise<boolean> {
   try {
     if (!postId) {
       return false;
@@ -36,27 +40,46 @@ export async function adminReviewPostController(postData:Post, userId:number, po
       throw { statusCode: 404, message: 'You should have admin access' };
     }
 
-    const payload : Post = {
+    // post data
+    const post : Post = {
       ...postData,
+      id: postId,
       updated_at: new Date().toISOString(),
       updated_by: userId
     };
 
     if (postData.mobiledoc) {
       const html: string = convertToHTML(postData.mobiledoc as mobiledoc);
-      payload.html = html;
-      payload.mobiledoc = postData.mobiledoc as mobiledoc;
+      post.html = html;
+      post.mobiledoc = postData.mobiledoc as mobiledoc;
     }
 
     if (postData.status == 'published') {
-      payload.published_at = new Date().toISOString();
+      post.published_at = new Date().toISOString();
     }
 
-    const fields = ['id', 'html', 'created_at', 'created_by', 'mobiledoc',
-      'status', 'published_at', 'updated_at', 'meta_title', 'title'];
+    // activity data
+    const {class_id} = await findOneByField(
+      ACTIVITY_TYPE_TABLE,
+      { name: 'published_post' },
+      ['class_id']
+    );
+    const {id} = await findOneByField(
+      ACTIVITY_TYPE_TABLE,
+      { name: 'published_post' },
+      ['id']
+    );
+    const activity : Activity = {
+      name: 'published_post',
+      class_id,
+      activity_type_id: id,
+      post_id: post.id
+    };
 
-    const data = await postHandler.updateOneById(postId, payload, fields);
-    return data.rows[0] as Post;
+    const payload = [post, activity];
+
+    const data = await postHandler.dbHandler('UPDATE_AND_PUBLISH_POST', payload);
+    return data as boolean;
 
   } catch (error) {
     throw error;
