@@ -1,6 +1,4 @@
-import {
-  POST_TABLE, USER_ROLE_TABLE
-} from 'constants/tables';
+import {POST_TABLE, USER_ROLE_TABLE} from 'constants/tables';
 import { Activity } from 'interfaces/activities.type';
 import { mobiledoc, Post } from 'interfaces/post.type';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
