@@ -1,10 +1,10 @@
 import {
-  ACTIVITY_TYPE_TABLE, POST_TABLE, USER_ROLE_TABLE
+  POST_TABLE, USER_ROLE_TABLE
 } from 'constants/tables';
 import { Activity } from 'interfaces/activities.type';
 import { mobiledoc, Post } from 'interfaces/post.type';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
-import { findOneByField } from 'services/postgres/query-builder.service';
+import { findActivityType } from 'utils/activities.utils';
 import { default as mobiledocLib} from '../../lib/mobiledoc';
 
 
@@ -59,22 +59,8 @@ export async function adminReviewPostController(postData:Post, userId:number, po
     }
 
     // activity data
-    const {class_id} = await findOneByField(
-      ACTIVITY_TYPE_TABLE,
-      { name: 'published_post' },
-      ['class_id']
-    );
-    const {id} = await findOneByField(
-      ACTIVITY_TYPE_TABLE,
-      { name: 'published_post' },
-      ['id']
-    );
-    const activity : Activity = {
-      name: 'published_post',
-      class_id,
-      activity_type_id: id,
-      post_id: post.id
-    };
+    const activity = findActivityType('published_post') as Activity;
+    activity.post_id = post.id;
 
     const payload = [post, activity];
 

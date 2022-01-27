@@ -4,11 +4,12 @@ import {
 } from 'constants/tables';
 import { userActivity } from 'interfaces/activities.type';
 
-export async function getUserActivities(payload: {[x: string]: any}): Promise<userActivity[]> {
+
+export async function getYearlyUserActivities(payload: {[x: string]: any}): Promise<userActivity[]> {
   try {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
-    const getUserActivitiesQuery: QueryConfig = {
+    const getYearlyUserActivitiesQuery: QueryConfig = {
       text: `SELECT DATE(updated_at), COUNT(updated_at)
               FROM ${ACTIVITY_TABLE}
               WHERE updated_at BETWEEN '${payload.year - 1}-01-1' AND '${payload.year}-12-31'
@@ -18,7 +19,7 @@ export async function getUserActivities(payload: {[x: string]: any}): Promise<us
       values: [payload.userId]
     };
 
-    const data = await postgresClient.query(getUserActivitiesQuery);
+    const data = await postgresClient.query(getYearlyUserActivitiesQuery);
     return data.rows as userActivity[];
   } catch (error) {
     throw error;
