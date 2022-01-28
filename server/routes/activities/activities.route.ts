@@ -4,7 +4,7 @@ import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { Activity } from 'interfaces/activities.type';
 import {
-  createActivitySchema, deleteActivitySchema, getUserYearlyActivitiesSchema
+  createActivitySchema, deleteActivitySchema, getUserActivityPointsSchema, getUserYearlyActivitiesSchema
 } from 'route-schemas/activities/activities.schema';
 
 
@@ -50,6 +50,25 @@ const getUserYearlyActivities: RouteOptions = {
   }
 };
 
+const getUserActivityPoints: RouteOptions = {
+  method: 'GET',
+  url: '/user-activity-points/:user_id',
+  schema: getUserActivityPointsSchema,
+  handler: async(request, reply) => {
+    try {
+      const params = request.params as {user_id: number};
+      const activityData = await controller.getUserActivityPointsController(params.user_id);
+      if (!activityData) {
+        reply.code(404).send({message: 'No activity points found for this user'});
+      }
+      reply.code(200).send({message: 'User activity points successfully fetched', data: activityData});
+
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 const deleteActivity: RouteOptions = {
   method: 'DELETE',
   url: '/activity/:activity_id',
@@ -68,6 +87,7 @@ const deleteActivity: RouteOptions = {
 function initActivities(server:FastifyInstance, _:any, done: () => void) {
   server.route(createActivity);
   server.route(getUserYearlyActivities);
+  server.route(getUserActivityPoints);
   server.route(deleteActivity);
 
   done();

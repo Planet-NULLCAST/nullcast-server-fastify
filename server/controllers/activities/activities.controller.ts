@@ -46,9 +46,19 @@ export async function getUserYearlyActivitiesController(
     userId
   };
 
-  const data = await activityHandler.dbHandler('GET_USER_ACTIVITIES', payload);
+  const data = await activityHandler.dbHandler('GET_YEARLY_USER_ACTIVITIES', payload);
 
   return data as userActivity[];
+}
+
+export async function getUserActivityPointsController(userId: number) {
+  const payload = {
+    userId
+  };
+
+  const data = await activityHandler.dbHandler('GET_USER_ACTIVITY_POINTS', payload);
+
+  return data;
 }
 
 export async function deleteActivityController(activityId: number) : Promise<boolean> {

@@ -1,11 +1,13 @@
 import { Client, QueryConfig } from 'pg';
 
 import {
-  POST_TABLE, POST_TAG_TABLE, TAG_TABLE, USER_TABLE
+  ACTIVITY_TABLE, POST_TABLE, POST_TAG_TABLE,
+  TAG_TABLE, USER_TABLE
 } from 'constants/tables';
 
 import { Post } from 'interfaces/post.type';
 import { QueryParams } from 'interfaces/query-params.type';
+import { Activity } from 'interfaces/activities.type';
 
 
 function constructJoinQuery({
@@ -400,4 +402,52 @@ export async function getPostsCount(
   const postData = await postgresClient.query<Post>(getPostsQuery);
 
   return { ...postData.rows[0]};
+}
+
+export async function updateAndPublishPost(payload: [Post, Activity]) {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    // Query for post table
+    const queryValues: any[] = [payload[0].id];
+    const postId = payload[0].id;
+    delete payload[0].id;
+    let updateStatement = 'SET';
+    const postArray = Object.entries(payload[0]);
+
+
+    postArray.forEach(([key, value], index) => {
+      queryValues.push(value);
+      if (index !== postArray.length - 1) {
+        updateStatement = `${updateStatement} ${key} = '${queryValues[index+1]}',`;
+      } else {
+        updateStatement = `${updateStatement} ${key} = '${queryValues[index+1]}'`;
+      }
+    });
+
+    // Query for activity table
+    const columns: string = Object.keys(payload[1]).join(', ');
+    const values: string[] = Object.values(payload[1]);
+    const valueRefs: string = values
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    /* eslint-disable no-unused-vars */
+      .map((value, _) => `'${value}'`)
+      .join(', ');
+    const updateAndPublishPostQuery: QueryConfig = {
+      text: `BEGIN;
+              UPDATE ${POST_TABLE} 
+              ${updateStatement} 
+              WHERE id = ${queryValues[0]};
+              INSERT INTO
+              ${ACTIVITY_TABLE}
+              (${columns}, user_id, created_by)
+              SELECT ${valueRefs}, created_by, created_by FROM ${POST_TABLE} WHERE id = ${postId};
+            COMMIT;`
+    };
+
+    await postgresClient.query(updateAndPublishPostQuery.text);
+    return true;
+  } catch (error) {
+    throw error;
+  }
 }

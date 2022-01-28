@@ -58,6 +58,21 @@ export const getUserYearlyActivitiesSchema = {
   }
 };
 
+export const getUserActivityPointsSchema = {
+  summary: 'Get user activity points',
+  description: 'Route to get user activity points information',
+  tags: ['Activities'],
+  params: {
+    type: 'object',
+    properties: {
+      user_id: {type: 'number', description: 'Id of the user'}
+    }
+  },
+  response: {
+    400: BAD_REQUEST
+  }
+};
+
 export const deleteActivitySchema = {
   summary: 'Delete Activity',
   description: 'To Delete an activity',
