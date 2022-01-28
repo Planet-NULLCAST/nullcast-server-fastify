@@ -3,14 +3,14 @@ import { queryStringProps } from 'route-schemas/shared-schemas/shared.properties
 import { eventProps } from './event.properties';
 
 
-export const createEventSchema = {
-  summary: 'Create Event',
-  description: 'A Post route to create an event and store its data',
+export const requestEventSchema = {
+  summary: 'Request Event',
+  description: 'A Post route to create an event with status pending and store its data',
   tags: ['Event'],
   body: {
     type: 'object',
     properties: {
-      ...eventProps
+      ...eventProps('user')
     }
   },
   response: {
@@ -137,7 +137,7 @@ export const updateEventSchema = {
   body: {
     type: 'object',
     properties: {
-      ...eventProps,
+      ...eventProps('user'),
       updated_by: {
         type: 'number',
         description: 'user whom have updated it'

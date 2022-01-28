@@ -6,7 +6,7 @@ import * as controller from '../../controllers';
 import {Event} from 'interfaces/event.type';
 import { TokenUser } from 'interfaces/user.type';
 import {
-  createEventSchema, deleteEventSchema,
+  requestEventSchema, deleteEventSchema,
   getAllEventUrlSchema,
   getEventBySlugSchema, getEventsByUserIdSchema,
   getEventSchema, getEventsSchema, updateEventSchema
@@ -15,14 +15,14 @@ import {
 import { QueryParams } from 'interfaces/query-params.type';
 
 
-const createEvent: RouteOptions = {
+const requestEvent: RouteOptions = {
   method: 'POST',
-  url: '/admin/event',
-  schema: createEventSchema,
+  url: '/event',
+  schema: requestEventSchema,
   handler: async(request, reply) => {
     try {
       const user = request.user as TokenUser;
-      const eventData = await controller.createEventController(request.body as Event, user.id);
+      const eventData = await controller.requestEventController(request.body as Event, user.id);
 
       if (eventData) {
         reply.code(201).send({ message: 'Event created', data: eventData });
@@ -30,7 +30,10 @@ const createEvent: RouteOptions = {
         reply.code(500).send({ message: 'Something Error happend' });
       }
 
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.detail?.includes('slug') || error?.detail?.includes('title')) {
+        throw ({statusCode: 404, message: 'Event title already exists'});
+      }
       throw error;
     }
 
@@ -132,7 +135,7 @@ const getEventsByUserId: RouteOptions = {
 
 const updateEvent: RouteOptions = {
   method: 'PUT',
-  url: '/admin/event/:eventId',
+  url: '/event/:eventId',
   schema: updateEventSchema,
   handler: async(request, reply) => {
     try {
@@ -167,7 +170,7 @@ const deleteEvent: RouteOptions = {
 };
 
 function initEvents(server: FastifyInstance, _: any, done: () => void) {
-  server.route(createEvent);
+  server.route(requestEvent);
   server.route(getEvent);
   server.route(getEventBySlug);
   server.route(getEvents);

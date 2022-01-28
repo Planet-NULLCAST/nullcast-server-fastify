@@ -37,8 +37,8 @@ export const createActivitySchema = {
 };
 
 export const getUserYearlyActivitiesSchema = {
-  summary: 'Get user yearly activity',
-  description: 'Route to get yearly user activity information',
+  summary: 'Get yearly user Activity',
+  description: 'Route to get yearly user activities',
   tags: ['Activities'],
   params: {
     type: 'object',

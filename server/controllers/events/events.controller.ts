@@ -7,38 +7,50 @@ import { checkAdminController } from 'controllers';
 
 const eventHandler = new DatabaseHandler(EVENT_TABLE);
 
-export async function createEventController(eventData:Event, userId:number): Promise<Event> {
+export async function requestEventController(eventData:Event, userId:number): Promise<Event> {
   try {
     const isAdmin = await checkAdminController(userId);
+    const adminStatus = ['published', 'rejected'];
+    const allowedStatus = ['drafted', 'pending'];
 
     if (isAdmin) {
-      const slug = eventData.title.toLowerCase().split(' ').join('-');
-      const payload : Event = {
-        title: eventData.title,
-        meta_title: eventData.meta_title,
-        description: eventData.description,
-        meta_description: eventData.meta_description,
-        guest_name: eventData.guest_name,
-        guest_designation: eventData.guest_designation,
-        guest_image: eventData.guest_image,
-        guest_bio: eventData.guest_bio,
-        registration_link: eventData.registration_link,
-        event_time: eventData.event_time,
-        status: 'published',
-        slug,
-        location: eventData.location,
-        banner_image: eventData.banner_image,
-        created_by: userId,
-        user_id: userId
-      };
-
-      const fields = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
-        'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'meta_description', 'location', 'primary_tag', 'event_time'];
-
-      const data = await eventHandler.insertOne(payload, fields);
-      return data.rows[0] as Event;
+      if (eventData.status && !(adminStatus.concat(allowedStatus).includes(eventData.status.trim().toLowerCase()))) {
+        throw { statusCode: 404, message: 'Status of the post is not valid' };
+      }
+    } else {
+      if (eventData.status && !(allowedStatus.includes(eventData.status.trim().toLowerCase()))) {
+        if (adminStatus.includes(eventData.status.trim().toLowerCase())) {
+          throw { statusCode: 404, message: 'You should have admin access' };
+        }
+        throw { statusCode: 404, message: 'Status of the post is not valid' };
+      }
     }
-    throw {statusCode: 404, message: 'User has no admin access'};
+
+    const slug = eventData.title.toLowerCase().split(' ').join('-');
+    const payload : Event = {
+      title: eventData.title,
+      meta_title: eventData.meta_title,
+      description: eventData.description,
+      meta_description: eventData.meta_description,
+      guest_name: eventData.guest_name,
+      guest_designation: eventData.guest_designation,
+      guest_image: eventData.guest_image,
+      guest_bio: eventData.guest_bio,
+      registration_link: eventData.registration_link,
+      event_time: eventData.event_time,
+      status: eventData.status,
+      slug,
+      location: eventData.location,
+      banner_image: eventData.banner_image,
+      created_by: userId,
+      user_id: userId
+    };
+
+    const fields = ['id', 'title', 'guest_name', 'guest_designation', 'guest_image', 'registration_link', 'guest_bio', 'created_at', 'created_by',
+      'slug', 'status', 'published_at', 'banner_image', 'updated_at', 'meta_title', 'description', 'meta_description', 'location', 'primary_tag', 'event_time'];
+
+    const data = await eventHandler.insertOne(payload, fields);
+    return data.rows[0] as Event;
 
   } catch (error) {
     throw error;
