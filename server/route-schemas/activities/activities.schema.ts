@@ -37,8 +37,8 @@ export const createActivitySchema = {
 };
 
 export const getUserYearlyActivitiesSchema = {
-  summary: 'Create Activity',
-  description: 'A POST route to create an activity',
+  summary: 'Get yearly user Activity',
+  description: 'Route to get yearly user activities',
   tags: ['Activities'],
   params: {
     type: 'object',
