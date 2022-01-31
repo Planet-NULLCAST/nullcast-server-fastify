@@ -38,7 +38,7 @@ const AdminCreateEvent: RouteOptions = {
 };
 
 const adminReviewPost: RouteOptions = {
-  method: 'PUT',
+  method: 'PATCH',
   url: '/admin/post/:post_id',
   schema: adminReviewPostSchema,
   handler: async(request, reply) => {
@@ -58,7 +58,7 @@ const adminReviewPost: RouteOptions = {
 };
 
 const adminReviewEvent: RouteOptions = {
-  method: 'PUT',
+  method: 'PATCH',
   url: '/admin/event/:eventId',
   schema: adminReviewEventSchema,
   handler: async(request, reply) => {
