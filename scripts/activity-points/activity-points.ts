@@ -28,19 +28,19 @@ export async function addActivityPoints() {
     const posts = postData.rows as Post[];
     const activityData: Activity[] = [];
     const activity = await findActivityType('published_post') as Activity;
-    if(posts[0]) {
+    if (posts[0]) {
       posts.forEach((post: Post) => {
         // activity data
         delete Object.assign(post, {['post_id']: post['id'] })['id'];
         delete Object.assign(post, {['user_id']: post['created_by'] })['created_by'];
         activityData.push({...activity, ...post});
-      })
+      });
       await bulkWrite(tableNames.ACTIVITY_TABLE, activityData);
-      console.log('Activity points added for published posts')
+      console.log('Activity points added for published posts');
     } else {
-      console.log('Points are already added for all published posts')
+      console.log('Points are already added for all published posts');
     }
-  } catch(error) {
+  } catch (error) {
     throw error;
   }
 }
