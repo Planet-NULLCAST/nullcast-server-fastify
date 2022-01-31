@@ -16,6 +16,7 @@
     "init-tables": "node ./initialize-tables.js",
     "create-seed": "ts-node ./seed-db.ts",
     "migrate": "ts-node ./scripts/migrate/index.ts",
+    "add-points": "ts-node ./scripts/activity-points/index.ts",
     "cron": "ts-node ./server/cron/index.ts",
     "map": "ts-node ./server/cron/site-map-generation.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
