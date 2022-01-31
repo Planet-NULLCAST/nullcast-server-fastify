@@ -1,0 +1,14 @@
+dist
+test-result.log
+.nyc_output
+coverage
+.env
+
+
+# Lambda deployment files
+lambdas/*/*.zip
+
+# Dependency directories
+node_modules
+lambdas/*/node_modules/
+server/public/*.xml
