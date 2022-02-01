@@ -27,7 +27,7 @@ export async function addActivityPoints() {
               FROM ${tableNames.POST_TABLE}
               WHERE status = 'published' ${rewardedPosts && `AND id NOT IN(${rewardedPosts})`} ;`
     };
-    
+
     const unrewardedPosts = (await postgresClient.query(FindUnrewardedPostsQuery)).rows as Post[];
 
     // Function to get activity details according to the activity type
@@ -43,7 +43,7 @@ export async function addActivityPoints() {
         delete Object.assign(post, {['user_id']: post['created_by'] })['created_by'];
         activityData.push({...activity, ...post});
       });
-      
+
       // Activity points are now added to unrewarded published posts
       await bulkWrite(tableNames.ACTIVITY_TABLE, activityData);
       console.log('Activity points added for published posts');
