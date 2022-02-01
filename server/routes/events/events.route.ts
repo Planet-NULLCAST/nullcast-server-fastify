@@ -134,7 +134,7 @@ const getEventsByUserId: RouteOptions = {
 };
 
 const updateEvent: RouteOptions = {
-  method: 'PUT',
+  method: 'PATCH',
   url: '/event/:eventId',
   schema: updateEventSchema,
   handler: async(request, reply) => {

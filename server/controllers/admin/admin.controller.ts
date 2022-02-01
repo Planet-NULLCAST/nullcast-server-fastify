@@ -100,7 +100,7 @@ export async function adminReviewPostController(postData:Post, userId:number, po
     }
 
     // activity data
-    const activity = findActivityType('published_post') as Activity;
+    const activity = await findActivityType('published_post') as Activity;
     activity.post_id = post.id;
 
     const payload = [post, activity];
