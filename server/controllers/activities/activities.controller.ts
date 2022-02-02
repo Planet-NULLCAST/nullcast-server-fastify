@@ -4,6 +4,7 @@ import {
   CLASS_TABLE
 } from 'constants/tables';
 import { Activity, userActivity } from 'interfaces/activities.type';
+import { QueryParams } from 'interfaces/query-params.type';
 
 
 const activityHandler = new DatabaseHandler(ACTIVITY_TABLE);
@@ -59,6 +60,14 @@ export async function getUserActivityPointsController(userId: number) {
   const data = await activityHandler.dbHandler('GET_USER_ACTIVITY_POINTS', payload);
 
   return data;
+}
+
+export async function getLeaderBoardController(queryParams: QueryParams) {
+  try {
+    return await activityHandler.dbHandler('GET_LEADER_BOARD', queryParams);
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function deleteActivityController(activityId: number) : Promise<boolean> {
