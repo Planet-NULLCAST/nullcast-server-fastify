@@ -4,8 +4,8 @@ import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { Activity } from 'interfaces/activities.type';
 import {
-  createActivitySchema, deleteActivitySchema, 
-  getLeaderBoardSchema, getUserActivityPointsSchema, 
+  createActivitySchema, deleteActivitySchema,
+  getLeaderBoardSchema, getUserActivityPointsSchema,
   getUserYearlyActivitiesSchema
 } from 'route-schemas/activities/activities.schema';
 import { QueryParams } from 'interfaces/query-params.type';
