@@ -7,15 +7,19 @@ export const createActivityTypeSchema = {
   tags: ['Activity Types'],
   body:  {
     type: 'object',
-    required: ['name', 'class_name'],
+    required: ['name', 'class_name', 'points'],
     properties: {
       name: {
         type: 'string',
-        description: 'Name of the activity'
+        description: 'Name of the activity type'
       },
       class_name: {
         type: 'string',
         description: 'Name of the class'
+      },
+      points: {
+        type: 'number',
+        description: 'Number of points for this activity type'
       }
     }
   },

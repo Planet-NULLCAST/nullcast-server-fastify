@@ -4,8 +4,11 @@ import * as controller from '../../controllers/index';
 import { TokenUser } from 'interfaces/user.type';
 import { Activity } from 'interfaces/activities.type';
 import {
-  createActivitySchema, deleteActivitySchema, getUserActivityPointsSchema, getUserYearlyActivitiesSchema
+  createActivitySchema, deleteActivitySchema, 
+  getLeaderBoardSchema, getUserActivityPointsSchema, 
+  getUserYearlyActivitiesSchema
 } from 'route-schemas/activities/activities.schema';
+import { QueryParams } from 'interfaces/query-params.type';
 
 
 const createActivity: RouteOptions = {
@@ -69,6 +72,25 @@ const getUserActivityPoints: RouteOptions = {
   }
 };
 
+const getLeaderBoard: RouteOptions = {
+  method: 'GET',
+  url: '/leader-board',
+  schema: getLeaderBoardSchema,
+  handler: async(request, reply) => {
+    try {
+      const queryParams = JSON.parse(JSON.stringify(request.query)) as QueryParams;
+      const activityData = await controller.getLeaderBoardController(queryParams);
+      if (!activityData) {
+        reply.code(404).send({message: 'No users found'});
+      }
+      reply.code(200).send({message: 'Users with points are fetched', data: activityData});
+
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 const deleteActivity: RouteOptions = {
   method: 'DELETE',
   url: '/activity/:activity_id',
@@ -88,6 +110,7 @@ function initActivities(server:FastifyInstance, _:any, done: () => void) {
   server.route(createActivity);
   server.route(getUserYearlyActivities);
   server.route(getUserActivityPoints);
+  server.route(getLeaderBoard);
   server.route(deleteActivity);
 
   done();
