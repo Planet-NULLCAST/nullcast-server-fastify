@@ -60,8 +60,9 @@ const getUserActivityPoints: RouteOptions = {
   handler: async(request, reply) => {
     try {
       const params = request.params as {user_id: number};
-      const activityData = await controller.getUserActivityPointsController(params.user_id);
-      if (!activityData) {
+      const activityData = await controller.getUserActivityPointsController(
+        params.user_id) as {user_id: number, points: number, class: string}[];
+      if (!activityData.length) {
         reply.code(404).send({message: 'No activity points found for this user'});
       }
       reply.code(200).send({message: 'User activity points successfully fetched', data: activityData});

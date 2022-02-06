@@ -1,7 +1,7 @@
 import { Client, QueryConfig } from 'pg';
 import {
   ACTIVITY_TABLE, ACTIVITY_TYPE_TABLE,
-  CLASS_TABLE, USER_TABLE
+  CLASS_TABLE, HISTORICAL_POINT_TABLE, USER_TABLE
 } from 'constants/tables';
 import { userActivity } from 'interfaces/activities.type';
 import { QueryParams } from 'interfaces/query-params.type';
@@ -14,7 +14,7 @@ export async function getYearlyUserActivities(payload: {[x: string]: any}): Prom
     const getYearlyUserActivitiesQuery: QueryConfig = {
       text: `SELECT DATE(updated_at), COUNT(updated_at)
               FROM ${ACTIVITY_TABLE}
-              WHERE updated_at BETWEEN '${payload.year - 1}-01-1' AND '${payload.year}-12-31'
+              WHERE updated_at BETWEEN '${payload.year}-01-1' AND '${payload.year}-12-31'
               AND user_id = $1
               GROUP BY date(updated_at)
               ORDER BY date(updated_at) DESC`,
@@ -33,12 +33,22 @@ export async function getUserActivityPoints(payload: {[x: string]: any}) {
     const postgresClient: Client = (globalThis as any).postgresClient as Client;
 
     const getUserActivityPointsQuery: QueryConfig = {
-      text: `SELECT a.user_id, SUM(at.points) AS points, c.name AS class
+      text: `SELECT hp.user_id, c.name AS class,
+            (SELECT hp.points + COALESCE(SUM(at.points), 0)
               FROM ${ACTIVITY_TABLE} AS a
-              LEFT JOIN ${CLASS_TABLE} AS c ON c.id = a.class_id
               LEFT JOIN ${ACTIVITY_TYPE_TABLE} AS at ON at.id = a.activity_type_id
-              WHERE a.user_id = $1
-              GROUP BY a.user_id, a.class_id, at.points, c.name`,
+              LEFT JOIN ${CLASS_TABLE} AS cl ON cl.id = a.class_id
+              WHERE 
+                cl.id = hp.class_id 
+                AND a.user_id = hp.user_id 
+                AND a.created_at >= hp.last_checked_activity_timestamp
+                AND a.id != hp.last_activity_id
+            ) AS points
+            FROM ${HISTORICAL_POINT_TABLE} AS hp
+            LEFT JOIN ${CLASS_TABLE} AS c ON c.id = hp.class_id
+            WHERE hp.user_id = $1
+            GROUP BY hp.user_id, hp.points, hp.class_id,
+            hp.last_checked_activity_timestamp, hp.last_activity_id, c.name`,
       values: [payload.userId]
     };
 
@@ -78,3 +88,30 @@ export async function getLeaderBoard(queryParams: QueryParams) {
     throw error;
   }
 }
+// SELECT a.user_id, SUM(at.points) AS points, c.name AS class, hp.points
+//               FROM activities AS a
+//               LEFT JOIN classes AS c ON c.id = a.class_id
+//               LEFT JOIN activity_types AS at ON at.id = a.activity_type_id
+// 			  LEFT JOIN historical_points as hp ON hp.last_activity_id = a.id
+//               WHERE a.user_id = 10000022 AND a.created_by>hp.last_activity_id
+//               GROUP BY a.user_id, a.class_id, at.points, c.name, hp.points
+
+
+// SELECT a.user_id, a.name AS class,
+// (SELECT a.old_points + COALESCE(SUM(at.points), 0) FROM activities AS act
+// LEFT JOIN activity_types AS at ON at.id = act.activity_type_id
+// LEFT JOIN classes AS c ON c.id = act.class_id
+// WHERE c.id = a.class_id AND act.user_id = a.user_id AND act.created_at >= a.date AND act.id != a.last_activity_id
+// ) AS points
+// FROM (
+// SELECT a.id, a.user_id, a.class_id, a.activity_type_id, a.created_at,
+// 	hp.points AS old_points, SUM(at.points) AS new_points, c.name,
+// 	MAX(hp.last_checked_activity_timestamp) AS date, hp.last_activity_id
+// FROM historical_points AS hp
+// LEFT JOIN classes AS c ON c.id = hp.class_id
+// LEFT JOIN activities AS a ON a.user_id = hp.user_id AND a.class_id = hp.class_id
+// LEFT JOIN activity_types AS at ON at.id = a.activity_type_id
+// GROUP BY a.user_id, a.class_id, a.activity_type_id, c.name, a.created_at, hp.last_activity_id, a.id, hp.points
+// ) AS a
+// WHERE a.user_id = 10000022
+// GROUP BY a.user_id, a.name, a.date, a.class_id, a.last_activity_id, a.old_points
