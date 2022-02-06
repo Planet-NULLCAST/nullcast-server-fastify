@@ -85,7 +85,7 @@ export async function addHistoricalPoints() {
                     RETURNING hp.user_id, hp.points;`
           };
           await postgresClient.query(updateActivityPoints);
-        };
+        }
       }
       throw ('User activities recorded successfully');
     }
