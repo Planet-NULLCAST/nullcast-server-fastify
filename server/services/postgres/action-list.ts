@@ -39,9 +39,7 @@ import {
 import {
   getFollower, getFollowers, unfollowUser
 } from './followers.service';
-import {
-  getYearlyUserActivities, getUserActivityPoints, getLeaderBoard
-} from './activities.service';
+import { getYearlyUserActivities, getUserActivityPoints } from './activities.service';
 import {
   deleteEventAttendee, getEventAttendee, getEventAttendees
 } from './event-register.service';
@@ -108,7 +106,6 @@ export const serviceActions: { [x in Actions]: any } = {
 
   GET_YEARLY_USER_ACTIVITIES: getYearlyUserActivities,
   GET_USER_ACTIVITY_POINTS: getUserActivityPoints,
-  GET_LEADER_BOARD: getLeaderBoard,
 
   GET_EVENT_ATTENDEE: getEventAttendee,
   GET_EVENT_ATTENDEES: getEventAttendees,

@@ -5,6 +5,8 @@ import initServices from '../initialize-services';
 import {
   CHAPTER_TABLE, COURSE_TABLE, EVENT_TABLE, POST_TABLE, USER_TABLE
 } from '../constants/tables';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 
 //Function to fetch all users from db

@@ -73,30 +73,6 @@ export const getUserActivityPointsSchema = {
   }
 };
 
-export const getLeaderBoardSchema = {
-  summary: 'Get activity points leader board',
-  description: 'Route to get activity points leader board data',
-  tags: ['Activities'],
-  querystring: {
-    type: 'object',
-    properties: {
-      page: {
-        type: 'number',
-        default: 1,
-        description: 'Page number'
-      },
-      limit: {
-        type: 'number',
-        default: 10,
-        description: 'Number of datas to be fetched'
-      }
-    }
-  },
-  response: {
-    400: BAD_REQUEST
-  }
-};
-
 export const deleteActivitySchema = {
   summary: 'Delete Activity',
   description: 'To Delete an activity',

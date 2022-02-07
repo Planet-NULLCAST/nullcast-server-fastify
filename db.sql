@@ -302,15 +302,6 @@ CREATE TABLE IF NOT EXISTS event_register (
     updated_by INTEGER,
     PRIMARY KEY(email, event_id)
 );
-CREATE TABLE IF NOT EXISTS historical_points (
-    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    class_id INTEGER NOT NULL REFERENCES classes (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    last_activity_id INTEGER NOT NULL REFERENCES activities (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    last_checked_activity_timestamp TIMESTAMP WITH TIME ZONE,
-    points INTEGER,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
 INSERT INTO entity (name, description)
 VALUES ('nullcast', 'Nullcast is an open-source tech community');
 INSERT INTO tags (name, description, meta_title, slug, created_by)
