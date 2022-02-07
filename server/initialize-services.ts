@@ -1,4 +1,6 @@
 import {Client} from 'pg';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 async function connectPostgres(currentThis: any) {
   const client =  new Client(

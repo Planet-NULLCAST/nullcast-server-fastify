@@ -36,7 +36,7 @@ export const adminReviewPostSchema = {
 };
 
 export const adminReviewEventSchema = {
-  summary: 'Admin eveny review',
+  summary: 'Admin event review',
   description: 'Route to review event by admin',
   tags: ['Admin'],
   params: {
