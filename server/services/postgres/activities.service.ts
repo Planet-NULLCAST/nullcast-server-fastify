@@ -82,8 +82,15 @@ export async function getLeaderBoard(queryParams: QueryParams) {
               OFFSET ${(page - 1) * +limit};`
     };
 
+    const getLeaderBoardCountQuery: QueryConfig = {
+      text: `SELECT COUNT(DISTINCT a.user_id) AS count
+              FROM ${ACTIVITY_TABLE} AS a;`
+    };
+
     const data = await postgresClient.query(getLeaderBoardQuery);
-    return data.rows;
+    const countData = await postgresClient.query(getLeaderBoardCountQuery);
+
+    return {users: data.rows, ...countData?.rows[0], limit, page};
   } catch (error) {
     throw error;
   }
