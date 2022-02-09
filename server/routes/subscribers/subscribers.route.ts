@@ -59,15 +59,19 @@ const getSubscribers: RouteOptions = {
 
 const deleteSubscriber: RouteOptions = {
   method: 'DELETE',
-  url: '/subscribe/:subscription_id',
+  url: '/subscribe/:email',
   schema: deleteSubscriberSchema,
   handler: async(request, reply) => {
-    const params = request.params as {subscription_id: number};
+    try {
+      const params = request.params as {email: string};
 
-    if (await controller.deleteSubscriberController(params.subscription_id)) {
-      reply.code(200).send({message: 'User unsubscribed'});
-    } else {
-      reply.code(500).send({message: 'User not unsubscibed'});
+      if (await controller.deleteSubscriberController(params.email)) {
+        reply.code(200).send({message: 'User unsubscribed'});
+      } else {
+        reply.code(400).send({message: 'User not unsubscibed'});
+      }
+    } catch(error) {
+      throw error;
     }
   }
 };

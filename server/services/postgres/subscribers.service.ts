@@ -61,3 +61,20 @@ export async function getSubscribers(queryParams: QueryParams) {
 
   return {users: subscriptionData.rows, ...countData.rows[0], limit, page};
 }
+
+
+export async function deleteSubscriber(payload: {[x: string]: any}): Promise<boolean> {
+  try {
+    const postgresClient: Client = (globalThis as any).postgresClient as Client;
+
+    const deleteSubscriberQuery: QueryConfig = {
+      text: `DELETE FROM ${SUBSCRIBER_TABLE}
+              WHERE email = $1;`,
+      values: [payload.email]
+    };
+    await postgresClient.query(deleteSubscriberQuery);
+    return true;
+  } catch(error) {
+    throw error;
+  }
+}

@@ -77,7 +77,7 @@ export const deleteSubscriberSchema = {
   params: {
     type: 'object',
     properties: {
-      subscription_id: { type: 'number', description: 'Id of the user subscription' }
+      email: { type: 'string', description: 'Email of the user' }
     }
   },
   response: {
