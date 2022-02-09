@@ -74,7 +74,7 @@ export async function deleteSubscriber(payload: {[x: string]: any}): Promise<boo
     };
     await postgresClient.query(deleteSubscriberQuery);
     return true;
-  } catch(error) {
+  } catch (error) {
     throw error;
   }
 }

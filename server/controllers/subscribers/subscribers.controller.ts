@@ -32,7 +32,7 @@ export async function deleteSubscriberController(email: string): Promise<boolean
     }
     const payload = {
       email
-    }
+    };
     await subscriberHandler.dbHandler('DELETE_SUBSCRIBER', payload);
     return true;
   } catch (error) {

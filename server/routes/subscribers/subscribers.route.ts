@@ -70,7 +70,7 @@ const deleteSubscriber: RouteOptions = {
       } else {
         reply.code(400).send({message: 'User not unsubscibed'});
       }
-    } catch(error) {
+    } catch (error) {
       throw error;
     }
   }
