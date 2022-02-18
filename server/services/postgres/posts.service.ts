@@ -441,7 +441,9 @@ export async function updateAndPublishPost(payload: [Post, Activity]) {
               INSERT INTO
               ${ACTIVITY_TABLE}
               (${columns}, user_id, created_by)
-              SELECT ${valueRefs}, created_by, created_by FROM ${POST_TABLE} WHERE id = ${postId};
+              SELECT ${valueRefs}, created_by, ${payload[0].updated_by}
+              FROM ${POST_TABLE} WHERE id = ${postId}
+              ON CONFLICT (post_id, user_id, activity_type_id, created_by) DO NOTHING;
             COMMIT;`
     };
 

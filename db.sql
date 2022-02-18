@@ -268,7 +268,9 @@ CREATE TABLE IF NOT EXISTS activities (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
-    updated_by INTEGER
+    updated_by INTEGER,
+    UNIQUE(user_id, activity_type_id, post_id, created_by),
+    UNIQUE(user_id, activity_type_id, event_id, created_by)
 );
 CREATE TABLE IF NOT EXISTS classes (
     id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
