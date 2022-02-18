@@ -25,7 +25,7 @@ export async function addPostVote(payload: [PostVote, Activity]) {
     let updateStatement = 'SET';
     const activityArray = Object.entries(payload[1]);
 
-    let queryValues: any[]= [];
+    const queryValues: any[]= [];
 
     activityArray.forEach(([key, value], index) => {
       queryValues.push(value);
@@ -36,7 +36,7 @@ export async function addPostVote(payload: [PostVote, Activity]) {
       }
     });
 
-    const activityName = payload[0]. value > 0 ? 'post_downvote' : 'post_upvote'
+    const activityName = payload[0]. value > 0 ? 'post_downvote' : 'post_upvote';
     const activity = await findOneByField(
       ACTIVITY_TYPE_TABLE,
       { name: activityName },
@@ -66,26 +66,26 @@ export async function addPostVote(payload: [PostVote, Activity]) {
               ON CONFLICT (post_id, user_id) 
               DO UPDATE SET VALUE = EXCLUDED.VALUE;
               
-              ${activityType ? 
-                `UPDATE ${ACTIVITY_TABLE}
+              ${activityType ?
+    `UPDATE ${ACTIVITY_TABLE}
                 ${updateStatement}
                 WHERE post_id = ${payload[0].postId} AND
                 created_by = ${payload[0].userId} AND
                 activity_type_id IN(${activity.id}, ${payload[1].activity_type_id});`
-                :
-                `INSERT INTO
+    :
+    `INSERT INTO
                 ${ACTIVITY_TABLE}
                 (${columns}, user_id, created_by)
                 SELECT ${valueRefs}, created_by, ${payload[0].userId}
                 FROM ${POST_TABLE} WHERE id = ${payload[0].postId}
                 ON CONFLICT (post_id, user_id, activity_type_id, created_by) 
                 DO NOTHING;`
-              }
+}
             COMMIT;`
     };
     await postgresClient.query(addPostVoteQuery.text);
     return true;
-  } catch(error) {
+  } catch (error) {
     throw error;
   }
 }

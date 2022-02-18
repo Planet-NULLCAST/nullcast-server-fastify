@@ -18,7 +18,7 @@ export async function addPostVoteController(postVoteData: PostVote, postId: numb
 
     // activity data
     let activity;
-    if(postVoteData.value > 0) {
+    if (postVoteData.value > 0) {
       activity = await findActivityType('post_upvote') as Activity;
     } else {
       activity = await findActivityType('post_downvote') as Activity;
