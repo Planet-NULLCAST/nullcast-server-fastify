@@ -15,6 +15,9 @@ import { migrateRoles } from './migrate-roles';
 import { replaceImageUrlPost } from './replace-image-url-post';
 
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 interface PgUser {
   id: string;
   email: string;

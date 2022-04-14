@@ -1,6 +1,6 @@
-import { findOneByField } from '../../server/services/postgres/query-builder.service';
-import { Activity } from '../../server/interfaces/activities.type';
-import {ACTIVITY_TYPE_TABLE} from '../../server/constants/tables';
+import { findOneByField } from 'services/postgres/query-builder.service';
+import { Activity } from 'interfaces/activities.type';
+import {ACTIVITY_TYPE_TABLE} from 'constants/tables';
 
 
 export async function findActivityType(activityType: string) {
