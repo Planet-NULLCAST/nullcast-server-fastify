@@ -21,11 +21,10 @@ const addPostVote: RouteOptions = {
       const params = request.params as {post_id: number};
       const postVoteData = await controller.addPostVoteController(request.body as PostVote, params.post_id,  user);
       if (postVoteData) {
-        reply.code(201).send({message: 'Voted for the post', data: postVoteData});
+        reply.code(201).send({message: 'Voted for the post'});
       } else {
-        reply.code(500).send({message:'Something Error happend'});
+        reply.code(500).send({message:'Vote not added to this post'});
       }
-
     } catch (error) {
       throw error;
     }

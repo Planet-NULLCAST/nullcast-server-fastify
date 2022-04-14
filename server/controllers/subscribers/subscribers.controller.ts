@@ -25,12 +25,15 @@ export async function getSubscribersController(queryParams: QueryParams): Promis
   }
 }
 
-export async function deleteSubscriberController(subscriptionId: number): Promise<boolean> {
+export async function deleteSubscriberController(email: string): Promise<boolean> {
   try {
-    if (!subscriptionId) {
+    if (!email) {
       return false;
     }
-    await subscriberHandler.deleteOneById(subscriptionId);
+    const payload = {
+      email
+    };
+    await subscriberHandler.dbHandler('DELETE_SUBSCRIBER', payload);
     return true;
   } catch (error) {
     throw error;

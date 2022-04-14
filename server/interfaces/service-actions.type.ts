@@ -51,6 +51,7 @@ export type Actions =
   | 'GET_EVENTS_BY_USER_ID'
 
   | 'GET_SUBSCRIBERS'
+  | 'DELETE_SUBSCRIBER'
 
   | 'GET_FOLLOWER'
   | 'GET_FOLLOWERS'

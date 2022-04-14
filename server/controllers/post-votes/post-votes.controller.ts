@@ -1,20 +1,33 @@
-import { POST_VOTE_TABLE } from 'constants/tables';
 import { DatabaseHandler } from 'services/postgres/postgres.handler';
+import { findActivityType } from 'utils/activities.utils';
+import { POST_VOTE_TABLE } from 'constants/tables';
 import { TokenUser } from 'interfaces/user.type';
 import { PostVote } from 'interfaces/post-vote.type';
+import { Activity } from 'interfaces/activities.type';
 
 
 const postVoteHandler = new DatabaseHandler(POST_VOTE_TABLE);
 
-export async function addPostVoteController(postVoteData: PostVote, postId: number, user:TokenUser): Promise<PostVote> {
+export async function addPostVoteController(postVoteData: PostVote, postId: number, user:TokenUser): Promise<boolean> {
   try {
-    const payload: PostVote = {
+    const postVote: PostVote = {
       postId: postId as number,
       userId: user.id as number,
       value: postVoteData.value as number
     };
 
-    return await postVoteHandler.dbHandler('ADD_POST_VOTE', payload) as PostVote;
+    // activity data
+    let activity;
+    if (postVoteData.value > 0) {
+      activity = await findActivityType('post_upvote') as Activity;
+    } else {
+      activity = await findActivityType('post_downvote') as Activity;
+    }
+    activity.post_id = postId;
+
+    const payload = [postVote, activity];
+
+    return await postVoteHandler.dbHandler('ADD_POST_VOTE', payload) as boolean;
   } catch (error) {
     throw error;
   }
