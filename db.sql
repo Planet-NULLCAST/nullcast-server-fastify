@@ -287,31 +287,6 @@ CREATE TABLE IF NOT EXISTS activities (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     created_by INTEGER,
-    updated_by INTEGER
-);
-CREATE TABLE IF NOT EXISTS activity_types (
-    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
-    class_id INTEGER NOT NULL REFERENCES classes (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    status VARCHAR(255) DEFAULT 'active',
-    points INTEGER,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    created_by INTEGER,
-    updated_by INTEGER
-);
-CREATE TABLE IF NOT EXISTS activities (
-    id INTEGER GENERATED ALWAYS AS IDENTITY (MINVALUE 10000000 START WITH 10000000 CACHE 200) PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    class_id INTEGER NOT NULL REFERENCES classes (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    name VARCHAR(255)NOT NULL,
-    status VARCHAR(255) DEFAULT 'active',
-    activity_type_id INTEGER NOT NULL REFERENCES activity_types (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    event_id INTEGER REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    post_id INTEGER REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    created_by INTEGER,
     updated_by INTEGER,
     UNIQUE(user_id, activity_type_id, post_id, created_by),
     UNIQUE(user_id, activity_type_id, event_id, created_by)
@@ -339,7 +314,7 @@ VALUES ('admin', 'Admin access'), ('user', 'No admin access');
 INSERT INTO certificates (name, description, content)
 VALUES ('nullcast', 'Certificate provided by nullcast', 'Nullcast certificate');
 INSERT INTO classes(name, description)
-VALUES('learner', 'Learning class'), ('contributor', 'Contributor class'), ('competitor', 'Competitor class')
+VALUES('learner', 'Learning class'), ('contributor', 'Contributor class'), ('competitor', 'Competitor class');
 INSERT INTO activity_types(name, points, class_id)
 (SELECT 'published_post', 10, id FROM classes WHERE name='contributor') UNION
 (SELECT 'post_downvote', -1, id FROM classes WHERE name='contributor') UNION
