@@ -68,7 +68,7 @@ const sendVerficationMail: RouteOptions = {
       const { to: userMail } = request.body as SendMailOptions;
       const resetToken = issueToken({email: userMail});
       const sender = await mailer.sendMail({
-        from: 'Nullcast <connect@nullcast.io>',
+        from: `Nullcast <${process.env.MAIL_USER}>`,
         to: userMail,
         subject: 'Account verification',
         // eslint-disable-next-line max-len
