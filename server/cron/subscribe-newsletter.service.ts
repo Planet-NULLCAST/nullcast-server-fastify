@@ -19,7 +19,7 @@ export async function sendMailForSubscribers() {
     if (queryData.rows.length) {
       queryData.rows.map(async(userMail) => {
         const sender = await mailer.sendMail({
-          from: 'Nullcast <connect@nullcast.io>',
+          from: `Nullcast <${process.env.MAIL_USER}>`,
           to: userMail.email,
           subject: 'Subscription Newsletter',
           // eslint-disable-next-line max-len
